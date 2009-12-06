@@ -7,7 +7,6 @@ package Domain;
  * @author Samuel Gomez
  */
 public class Board extends GenericBoard {
-    //sad
 
     /**
      * A red keypeg indicates that a codepeg matches on both color and position
