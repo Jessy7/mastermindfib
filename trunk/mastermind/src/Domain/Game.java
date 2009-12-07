@@ -310,7 +310,7 @@ public class Game extends GenericGame {
     public int giveHint()
     {
         Boolean[] visib = ((Board)board).getPatternVisibility();
-        int hint = randomFromXtoY(1, board.getColumns());
+        int hint = randomFromXtoY(0, board.getColumns() - 1);
         // board.columns is a protected from GenericBoard. it should not be allowed but netbeans allows it
 
         visib[hint] = true;
