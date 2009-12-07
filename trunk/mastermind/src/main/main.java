@@ -76,7 +76,7 @@ public class main
         SettingsUseCaseController s;
         String difficulty = "";
         String vsCpu = "";
-       // DifficultyLevel dl = new DifficultyLevel();
+        Boolean bVsCpu;
 
         while (difficulty.compareTo("0")!= 0 && difficulty.compareTo("1")!= 0 && difficulty.compareTo("2")!= 0)
         {
@@ -89,19 +89,24 @@ public class main
         }
 
         s = new SettingsUseCaseController();
-        //s.saveSettings(DifficultyLevel.Easy);
 
         while (vsCpu.compareTo("0")!= 0 && vsCpu.compareTo("1")!= 0)
         {
             System.out.println("Do you want to play vs CPU:");
-            System.out.println("0.Yes");
-            System.out.println("1.No");
+            System.out.println("0.No");
+            System.out.println("1.Yes");
 
             vsCpu = br.readLine();
         }
 
-       // s.setPlayer2(Boolean.valueOf(vsCpu));
-        s.setSettings(DifficultyLevel.getFromString(difficulty), Boolean.valueOf(vsCpu));
+        if (vsCpu.compareTo("0")== 0)
+            bVsCpu = false;
+        else
+            bVsCpu = true;
+
+        System.out.println("vs CPU? " + bVsCpu);
+
+        s.setSettings(DifficultyLevel.getFromString(difficulty), bVsCpu);
 
         playGame();
     }
@@ -175,6 +180,9 @@ public class main
         DifficultyLevel dl = pg.getLevel();
         Boolean b = false;
 
+        System.out.println("Is codemaker human?: " + ((PlayGameUseCaseController)pg).isCodemakerHuman());
+        System.out.println("Is codebreaker human?: " + ((PlayGameUseCaseController)pg).isCodebreakerHuman());
+
         if (((PlayGameUseCaseController)pg).isCodemakerHuman())
         {
             insertPattern();
@@ -213,7 +221,6 @@ public class main
                 giveHint();
             }
             */
-            
             String guess = "";
             int attempt = ((PlayGameUseCaseController)pg).getCurrentRow();
 
@@ -224,7 +231,6 @@ public class main
                 b = false;
                 while (!b)
                 {
-                    showElements();
                     System.out.println("Please, insert the guess");
                     guess = br.readLine();
 
@@ -256,27 +262,28 @@ public class main
                     }
                 }
 
-                board[((PlayGameUseCaseController)pg).getCodePegsLastRowNumber()] = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
-                
-                ((PlayGameUseCaseController)pg).generateKeyPegs();
-                Integer[] keyPegsRow = ((PlayGameUseCaseController)pg).getKeyPegsRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
-                int lastRow = ((PlayGameUseCaseController)pg).getCodePegsLastRowNumber();
-
-                for (int i = 0; i < 4; i++)
-                    keyPegs[lastRow][i] = keyPegsRow[i];
-
             }
             else if(!((PlayGameUseCaseController)pg).isCodebreakerHuman())
             {
                 ((PlayGameUseCaseController)pg).cpuAttempt();
-                Integer[] codePegRow = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
+                /*Integer[] codePegRow = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
                 System.out.print("CodePegs cpu: ");
                 for (int i = 0; i < codePegRow.length; i++)
                 {
                     System.out.print(codePegRow[i]);
                 }
-                System.out.println();
+                System.out.println();*/
             }
+
+            board[((PlayGameUseCaseController)pg).getCodePegsLastRowNumber()] = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
+
+            ((PlayGameUseCaseController)pg).generateKeyPegs();
+            Integer[] keyPegsRow = ((PlayGameUseCaseController)pg).getKeyPegsRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
+            int lastRow = ((PlayGameUseCaseController)pg).getCodePegsLastRowNumber();
+
+            for (int i = 0; i < 4; i++)
+                keyPegs[lastRow][i] = keyPegsRow[i];
+            showElements();
         }
         ((PlayGameUseCaseController)pg).closeRound();
     }
@@ -296,7 +303,6 @@ public class main
                 name = br.readLine();
             }
             pg.updateRanking(name, score);
-
         }
 
         if (!pg.getVsCpu())
@@ -379,6 +385,7 @@ public class main
 
     private static void exitGame()
     {
+        System.exit(1);
     }
 
     private static void showElements()
@@ -390,17 +397,14 @@ public class main
         System.out.println();
      
         System.out.println("CodePegs      keyPegs");
-        for (int i = 9; i > -1; i--)
-        {
+        for (int i = 9; i > -1; i--) {
             for (int j = 0; j < 4; j++)
                 System.out.print(board[i][j]);
-            System.out.print("   ");
+            System.out.print("          ");
             for (int j = 0; j < 4; j++)
                 System.out.print(keyPegs[i][j]);
             System.out.println();
-        }
-
-         
+        }    
     }
 
     private static void initializeValues()
@@ -420,8 +424,6 @@ public class main
     private static void updateElements() {
 
         PlayGameUseCaseController pg = new PlayGameUseCaseController();
-
-
 
         board = ((PlayGameUseCaseController)pg).getBoard();
         keyPegs = ((PlayGameUseCaseController)pg).getKeyPegs();
