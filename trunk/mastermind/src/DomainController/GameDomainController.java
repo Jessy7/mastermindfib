@@ -74,7 +74,7 @@ public class GameDomainController extends GenericGameDC {
     * @return 0 if ok, -1 if the hint is already given.
     */
    public int giveHint() {
-       if (((Game)g).getHintWasGiven())
+       if (!((Game)g).getHintWasGiven())
                 return ((Game)g).giveHint();
        else
                return -1;
@@ -156,7 +156,7 @@ public class GameDomainController extends GenericGameDC {
        Random r  = new Random();
 
        for (int i = 0; i < columns; i++)
-           pattern[i] = r.nextInt(colors);
+           pattern[i] = r.nextInt(colors) + 1;
 
        return pattern;
    }
