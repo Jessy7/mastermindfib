@@ -159,40 +159,45 @@ public class main
             currentRound = ((PlayGameUseCaseController)pg).getCurrentRound();
             System.out.println("Current round: " + currentRound);
             initializeValues();
+            startRound();
             playRound();
         }
 
         System.out.println("GAME FINISHED!!");
         int p1points = ((PlayGameUseCaseController)pg).getScore(1);
-        System.out.println("player1 points: " + p1points);
+        System.out.println("Player1 points: " + p1points);
         int p2points = ((PlayGameUseCaseController)pg).getScore(2);
-        System.out.println("player2 points: " + p2points);
+        System.out.println("Player2 points: " + p2points);
 
         definePlayer();
 
     }
 
-    private static void playRound() throws IOException
-    {
-
-        DifficultyLevel dl = pg.getLevel();
-        Boolean b = false;
-
+    private static void startRound() throws IOException {
         if (((PlayGameUseCaseController)pg).isCodemakerHuman())
             insertPattern();
         else
             ((PlayGameUseCaseController)pg).generatePattern();
         
         patternColor = ((PlayGameUseCaseController)pg).getPatternColor();
+    }
+
+    private static void playRound() throws IOException {
+
+        Boolean b = false;
+        int guessLength = ((PlayGameUseCaseController)pg).getColumns();
 
         while (!((PlayGameUseCaseController)pg).isRoundFinished())
         {
+
+            showElements();
+
             askForSave();
             askForAHint();
 
             String guess = "";
-            int attempt = ((PlayGameUseCaseController)pg).getCurrentRow();
 
+            int attempt = ((PlayGameUseCaseController)pg).getCurrentRow();
             System.out.println("Attempt: " + (attempt+1));
 
             if (((PlayGameUseCaseController)pg).isCodebreakerHuman()) {
@@ -205,18 +210,9 @@ public class main
                     for(int i = 0; i < guess.length(); i++)
                         iGuess[i] = Integer.valueOf(guess.substring(i,i+1));
 
-                    if (dl ==  DifficultyLevel.Easy && guess.length() == 4) {
-                        for (int i = 0; i < iGuess.length; i++)
-                            ((PlayGameUseCaseController)pg).setCell(attempt, i, iGuess[i]);
-                        b = true;
-                    }
-                    else if (dl ==  DifficultyLevel.Normal && iGuess.length == 5) {
-                        for (int i = 0; i < iGuess.length; i++)
-                            ((PlayGameUseCaseController)pg).setCell(attempt, i, iGuess[i]);
-                        b = true;
-                    }
-                    else if (dl ==  DifficultyLevel.Hard && iGuess.length == 6) {
-                        for (int i = 0; i < iGuess.length; i++)
+                    if (guess.length() == guessLength)
+                    {
+                        for (int i = 0; i < guessLength; i++)
                             ((PlayGameUseCaseController)pg).setCell(attempt, i, iGuess[i]);
                         b = true;
                     }
@@ -230,14 +226,12 @@ public class main
             }
 
             board[((PlayGameUseCaseController)pg).getCodePegsLastRowNumber()] = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
-
             ((PlayGameUseCaseController)pg).generateKeyPegs();
             Integer[] keyPegsRow = ((PlayGameUseCaseController)pg).getKeyPegsRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
             int lastRow = ((PlayGameUseCaseController)pg).getCodePegsLastRowNumber();
 
             for (int i = 0; i < 4; i++)
                 keyPegs[lastRow][i] = keyPegsRow[i];
-            showElements();
         }
         ((PlayGameUseCaseController)pg).closeRound();
     }
@@ -305,6 +299,7 @@ public class main
             System.out.println("load game error");
         updateElements();
         playRound();
+        playGame();
 
     }
 
@@ -337,6 +332,9 @@ public class main
         else {
             patternVisibility[patternToShow] = patternColor[patternToShow];
         }
+
+        showElements();
+
     }
 
     private static void exitGame()
@@ -388,11 +386,13 @@ public class main
     private static void updateElements() {
 
         pg = new PlayGameUseCaseController();
+        int columns = ((PlayGameUseCaseController)pg).getColumns();
 
         board = ((PlayGameUseCaseController)pg).getBoard();
         keyPegs = ((PlayGameUseCaseController)pg).getKeyPegs();
         Boolean[] patternGuessB = ((PlayGameUseCaseController)pg).getPatternVisibility();
         patternColor = ((PlayGameUseCaseController)pg).getPatternColor();
+        patternVisibility = new Integer[columns];
 
         for (int i = 0; i < patternGuessB.length; i++)
         {
@@ -409,7 +409,7 @@ public class main
 
             while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
             {
-                System.out.println("Do you want to save a game? (y/n)");
+                System.out.println("Do you want to save the game? (y/n)");
                 answer = br.readLine();
             }
 
