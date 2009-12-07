@@ -13,7 +13,6 @@ import UseCaseController.PlayGameUseCaseController;
 import UseCaseController.SaveGameUseCaseController;
 import UseCaseController.SettingsUseCaseController;
 import UseCaseController.ShowRankingUseCaseController;
-import View.PlayGameView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,9 +33,6 @@ public class main
 
     public static void main (String args[]) throws IOException
     {
-
-         //   PlayMastermindView pgv = new PlayMastermindView();
-        //    pgv.setVisible(true);
         
         br = new BufferedReader(new InputStreamReader(System.in));
 
