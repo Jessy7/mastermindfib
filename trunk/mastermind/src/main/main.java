@@ -26,11 +26,12 @@ import java.util.List;
 public class main
 {
 
+    private static GenericPlayGameUCC pg;
     private static BufferedReader br;
-    private static Integer[][] board = new Integer[10][4];
-    private static Integer[] patternColor = new Integer[4];
-    private static Integer[] patternVisibility = new Integer[4];
-    private static Integer[][] keyPegs = new Integer[10][4];
+    private static Integer[][] board;
+    private static Integer[] patternColor;
+    private static Integer[] patternVisibility;
+    private static Integer[][] keyPegs;
 
     public static void main (String args[]) throws IOException
     {
@@ -114,7 +115,6 @@ public class main
     
     private static void insertPattern() throws IOException 
     {
-        GenericPlayGameUCC pg;
         Boolean validPatern = false;
         String pattern = "";
         int patternLenght;
@@ -155,13 +155,13 @@ public class main
     private static void playGame() throws IOException
     {
 
-        PlayGameUseCaseController pg = new PlayGameUseCaseController();
+        pg = new PlayGameUseCaseController();
 
         int currentRound;
 
         while (!pg.isGameFinished())
         {
-            currentRound = pg.getCurrentRound();
+            currentRound = ((PlayGameUseCaseController)pg).getCurrentRound();
             System.out.println("Current round: " + currentRound);
             initializeValues();
             playRound();
@@ -180,7 +180,6 @@ public class main
     private static void playRound() throws IOException
     {
 
-        GenericPlayGameUCC pg = new PlayGameUseCaseController();
         DifficultyLevel dl = pg.getLevel();
         Boolean b = false;
 
@@ -253,9 +252,8 @@ public class main
     private static void definePlayer() throws IOException
     {
         String name = "";
-        PlayGameUseCaseController pg = new PlayGameUseCaseController();
 
-        int score = pg.getScore(1);
+        int score = ((PlayGameUseCaseController)pg).getScore(1);
 
         if (pg.entersRanking(score))
         {
@@ -267,7 +265,7 @@ public class main
             pg.updateRanking(name, score);
         }
 
-        score = pg.getScore(2);
+        score = ((PlayGameUseCaseController)pg).getScore(2);
 
         if (pg.entersRanking(score))
         {
@@ -337,7 +335,7 @@ public class main
     private static void giveHint()
     {
         int patternToShow;
-        PlayGameUseCaseController pg = new PlayGameUseCaseController();
+        pg = new PlayGameUseCaseController();
         patternToShow = pg.giveHint();
 
         if (patternToShow == -1) {
@@ -374,21 +372,29 @@ public class main
 
     private static void initializeValues()
     {
+
+        int columns = ((PlayGameUseCaseController)pg).getColumns();
+        board = new Integer[10][columns];
+        patternColor = new Integer[columns];
+        patternVisibility = new Integer[columns];
+        keyPegs = new Integer[10][columns];
+
+
         for (int i = 0; i < 10; i++)
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < columns; j++)
                 board[i][j] = new Integer(0);
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < columns; i++)
             patternVisibility[i] = new Integer(0);
 
         for (int i = 0; i < 10; i++)
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < columns; j++)
                 keyPegs[i][j] = new Integer(0);
     }
 
     private static void updateElements() {
 
-        PlayGameUseCaseController pg = new PlayGameUseCaseController();
+        pg = new PlayGameUseCaseController();
 
         board = ((PlayGameUseCaseController)pg).getBoard();
         keyPegs = ((PlayGameUseCaseController)pg).getKeyPegs();
