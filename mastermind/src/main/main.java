@@ -146,9 +146,6 @@ public class main
     private static void playGame() throws IOException
     {
 
-        //PlayMastermindView pmv = new PlayMastermindView();
-        //pmv.setVisible(true);
-
         PlayGameUseCaseController pg = new PlayGameUseCaseController();
 
         int currentRound;
