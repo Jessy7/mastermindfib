@@ -21,14 +21,15 @@ import java.util.List;
 
 /**
  *
- * @author Ori
+ * @author Oriol Bellet
  */
 public class main
 {
 
     private static BufferedReader br;
     private static Integer[][] board = new Integer[10][4];
-    private static Integer[] patternGuess = new Integer[4];
+    private static Integer[] patternColor = new Integer[4];
+    private static Integer[] patternVisibility = new Integer[4];
     private static Integer[][] keyPegs = new Integer[10][4];
 
     public static void main (String args[]) throws IOException
@@ -145,6 +146,9 @@ public class main
             {
                 System.out.println("Invalid pattern");
             }
+
+            patternColor = ((PlayGameUseCaseController)pg).getPatternColor();
+
         }
     }
 
@@ -180,9 +184,6 @@ public class main
         DifficultyLevel dl = pg.getLevel();
         Boolean b = false;
 
-        System.out.println("Is codemaker human?: " + ((PlayGameUseCaseController)pg).isCodemakerHuman());
-        System.out.println("Is codebreaker human?: " + ((PlayGameUseCaseController)pg).isCodebreakerHuman());
-
         if (((PlayGameUseCaseController)pg).isCodemakerHuman())
         {
             insertPattern();
@@ -194,33 +195,9 @@ public class main
 
         while (!((PlayGameUseCaseController)pg).isRoundFinished())
         {
-            /*
-            String answer = "";
+            askForSave();
+            askForAHint();
 
-            while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
-            {
-                System.out.println("Do you want to save a game? (y/n)");
-                answer = br.readLine();
-            }
-
-            if (answer.compareTo("y") == 0)
-            {
-                saveGame();
-            }
-
-            answer = "";
-
-            while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
-            {
-                System.out.println("Do you want a hint? (y/n)");
-                answer = br.readLine();
-            }
-
-            if (answer.compareTo("y") == 0)
-            {
-                giveHint();
-            }
-            */
             String guess = "";
             int attempt = ((PlayGameUseCaseController)pg).getCurrentRow();
 
@@ -359,9 +336,16 @@ public class main
 
     private static void giveHint()
     {
+        int patternToShow;
         PlayGameUseCaseController pg = new PlayGameUseCaseController();
-        pg.giveHint();
-        patternGuess = ((PlayGameUseCaseController)pg).getPatternColor();
+        patternToShow = pg.giveHint();
+
+        if (patternToShow == -1) {
+           System.out.println("A hint is already given");
+        }
+        else {
+            patternVisibility[patternToShow] = patternColor[patternToShow];
+        }
     }
 
     private static void exitGame()
@@ -373,7 +357,7 @@ public class main
     {
         System.out.print("Pattern: ");
         for (int i = 0; i < 4; i++)
-            System.out.print(patternGuess[i] + " ");
+            System.out.print(patternVisibility[i] + " ");
 
         System.out.println();
      
@@ -395,7 +379,7 @@ public class main
                 board[i][j] = new Integer(0);
 
         for (int i = 0; i < 4; i++)
-            patternGuess[i] = new Integer(0);
+            patternVisibility[i] = new Integer(0);
 
         for (int i = 0; i < 10; i++)
             for (int j = 0; j < 4; j++)
@@ -409,14 +393,46 @@ public class main
         board = ((PlayGameUseCaseController)pg).getBoard();
         keyPegs = ((PlayGameUseCaseController)pg).getKeyPegs();
         Boolean[] patternGuessB = ((PlayGameUseCaseController)pg).getPatternVisibility();
-        Integer[] patternColor = ((PlayGameUseCaseController)pg).getPatternColor();
+        patternColor = ((PlayGameUseCaseController)pg).getPatternColor();
 
         for (int i = 0; i < patternGuessB.length; i++)
         {
             if (patternGuessB[i] == Boolean.TRUE)
-                patternGuess[i] = patternColor[i];
+                patternVisibility[i] = patternColor[i];
             else
-                patternGuess[i] = 0;
+                patternVisibility[i] = 0;
         }
+    }
+
+    private static void askForSave() throws IOException {
+
+            String answer = "";
+
+            while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
+            {
+                System.out.println("Do you want to save a game? (y/n)");
+                answer = br.readLine();
+            }
+
+            if (answer.compareTo("y") == 0)
+            {
+                saveGame();
+            }
+    }
+
+    private static void askForAHint() throws IOException {
+
+            String answer = "";
+
+            while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
+            {
+                System.out.println("Do you want a hint? (y/n)");
+                answer = br.readLine();
+            }
+
+            if (answer.compareTo("y") == 0)
+            {
+                giveHint();
+            }
     }
 }
