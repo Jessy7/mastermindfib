@@ -84,6 +84,7 @@ public class GameDomainController extends GenericGameDC {
     * This method checks if the finished row if the last one. If is the last one, the game is finished
     * @return true if the game if finished, false otherwise
     */
+   @Override
    public Boolean isGameFinished() {
        return (((Game)g).getCurrentRound() == ((Game)g).getTotalRounds());
    }
@@ -248,10 +249,11 @@ public class GameDomainController extends GenericGameDC {
        Boolean vsCpu = Boolean.valueOf(dataArray[0]);
        DifficultyLevel dl = DifficultyLevel.valueOf(dataArray[1]);
        ((Game)g).setSettings(dl, vsCpu);
-      
-       ((Game)g).setCurrentRound(Integer.getInteger(dataArray[2]));
-       ((Game)g).setP1Points(Integer.getInteger(dataArray[3]));
-       ((Game)g).setP2Points(Integer.getInteger(dataArray[4]));
+
+       System.out.println("Current round: " + dataArray[2]);
+       ((Game)g).setCurrentRound(Integer.valueOf(dataArray[2]));
+       ((Game)g).setP1Points(Integer.valueOf(dataArray[3]));
+       ((Game)g).setP2Points(Integer.valueOf(dataArray[4]));
        ((Game)g).setPatternColor(convertStringToIntegerArray(dataArray[5]));
        ((Game)g).setBoard(convertStringToIntegerMatrix(dataArray[6]));
        ((Game)g).setKeyPegs(convertStringToIntegerMatrix(dataArray[7]));
@@ -264,29 +266,9 @@ public class GameDomainController extends GenericGameDC {
     * @return The field element of the string
     */
    private String[] splitAttributes (String data) {
-
        String[] dataArray = null;
        dataArray = data.split(",");
        return dataArray;
-
-      /* String attribute = "";
-       int endIndex;
-
-       endIndex = data.indexOf(',');
-       if (endIndex == -1) {
-            attribute = data.substring(0, data.length()-1);
-            data = "";
-       }
-
-       else {
-            attribute = data.substring(0, endIndex);
-            System.out.println("Attribute: " + attribute);
-            //data = data.substring(endIndex+1,data.length());
-            data = new String(data.substring(endIndex+1,data.length()));
-            System.out.println("newData: " + data);
-       }
-
-       return attribute;*/
    }
 
    /**
