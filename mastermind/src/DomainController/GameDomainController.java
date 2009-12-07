@@ -169,16 +169,21 @@ public class GameDomainController extends GenericGameDC {
        int nColumns = ((Game)g).getColumns();
        int nColors = ((Game)g).getNColors();
        Integer[] pattern = new Integer[nColumns];
-       Integer[] allColors = new Integer[nColors];
+       Integer[] usedColor = new Integer[nColors];
+
+       for (int i = 0; i < usedColor.length; i++) {
+           usedColor[i] = new Integer(0);
+       }
+
        Random r = new Random();
        int tryColor;
 
        int i = 0;
-       while (i < nColors) {
+       while (i < pattern.length) {
            tryColor = r.nextInt(nColors);
-           if (allColors[tryColor] == 0) {
-               allColors[tryColor] = 1;
-               pattern[i] = tryColor;
+           if (usedColor[tryColor] == 0) {
+               usedColor[tryColor] = 1;
+               pattern[i] = tryColor + 1;
                i++;
            }
        }
@@ -351,7 +356,14 @@ public class GameDomainController extends GenericGameDC {
     */
    public void cpuAttempt() 
    {
-       System.out.println("Code not merged.");
+       int currentRow = ((Game)g).getCurrentRow();
+       int column = ((Game)g).getColumns();
+       for (int i = 0; i < column; i++) {
+        ((Game)g).setCell(currentRow, i, 1);
+       
+        //System.out.println("Code not merged.");
+        generateKeyPegs();
+       }
    }
 
    /**
