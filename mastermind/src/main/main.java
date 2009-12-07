@@ -106,8 +106,6 @@ public class main
         else
             bVsCpu = true;
 
-        System.out.println("vs CPU? " + bVsCpu);
-
         s.setSettings(DifficultyLevel.getFromString(difficulty), bVsCpu);
 
         playGame();
@@ -146,9 +144,6 @@ public class main
             {
                 System.out.println("Invalid pattern");
             }
-
-            patternColor = ((PlayGameUseCaseController)pg).getPatternColor();
-
         }
     }
 
@@ -184,13 +179,11 @@ public class main
         Boolean b = false;
 
         if (((PlayGameUseCaseController)pg).isCodemakerHuman())
-        {
             insertPattern();
-        }
         else
-        {
             ((PlayGameUseCaseController)pg).generatePattern();
-        }
+        
+        patternColor = ((PlayGameUseCaseController)pg).getPatternColor();
 
         while (!((PlayGameUseCaseController)pg).isRoundFinished())
         {
