@@ -226,11 +226,9 @@ public class main
 
             System.out.println("Attempt: " + (attempt+1));
 
-            if (((PlayGameUseCaseController)pg).isCodebreakerHuman())
-            {
+            if (((PlayGameUseCaseController)pg).isCodebreakerHuman()) {
                 b = false;
-                while (!b)
-                {
+                while (!b) {
                     System.out.println("Please, insert the guess");
                     guess = br.readLine();
 
@@ -238,41 +236,28 @@ public class main
                     for(int i = 0; i < guess.length(); i++)
                         iGuess[i] = Integer.valueOf(guess.substring(i,i+1));
 
-                    if (dl ==  DifficultyLevel.Easy && guess.length() == 4)
-                    {
+                    if (dl ==  DifficultyLevel.Easy && guess.length() == 4) {
                         for (int i = 0; i < iGuess.length; i++)
                             ((PlayGameUseCaseController)pg).setCell(attempt, i, iGuess[i]);
                         b = true;
                     }
-                    else if (dl ==  DifficultyLevel.Normal && iGuess.length == 5)
-                    {
+                    else if (dl ==  DifficultyLevel.Normal && iGuess.length == 5) {
                         for (int i = 0; i < iGuess.length; i++)
                             ((PlayGameUseCaseController)pg).setCell(attempt, i, iGuess[i]);
                         b = true;
                     }
-                    else if (dl ==  DifficultyLevel.Hard && iGuess.length == 6)
-                    {
+                    else if (dl ==  DifficultyLevel.Hard && iGuess.length == 6) {
                         for (int i = 0; i < iGuess.length; i++)
                             ((PlayGameUseCaseController)pg).setCell(attempt, i, iGuess[i]);
                         b = true;
                     }
-                    else
-                    {
+                    else {
                         System.out.println("Invalid guess");
                     }
                 }
-
             }
-            else if(!((PlayGameUseCaseController)pg).isCodebreakerHuman())
-            {
+            else if(!((PlayGameUseCaseController)pg).isCodebreakerHuman()) {
                 ((PlayGameUseCaseController)pg).cpuAttempt();
-                /*Integer[] codePegRow = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
-                System.out.print("CodePegs cpu: ");
-                for (int i = 0; i < codePegRow.length; i++)
-                {
-                    System.out.print(codePegRow[i]);
-                }
-                System.out.println();*/
             }
 
             board[((PlayGameUseCaseController)pg).getCodePegsLastRowNumber()] = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
@@ -305,24 +290,20 @@ public class main
             pg.updateRanking(name, score);
         }
 
-        if (!pg.getVsCpu())
+        score = pg.getScore(2);
+
+        if (pg.entersRanking(score))
         {
-            score = pg.getScore(2);
+            name = "";
 
-            if (pg.entersRanking(score))
-            {
-                name = "";
-
-                while (name.isEmpty())
-                {
-                    System.out.println("Insert player2 name:");
-                    name = br.readLine();
-                }
-
-                pg.updateRanking(name, score); 
+            while (name.isEmpty())  {
+                System.out.println("Insert player2 name:");
+                name = br.readLine();
             }
-        }
 
+            pg.updateRanking(name, score);
+        }
+        
         showRanking();
 
     }
