@@ -225,13 +225,8 @@ public class main
                 ((PlayGameUseCaseController)pg).cpuAttempt();
             }
 
-            board[((PlayGameUseCaseController)pg).getCodePegsLastRowNumber()] = ((PlayGameUseCaseController)pg).getCodePegRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
             ((PlayGameUseCaseController)pg).generateKeyPegs();
-            Integer[] keyPegsRow = ((PlayGameUseCaseController)pg).getKeyPegsRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
-            int lastRow = ((PlayGameUseCaseController)pg).getCodePegsLastRowNumber();
-
-            for (int i = 0; i < 4; i++)
-                keyPegs[lastRow][i] = keyPegsRow[i];
+            updateElements();
         }
         ((PlayGameUseCaseController)pg).closeRound();
     }
@@ -344,18 +339,20 @@ public class main
 
     private static void showElements()
     {
+        int columns = ((PlayGameUseCaseController)pg).getColumns();
+
         System.out.print("Pattern: ");
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < columns; i++)
             System.out.print(patternVisibility[i] + " ");
 
         System.out.println();
      
         System.out.println("CodePegs      keyPegs");
         for (int i = 9; i > -1; i--) {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < columns; j++)
                 System.out.print(board[i][j]);
             System.out.print("          ");
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < columns; j++)
                 System.out.print(keyPegs[i][j]);
             System.out.println();
         }    

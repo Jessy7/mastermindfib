@@ -112,7 +112,7 @@ public class GameDomainController extends GenericGameDC {
 
        else if (((Game)g).getCurrentRow() == 10) {
            System.out.println("CODEMAKER WINS THIS ROUND!");
-           System.out.println();
+           for (int i = 0; i < pattern.length; i++) System.out.print(pattern[i]);
            System.out.println();
            System.out.println();
            return true;
