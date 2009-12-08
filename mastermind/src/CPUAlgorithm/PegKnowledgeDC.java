@@ -35,6 +35,17 @@ public class PegKnowledgeDC
         return integerArray;
     }
 
+    protected static ArrayList IntegerArrayToArrayList(Integer[] integerArray)
+    {
+        ArrayList arrayList = new ArrayList();
+
+        for (int i = 0; i < integerArray.length; i++) {
+            arrayList.add(integerArray[i]);
+        }
+
+        return arrayList;
+    }
+
     private static Boolean Contains(final Integer[] hayStack, final Integer needle)
     {
         for (int i = 0; i < hayStack.length; i++) {
@@ -49,14 +60,14 @@ public class PegKnowledgeDC
 
 
 
-    public PegKnowledgeDC(int ncolors, int nholes)
+    public PegKnowledgeDC(int _nColors, int _nHoles)
     {
-        nHoles = new Integer(nholes);
+        nHoles = new Integer(_nHoles);
 
-        nColors = new Integer(ncolors);
+        nColors = new Integer(_nColors);
 
-        knowledge = new PegKnowledge[ncolors];
-        for (int i = 0; i < ncolors; i++) {
+        knowledge = new PegKnowledge[_nColors];
+        for (int i = 0; i < _nColors; i++) {
             knowledge[i] = new PegKnowledge();
         }
     }
@@ -82,6 +93,16 @@ public class PegKnowledgeDC
         
     }
 
+    public void addPegNoEstaEn(int peg, Integer DondeNoEsta)
+    {
+        knowledge[peg].addPegNoEstaEn(DondeNoEsta);
+
+        Integer[] where = WhereMayBe(peg);
+        if (where.length == 1) {
+            addPegEstaEn(peg, where[0]);
+        }
+    }
+
     public void addPegEstaPeroNoEn(int peg)
     {
         knowledge[peg].addPegEstaPeroNoEn();
@@ -91,25 +112,11 @@ public class PegKnowledgeDC
     {
         knowledge[peg].addPegEstaPeroNoEn(DondeNoEsta);
 
-        // if it is known that there it is but not in any possible holes minus 1
-        // we can infer that it is in the remaining hole, so
-        // we can upgrade its status to ESTA_EN
-        Integer[] details = knowledge[peg].getStateDetails();
-        Integer DondeEsta = -1;
-        Integer j = 0;
-
-        if (details.length == nHoles - 1) {
-            do {
-                if (!Contains(details, j)) {
-                    // we got him
-                    DondeEsta = new Integer(j);
-                }
-                j++;
-            } while (DondeEsta.equals(-1));
-
-            // upgrade state
-            addPegEstaEn(peg, DondeEsta);
+        Integer[] where = WhereMayBe(peg);
+        if (where.length == 1) {
+            addPegEstaEn(peg, where[0]);
         }
+
     }
 
     public void addPegEstaEn(int peg, Integer DondeEsta)
@@ -148,6 +155,19 @@ public class PegKnowledgeDC
     public Integer WhereIs(int peg)
     {
         return knowledge[peg].WhereIs();
+    }
+
+    public Integer[] WhereMayBe(int peg)
+    {
+        ArrayList res = new ArrayList();
+
+        for (int hole = 0; hole < nHoles; hole++) {
+            if (CanPegBeInPos(peg, hole)) {
+                res.add(hole);
+            }
+        }
+
+        return ArrayListToIntegerArray(res);
     }
 
     public Integer HowManyInState(Integer state)
@@ -198,11 +218,27 @@ public class PegKnowledgeDC
         return HowManyInState(PegKnowledge.PUEDE_ESTAR);
     }
 
+    public Integer[] WhichMayBeInPos(int pos)
+    {
+        ArrayList CanBeInHole = new ArrayList();
+
+        for (int c = 0; c < nColors.intValue(); c++) {
+
+            if (CanPegBeInPos(c, pos)) {
+
+                CanBeInHole.add(c);
+
+            }
+        }
+
+        return ArrayListToIntegerArray(CanBeInHole);
+    }
+
     public Integer[] WhichAreInPattern()
     {
         ArrayList which = new ArrayList();
 
-        for (int i = 0; i < nColors; i++) {
+        for (int i = 0; i < nColors.intValue(); i++) {
             if (knowledge[i].isInPattern()) which.add(i);
         }
 
@@ -213,7 +249,7 @@ public class PegKnowledgeDC
     {
         ArrayList which = new ArrayList();
 
-        for (int i = 0; i < nColors; i++) {
+        for (int i = 0; i < nColors.intValue(); i++) {
             if (knowledge[i].isNotInPattern()) which.add(i);
         }
 
@@ -224,7 +260,7 @@ public class PegKnowledgeDC
     {
         ArrayList which = new ArrayList();
 
-        for (int i = 0; i < nColors; i++) {
+        for (int i = 0; i < nColors.intValue(); i++) {
             if (knowledge[i].mayBeInPatter()) which.add(i);
         }
 
@@ -236,7 +272,7 @@ public class PegKnowledgeDC
         String str = new String("");
         Integer[] details;
 
-        for (int i = 0; i < nColors; i++) {
+        for (int i = 0; i < nColors.intValue(); i++) {
 
             // state
             str = i + " " + knowledge[i].getState().toString();
@@ -252,7 +288,6 @@ public class PegKnowledgeDC
             System.out.println(str);
         }
 
-        System.out.println();
     }
     
 }
