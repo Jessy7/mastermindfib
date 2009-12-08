@@ -1,7 +1,6 @@
 
 package CPUAlgorithm;
 
-import Domain.PegKnowledge;
 import java.util.ArrayList;
 
 /**

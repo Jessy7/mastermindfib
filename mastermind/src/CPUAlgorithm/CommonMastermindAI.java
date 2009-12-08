@@ -274,7 +274,7 @@ public abstract class CommonMastermindAI
         return ArrayListToIntegerArray(res);
     }
 
-     Boolean IsRelieve(final Integer[] fromRow, final Integer[] toRow)
+    private Boolean IsRelieve(final Integer[] fromRow, final Integer[] toRow)
     {
         ArrayList addedList = new ArrayList();
         ArrayList removedList = new ArrayList();
@@ -594,42 +594,21 @@ public abstract class CommonMastermindAI
 
     }
 
+    /*
+     * A relieve can be done keeping the order or not
+     */
     private void LearnFromRelieve(final Integer fromRow, final Integer toRow,
             Integer added, Integer removed)
     {
         knowledge.print();
 
-        if (IsReliveRemainingEqual(codePegs[fromRow], codePegs[toRow],
-                added, removed)) {
-
-            LearnFromRelieveRemainingEqual(fromRow, toRow, added, removed);
-
-        } else if (IsReliveRemainingReorder(codePegs[fromRow], codePegs[toRow],
-                added, removed)) {
-
-            /*LearnFromRelieveRemainingReorder(codePegs[fromRow], codePegs[toRow],
-                    added, removed);
-
-        } else if (IsRelieveReorder(codePegs[fromRow], codePegs[toRow],
-                added, removed)) {
-
-            LearnFromRelieveReorder(codePegs[fromRow], codePegs[toRow],
-                    added, removed);
-*/
-        }
-
-    }
-
-    private void LearnFromRelieveRemainingEqual(final Integer fromRow, final Integer toRow,
-            Integer added, Integer removed)
-    {
         /*
-         * in any positions, differences in the sum of white + colored key pegs
-         * give information
+         * whether the order was kept or didn't, differences in the sum of
+         * white + colored key pegs give information
          */
         switch(KeyDiff(fromRow, toRow)) {
 
-            // added peg is in the pattern. the old don't.
+            // added peg is in the pattern. the old doesn't.
             case 1:
                 knowledge.addPegEstaPeroNoEn(added, PegPosInRow(toRow, added));
                 knowledge.addPegNoEsta(removed);
@@ -652,6 +631,8 @@ public abstract class CommonMastermindAI
                 } else if (knowledge.getState(added).equals(PegKnowledge.NO_ESTA)) {
                     knowledge.addPegNoEsta(removed);
 
+
+
                 /*
                  * ESTA_PERO_NO_EN state is transmited (not its details)
                  */
@@ -663,6 +644,8 @@ public abstract class CommonMastermindAI
                 // added -> removed
                 } else if (knowledge.getState(added).equals(PegKnowledge.ESTA_PERO_NO_EN)) {
                     knowledge.addPegEstaPeroNoEn(removed, PegPosInRow(fromRow, removed));
+
+
 
                 /*
                  * ESTA_EN state is transmited (not its details)
@@ -680,48 +663,61 @@ public abstract class CommonMastermindAI
 
                 break;
 
-            // removed peg is in the pattern. the new don't.
+            // removed peg is in the pattern. the new doesn't.
             case -1:
                 knowledge.addPegEstaPeroNoEn(removed, PegPosInRow(fromRow, added));
                 knowledge.addPegNoEsta(added);
                 break;
 
-        } // fi any position
+        }
 
-        /*
-         * in the same position, color key pegs differences give information
-         */
-        if (PegPosInRow(toRow, added).equals(PegPosInRow(fromRow, removed))) {
+        if (IsReliveRemainingEqual(codePegs[fromRow], codePegs[toRow],
+                added, removed)) {
 
-            Integer pos = PegPosInRow(toRow, added); // == PegPosInRow(fromRow, removed)
-            switch (KeyColoredDiff(fromRow, toRow)) {
+            LearnFromRelieveKeptOrder(fromRow, toRow, added, removed);
 
-                // added peg is exactly in the right hole
-                case 1:
-                    knowledge.addPegEstaEn(added, pos);
+        } else {
 
-                    // the old is not in the pattern
-                    if (KeyWhiteDiff(fromRow, toRow).equals(0)) {
-                        knowledge.addPegNoEsta(removed);
-                    }
-                    break;
+            LearnFromRelieveNoKeptOrder(fromRow, toRow, added, removed);
 
-                // removed peg was exactly in the right hole
-                case -1:
-                    knowledge.addPegEstaEn(removed, pos);
-
-                    // the new is not in the pattern
-                    if (KeyWhiteDiff(fromRow, toRow).equals(0)) {
-                        knowledge.addPegNoEsta(added);
-                    }
-                    break;
-
-            }
-        } // fi same position
+        }
 
     }
 
-    private void LearnFromRelieveRemainingReorder(final Integer fromRow, final Integer toRow,
+    private void LearnFromRelieveKeptOrder(final Integer fromRow, final Integer toRow,
+            Integer added, Integer removed)
+    {
+        /*
+         * color key pegs differences give information
+         */
+        Integer pos = PegPosInRow(toRow, added); // == PegPosInRow(fromRow, removed)
+        switch (KeyColoredDiff(fromRow, toRow)) {
+
+            // added peg is exactly in the right hole
+            case 1:
+                knowledge.addPegEstaEn(added, pos);
+
+                // the old is not in the pattern
+                if (KeyWhiteDiff(fromRow, toRow).equals(0)) {
+                    knowledge.addPegNoEsta(removed);
+                }
+                break;
+
+            // removed peg was exactly in the right hole
+            case -1:
+                knowledge.addPegEstaEn(removed, pos);
+
+                // the new is not in the pattern
+                if (KeyWhiteDiff(fromRow, toRow).equals(0)) {
+                    knowledge.addPegNoEsta(added);
+                }
+                break;
+
+        }
+
+    }
+
+    private void LearnFromRelieveNoKeptOrder(final Integer fromRow, final Integer toRow,
             Integer added, Integer removed)
     {
         
