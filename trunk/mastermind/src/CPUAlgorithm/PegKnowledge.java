@@ -24,8 +24,8 @@ public class PegKnowledge
      * Columns:
      *  - State: {NO_ESTA, ..., ESTA_EN}
      *  - Details about the state. Depending on the value of the state:
+     *      - If PUEDE_ESTAR: Stores where it is known that the peg is not.
      *      - If ESTA_PERO_NO_EN: Stores where it is known that the peg is not.
-     *              Comma-separated numbers of column.
      *      - If ESTA_EN: Stores where the peg is.
      *
      */
@@ -74,6 +74,16 @@ public class PegKnowledge
         }
     }
 
+    public void addPegNoEstaEn(Integer DondeNoEsta)
+    {
+        if (equals(PUEDE_ESTAR, state)) {
+            state_details.add(DondeNoEsta);
+        }
+    }
+
+    /**
+     * keeps knowledge about where the peg is not (state_details)
+     */
     public void addPegEstaPeroNoEn()
     {
         if (greaterThan(ESTA_PERO_NO_EN, state)) {
@@ -102,15 +112,17 @@ public class PegKnowledge
     public Boolean CanPegBeInPos(Integer pos)
     {
         
-        if (state == NO_ESTA) return false;
+        if (state.equals(NO_ESTA)) return false;
 
-        if (state == PUEDE_ESTAR) return true;
-
-        if (state == ESTA_PERO_NO_EN) {
+        if (state.equals(PUEDE_ESTAR)) {
             return !state_details.contains(pos);
         }
 
-        if (state == ESTA_EN) {
+        if (state.equals(ESTA_PERO_NO_EN)) {
+            return !state_details.contains(pos);
+        }
+
+        if (state.equals(ESTA_EN)) {
             return state_details.contains(pos);
         }
 
@@ -121,7 +133,7 @@ public class PegKnowledge
     {
         Iterator itr;
 
-        if (state == ESTA_EN) {
+        if (state.equals(ESTA_EN)) {
             itr = state_details.iterator();
             return (Integer)itr.next();
         } else {
@@ -131,32 +143,32 @@ public class PegKnowledge
     
     public Boolean isInPattern()
     {
-        return state == ESTA_EN || state == ESTA_PERO_NO_EN;
+        return state.equals(ESTA_EN) || state.equals(ESTA_PERO_NO_EN);
     }
 
     public Boolean isNotInPattern()
     {
-        return state == NO_ESTA;
+        return state.equals(NO_ESTA);
     }
 
     public Boolean mayBeInPatter()
     {
-        return state == PUEDE_ESTAR;
+        return state.equals(PUEDE_ESTAR);
     }
 
     private Boolean greaterThan (Integer stateA, Integer stateB)
     {
-        return Compare(stateA, stateB) > 0;
+        return Compare(stateA, stateB).intValue() > 0;
     }
 
     private Boolean lessThan (Integer stateA, Integer stateB)
     {
-        return Compare(stateA, stateB) < 0;
+        return Compare(stateA, stateB).intValue() < 0;
     }
 
     private Boolean equals (Integer stateA, Integer stateB)
     {
-        return Compare(stateA, stateB) == 0;
+        return Compare(stateA, stateB).equals(0);
     }
 
     private Integer Compare (Integer stateA, Integer stateB)

@@ -67,7 +67,7 @@ public class MastermindAI4Holes extends CommonMastermindAI
     protected void SuccessorSelection(Integer lastRow, Integer[] successor)
     {
 
-        if (lastRow >= -1 && lastRow <= 2) {
+        if (lastRow.intValue() >= -1 && lastRow.intValue() <= 2) {
 
             switch (lastRow) {
                 case -1:

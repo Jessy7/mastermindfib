@@ -118,7 +118,7 @@ public abstract class CommonMastermindAI
     private void SwapDiff(final Integer[] fromRow, final Integer[] toRow,
             ArrayList sources, ArrayList destinations)
     {
-        for (int j = 0; j < NHOLES; j++) {
+        for (int j = 0; j < NHOLES.intValue(); j++) {
 
             // the peg on the source has changed its position
             if (!fromRow[j].equals(toRow[j])) {
@@ -128,7 +128,7 @@ public abstract class CommonMastermindAI
                     sources.add(j);
 
                     // find the new position of th epeg
-                    for (int k = 0; k < NHOLES; k++) {
+                    for (int k = 0; k < NHOLES.intValue(); k++) {
                         if (fromRow[j].equals(toRow[k])) {
                             destinations.add(k);
                         }
@@ -188,7 +188,7 @@ public abstract class CommonMastermindAI
          * eg: pegs = 1624, colors = 123456
          */
 
-        for (int j = 0; j < NCOLORS; j++) {
+        for (int j = 0; j < NCOLORS.intValue(); j++) {
             WA_bool[j] = new Boolean(false);
         }
 
@@ -196,7 +196,7 @@ public abstract class CommonMastermindAI
          * WA_bool = [false][false][false][false][false][false]
          */
 
-        for (int j = 0; j < NHOLES; j++) {
+        for (int j = 0; j < NHOLES.intValue(); j++) {
             WA_bool[codePegsRow[j]] = new Boolean(true);
         }
 
@@ -204,8 +204,8 @@ public abstract class CommonMastermindAI
          * WA_bool = [true][true][false][true][false][true]
          */
 
-        for (int j = 0; j < NCOLORS; j++) {
-            if (WA_bool[j] == false) {
+        for (int j = 0; j < NCOLORS.intValue(); j++) {
+            if (WA_bool[j].equals(false)) {
                 WAN[i] = new Integer(j);
                 i++;
             }
@@ -298,7 +298,7 @@ public abstract class CommonMastermindAI
         Boolean res = true;
 
         // all the remaining must be in the same hole
-        for (int j = 0; j < NHOLES; j++) {
+        for (int j = 0; j < NHOLES.intValue(); j++) {
             if (fromRow[j].equals(removed)) {
                 // don't check this hole
             } else {
@@ -317,7 +317,7 @@ public abstract class CommonMastermindAI
         Boolean res = false;
 
         // at least one of the remaining must be in a different hole
-        for (int j = 0; j < NHOLES; j++) {
+        for (int j = 0; j < NHOLES.intValue(); j++) {
             if (fromRow[j].equals(removed)) {
                 // don't check this hole
             } else {
@@ -336,6 +336,19 @@ public abstract class CommonMastermindAI
         return !PegPosInRow(fromRow, removed).equals(PegPosInRow(toRow, added));
     }
 
+    private static String IntegerArrayToString(Integer[] x)
+    {
+        String res = new String();
+
+        res += x[0];
+
+        for (int i = 1; i < x.length; i++) {
+            res += "," + x[i];
+        }
+        
+        return res;
+    }
+
     /**
      *
      * @param row Array of integers
@@ -348,7 +361,7 @@ public abstract class CommonMastermindAI
      */
     private Integer PegPosInRow(Integer[] row, Integer Color)
     {
-        for (int j = 0; j < NHOLES; j++) {
+        for (int j = 0; j < NHOLES.intValue(); j++) {
             if (row[j].equals(Color)) return j;
         }
 
@@ -371,16 +384,21 @@ public abstract class CommonMastermindAI
         NHOLES = _nHoles;
         NCOLORS = _nColors;
 
+        Integer currRow = new Integer(0);
+        while (_codePegs[currRow][0] != null) {
+            currRow++;
+        }
+
         codePegs = new Integer[_codePegs.length][NHOLES];
-        for (int i = 0; i < _codePegs.length; i++) {
-            for (int j = 0; j < NHOLES; j++) {
+        for (int i = 0; i < currRow; i++) {
+            for (int j = 0; j < NHOLES.intValue(); j++) {
                 codePegs[i][j] = new Integer(_codePegs[i][j]);
             }
         }
         
         keyPegs = new Integer[_keyPegs.length][KEYPEG_NCOLS];
-        for (int i = 0; i < _keyPegs.length; i++) {
-            for (int j = 0; j < KEYPEG_NCOLS; j++) {
+        for (int i = 0; i < currRow; i++) {
+            for (int j = 0; j < KEYPEG_NCOLS.intValue(); j++) {
                 keyPegs[i][j] = new Integer(_keyPegs[i][j]);
             }
         }
@@ -459,10 +477,18 @@ public abstract class CommonMastermindAI
 
         knowledge.print();
 
-    }
+     }
     
     protected void LearnFromRow(Integer row)
     {
+
+        // no colored keypegs -> none of the guessed can be where has been guessed
+        if (keyPegs[row][COLORED_COL] == 0) {
+            for (int j = 0; j < NHOLES; j++) {
+                knowledge.addPegNoEstaEn(codePegs[row][j], j);
+            }
+        }
+
         // switch value
         Integer nKeyPegs = keyPegs[row][COLORED_COL] + keyPegs[row][WHITE_COL];
 
@@ -470,7 +496,7 @@ public abstract class CommonMastermindAI
          * eg: 3 keypegs, 7 holes, 11 colors --> the 4 colors that are not there
          * in the guess, are in the pattern.
          */
-        if (NHOLES - nKeyPegs == NCOLORS - NHOLES) {
+        if (((Integer)(NHOLES - nKeyPegs)).equals((Integer)(NCOLORS - NHOLES))) {
 
             for (Integer IsNot : WhichAreNot(codePegs[row])) {
                 knowledge.addPegEstaPeroNoEn(IsNot);
@@ -486,7 +512,7 @@ public abstract class CommonMastermindAI
             if (keyPegs[row][WHITE_COL].equals(NHOLES)) {
 
                 // for each one we know that it is not on that position
-                for (Integer j = 0; j < NHOLES; j++) {
+                for (Integer j = 0; j < NHOLES.intValue(); j++) {
                     knowledge.addPegEstaPeroNoEn(codePegs[row][j], j);
                 }
 
@@ -494,7 +520,7 @@ public abstract class CommonMastermindAI
             } else {
 
                 // for each one we know that, at least, is in the pattern
-                for (Integer j = 0; j < NHOLES; j++) {
+                for (Integer j = 0; j < NHOLES.intValue(); j++) {
                     knowledge.addPegEstaPeroNoEn(codePegs[row][j]);
                 }
 
@@ -520,7 +546,7 @@ public abstract class CommonMastermindAI
                  * nKeyPegs would have been greater than inRow!
                  */
 
-                for (int j = 0; j < NHOLES; j++) {
+                for (int j = 0; j < NHOLES.intValue(); j++) {
                     if (knowledge.getState(
                             codePegs[row][j]).equals(
                             PegKnowledge.PUEDE_ESTAR)) {
@@ -578,6 +604,10 @@ public abstract class CommonMastermindAI
             SwapDiff(codePegs[fromRow], codePegs[toRow],
                     sourcesList, destinationsList);
 
+            if (sourcesList.size() == 0) {
+                System.out.println();
+            }
+
             Integer source = (Integer)sourcesList.get(0);
             Integer destination = (Integer)destinationsList.get(0);
 
@@ -600,7 +630,6 @@ public abstract class CommonMastermindAI
     private void LearnFromRelieve(final Integer fromRow, final Integer toRow,
             Integer added, Integer removed)
     {
-        knowledge.print();
 
         /*
          * whether the order was kept or didn't, differences in the sum of
@@ -610,7 +639,11 @@ public abstract class CommonMastermindAI
 
             // added peg is in the pattern. the old doesn't.
             case 1:
-                knowledge.addPegEstaPeroNoEn(added, PegPosInRow(toRow, added));
+                if (keyPegs[toRow][COLORED_COL].equals(0)) {
+                    knowledge.addPegEstaPeroNoEn(added, PegPosInRow(toRow, added));
+                } else {
+                    knowledge.addPegEstaPeroNoEn(added);
+                }
                 knowledge.addPegNoEsta(removed);
                 break;
 
@@ -639,24 +672,40 @@ public abstract class CommonMastermindAI
 
                 // removed -> added
                 } else if (knowledge.getState(removed).equals(PegKnowledge.ESTA_PERO_NO_EN)) {
-                    knowledge.addPegEstaPeroNoEn(added, PegPosInRow(toRow, added));
+                    knowledge.addPegEstaPeroNoEn(added);
 
                 // added -> removed
                 } else if (knowledge.getState(added).equals(PegKnowledge.ESTA_PERO_NO_EN)) {
-                    knowledge.addPegEstaPeroNoEn(removed, PegPosInRow(fromRow, removed));
+                    knowledge.addPegEstaPeroNoEn(removed);
 
 
 
                 /*
-                 * ESTA_EN state is transmited (not its details)
+                 * ESTA_EN state is transmited (but details are customized)
                  */
 
                 // removed -> added
-                } else if (knowledge.getState(removed).equals(PegKnowledge.ESTA_EN)) {
+                } else if (
+                        // removed's state == ESTA_EN
+                        knowledge.getState(removed).equals(PegKnowledge.ESTA_EN) &&
+                        
+                        // removed was in his right position
+                        knowledge.WhereIs(removed).equals(PegPosInRow(fromRow, removed))
+                        ) {
+
+                    // added has been put in his right position
                     knowledge.addPegEstaEn(added, PegPosInRow(toRow, added));
 
                 // added -> removed
-                } else if (knowledge.getState(added).equals(PegKnowledge.ESTA_EN)) {
+                } else if (
+                        // added's state == ESTA_EN
+                        knowledge.getState(added).equals(PegKnowledge.ESTA_EN) &&
+
+                        // added is in his right position
+                        knowledge.WhereIs(added).equals(PegPosInRow(toRow, added))
+                        ) {
+
+                    // removed has been removed from his right position
                     knowledge.addPegEstaEn(removed, PegPosInRow(fromRow, removed));
 
                 }
@@ -776,28 +825,69 @@ public abstract class CommonMastermindAI
         if (IsSwap11(codePegs[firstRow], codePegs[secondRow])) {
             if (IsSwap11(codePegs[secondRow], codePegs[thirdRow])) {
 
-                // if first transition wins a colored peg
+                // if first transition won a colored peg
                 if (KeyColoredDiff(firstRow, secondRow).equals(1)) {
 
+                    // transition 1
                     SwapDiff(codePegs[firstRow], codePegs[secondRow],
                             originsList, destinationsList);
 
-                    Integer posX = (Integer)originsList.get(0);
-                    Integer X = codePegs[firstRow][posX];
+                    Integer pO1 = new Integer((Integer)originsList.get(0));
 
-                    Integer posY = (Integer)destinationsList.get(0);
-                    Integer Y = codePegs[firstRow][posY];
+                    Integer pD1 = new Integer((Integer)destinationsList.get(0));
+
+                    // transition 2
+                    SwapDiff(codePegs[secondRow], codePegs[thirdRow],
+                            originsList, destinationsList);
+
+                    Integer pO2 = new Integer((Integer)originsList.get(0));
+
+                    Integer pD2 = new Integer((Integer)destinationsList.get(0));
+
+                    Integer X, Y, Z;
+                    Integer pX = new Integer(-1);
+                    Integer pY = new Integer(-1);
+                    Integer pZ = new Integer(-1);
+
+                    // origen 1 == origen 2
+                    if (pO1.equals(pO2)) {
+                        pX = new Integer(pD1);
+                        pY = new Integer(pO2);
+                        pZ = new Integer(pD2);
+
+                    // origen 1 == destí 2
+                    } else if (pO1.equals(pD2)) {
+                        pX = new Integer(pD1);
+                        pY = new Integer(pD2);
+                        pZ = new Integer(pO2);
+
+                    // destí 1 == origen 2
+                    } else if (pD1.equals(pO2)) {
+                        pX = new Integer(pO1);
+                        pY = new Integer(pO2);
+                        pZ = new Integer(pD2);
+
+                    // destí 1 == destí 2
+                    } else if (pD1.equals(pD2)) {
+                        pX = new Integer(pO1);
+                        pY = new Integer(pD2);
+                        pZ = new Integer(pO2);
+
+                    }
+
+                    X = new Integer(codePegs[thirdRow][pX]);
+                    Z = new Integer(codePegs[thirdRow][pZ]);
 
                     switch(KeyColoredDiff(secondRow, thirdRow)) {
 
                         // if second transition looses a colored peg
                         case -1:
-                            knowledge.addPegEstaEn(Y, posY);
+                            knowledge.addPegEstaEn(Z, pY);
                             break;
 
                         // if second transition does not modify the colored pegs
                         case 0:
-                            knowledge.addPegEstaEn(X, posX);
+                            knowledge.addPegEstaEn(X, pX);
                             break;
                     }
                 }
@@ -876,7 +966,7 @@ public abstract class CommonMastermindAI
         Integer row;
 
         for (row = 0;
-                row < codePegs.length && codePegs[row][0] != null;
+                (row.intValue() < codePegs.length) && (codePegs[row][0] != null);
                 row++) {}
 
         return row;
@@ -911,8 +1001,8 @@ public abstract class CommonMastermindAI
         Integer lastRow = new Integer(CurrentRow() - 1);
 
         // initializes the successor with the last guess
-        if (lastRow >= 0) {
-            for (int j = 0; j < NHOLES; j++) {
+        if (lastRow.intValue() >= 0) {
+            for (int j = 0; j < NHOLES.intValue(); j++) {
                 successor[j] = new Integer(codePegs[lastRow][j]);
             }
         }
@@ -938,7 +1028,7 @@ public abstract class CommonMastermindAI
     private void SuccessorOrder(Integer[] successor)
     {
         // if not all colors in the pattern were in the last guess
-        if (knowledge.HowManyInPattern(successor) != NHOLES) {
+        if (!knowledge.HowManyInPattern(successor).equals(NHOLES)) {
 
             Relieve1BadBy1Good(successor);
 
@@ -959,6 +1049,10 @@ public abstract class CommonMastermindAI
     {
         // list of swappable positions
         ArrayList swappablePoss = getSwappablePoss();
+
+        System.out.println("Swappable positions: " +
+                IntegerArrayToString(ArrayListToIntegerArray(swappablePoss)));
+
 
         // list of potential swaps
             /* cartesian product filtering
@@ -982,21 +1076,36 @@ public abstract class CommonMastermindAI
          *      2415
          */
 
+        if (origins.size() == 0 || destinations.size() == 0) {
+            System.out.println("swap(): there are no origins or destinations.");
+            System.out.println("Successor: " + IntegerArrayToString(successor));
+
+            return;
+        }
+
         int i = 0;
 
+        Integer[] successorAttempt = new Integer[successor.length];
+
         do {
+            System.arraycopy(successor, 0, successorAttempt, 0, successor.length);
+
             Integer aux;
             Integer pos1 = (Integer)origins.get(i);
             Integer pos2 = (Integer)destinations.get(i);
 
-            aux = successor[pos1];
-            successor[pos1] = successor[pos2];
-            successor[pos2] = aux;
+            aux = successorAttempt[pos1];
+            successorAttempt[pos1] = successorAttempt[pos2];
+            successorAttempt[pos2] = aux;
+            System.out.println("successorAttempt: " + IntegerArrayToString(successorAttempt));
+            
             i++;
-
+            
         // discard proposing a previous guess
-        } while (IsRowInMatrix(successor, codePegs) && i < origins.size());
+        } while (IsRowInMatrix(successorAttempt, codePegs) && i < origins.size());
 
+        System.arraycopy(successorAttempt, 0, successor, 0, successor.length);
+        System.out.println("final successor: " + IntegerArrayToString(successorAttempt));
     }
 
     /**
@@ -1019,7 +1128,7 @@ public abstract class CommonMastermindAI
         i = 0;
         do {
             // if color not in pattern is in the successor
-            if (PegPosInRow(successor, colorsNotIn[i]) > -1) {
+            if (PegPosInRow(successor, colorsNotIn[i]).intValue() > -1) {
                 posOfBad = PegPosInRow(successor, colorsNotIn[i]);
             }
             i++;
@@ -1065,7 +1174,7 @@ public abstract class CommonMastermindAI
     {
         ArrayList<Integer> swappable = new ArrayList();
 
-        for (int i = 0; i < NCOLORS; i++) {
+        for (int i = 0; i < NCOLORS.intValue(); i++) {
             if (knowledge.getState(i).equals(PegKnowledge.ESTA_PERO_NO_EN)) {
                 swappable.add(i);
             }
