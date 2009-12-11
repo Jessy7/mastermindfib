@@ -5,11 +5,19 @@ import java.util.ArrayList;
 
 /**
  * This class groups the knowledge about pegs and provides methods
- * to access to this knowledge
+ * to access (write and read) to this knowledge.
  *
- * @author Samuel Gomez
+ * Write methods are named addPeg*, and they allow the user to abstract from
+ * whether the added information was already known or didn't; adding less
+ * precise information than the already kept by the knowledge,
+ * does not makes the knowledge less precise than before.
+ *
+ * However, it does not manage writtings that contradict the current knowledge;
+ * this must be controlled by the user.
+ *
+ * @author Samuel Gómez
  */
-public class PegKnowledgeDC
+public class PegsKnowledge
 {
     private Integer nHoles;
     private Integer nColors;
@@ -60,15 +68,38 @@ public class PegKnowledgeDC
 
 
 
-    public PegKnowledgeDC(int _nColors, int _nHoles)
+    /**
+     * New instance
+     * 
+     * @param _nColors
+     * @param _nHoles
+     */
+    public PegsKnowledge(int _nColors, int _nHoles)
     {
         nHoles = new Integer(_nHoles);
 
         nColors = new Integer(_nColors);
 
-        knowledge = new PegKnowledge[_nColors];
+        knowledge = new PegKnowledge[nColors];
         for (int i = 0; i < _nColors; i++) {
             knowledge[i] = new PegKnowledge();
+        }
+    }
+
+    /**
+     * Copy instance
+     *
+     * @param original
+     */
+    public PegsKnowledge(PegsKnowledge original)
+    {
+        nHoles = new Integer(original.nHoles);
+
+        nColors = new Integer(original.nColors);
+
+        knowledge = new PegKnowledge[nColors];
+        for (int i = 0; i < nColors; i++) {
+            knowledge[i] = new PegKnowledge(original.knowledge[i]);
         }
     }
 
@@ -87,7 +118,9 @@ public class PegKnowledgeDC
          */
         if (HowManyInState(PegKnowledge.NO_ESTA).equals(nColors - nHoles)) {
             for (int i = 0; i < nColors; i++) {
-                addPegEstaPeroNoEn(i);
+                if (knowledge[i].getState().equals(PegKnowledge.PUEDE_ESTAR)) {
+                    addPegEstaPeroNoEn(i);
+                }
             }
         }
         
@@ -97,9 +130,12 @@ public class PegKnowledgeDC
     {
         knowledge[peg].addPegNoEstaEn(DondeNoEsta);
 
-        Integer[] where = WhereMayBe(peg);
-        if (where.length == 1) {
-            addPegEstaEn(peg, where[0]);
+        /* if a peg P in the pattern can only be in one possible hole H, P is in H */
+        if (knowledge[peg].getState().equals(PegKnowledge.ESTA_PERO_NO_EN)) {
+            Integer[] where = WhereMayBe(peg);
+            if (where.length == 1) {
+                addPegEstaEn(peg, where[0]);
+            }
         }
     }
 
@@ -112,6 +148,7 @@ public class PegKnowledgeDC
     {
         knowledge[peg].addPegEstaPeroNoEn(DondeNoEsta);
 
+        /* if a peg P in the pattern can only be in one possible hole H, P is in H */
         Integer[] where = WhereMayBe(peg);
         if (where.length == 1) {
             addPegEstaEn(peg, where[0]);
@@ -123,9 +160,10 @@ public class PegKnowledgeDC
     {
         knowledge[peg].addPegEstaEn(DondeEsta);
 
+        /* peg P is in hole H implies all the other pegs are not in hole H */
         for (int i = 0; i < knowledge.length; i++) {
-            if ((i != peg) && (getState(peg).equals(PegKnowledge.ESTA_PERO_NO_EN))) {
-                addPegEstaPeroNoEn(i, DondeEsta);
+            if (i != peg) {
+                addPegNoEstaEn(i, DondeEsta);
             }
         }
     }
@@ -172,10 +210,42 @@ public class PegKnowledgeDC
 
     public Integer HowManyInState(Integer state)
     {
-        Integer res = 0;
+        Integer res = new Integer(0);
 
         for (int i = 0; i < knowledge.length; i++) {
             if (knowledge[i].getState().equals(state)) {
+                res++;
+            }
+        }
+
+        return res;
+    }
+
+    public Integer HowManyInState(Integer state, Integer[] Colors)
+    {
+        Integer res = new Integer(0);
+
+        for (int j = 0; j < Colors.length; j++) {
+            if (knowledge[Colors[j]].getState().equals(state)) {
+                res++;
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     *
+     * @param Colors
+     * @return How many of the colors in Colors it is known that there are
+     * in the pattern and right in the position that they have in Colors
+     */
+    public Integer HowManyInRightHole(Integer[] Colors)
+    {
+        Integer res = new Integer(0);
+
+        for (int j = 0; j < Colors.length; j++) {
+            if (knowledge[Colors[j]].WhereIs().equals(j)) {
                 res++;
             }
         }
@@ -191,16 +261,8 @@ public class PegKnowledgeDC
      */
     public Integer HowManyInPattern(Integer[] Colors)
     {
-        Integer res = new Integer(0);
-
-        for (int i = 0; i < Colors.length; i++) {
-            if (knowledge[Colors[i]].getState().equals(PegKnowledge.ESTA_EN) ||
-                    knowledge[Colors[i]].getState().equals(PegKnowledge.ESTA_PERO_NO_EN)) {
-                res++;
-            }
-        }
-
-        return res;
+        return HowManyInState(PegKnowledge.ESTA_EN, Colors) +
+                HowManyInState(PegKnowledge.ESTA_PERO_NO_EN, Colors);
     }
 
     /**
@@ -232,6 +294,17 @@ public class PegKnowledgeDC
         }
 
         return ArrayListToIntegerArray(CanBeInHole);
+    }
+
+    public Integer[] WhichAreInRightHole()
+    {
+        ArrayList which = new ArrayList();
+
+        for (int i = 0; i < nColors.intValue(); i++) {
+            if (!knowledge[i].WhereIs().equals(-1)) which.add(i);
+        }
+
+        return ArrayListToIntegerArray(which);
     }
 
     public Integer[] WhichAreInPattern()
@@ -288,6 +361,17 @@ public class PegKnowledgeDC
             System.out.println(str);
         }
 
+    }
+
+    public Boolean equals(PegsKnowledge B)
+    {
+        for (int i = 0; i < nColors; i++) {
+            if (!knowledge[i].equals(B.knowledge[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
     
 }

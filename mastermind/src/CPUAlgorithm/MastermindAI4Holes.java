@@ -41,6 +41,11 @@ public class MastermindAI4Holes extends CommonMastermindAI
      *
      */
 
+    /**
+     * 
+     * @param _codePegs Guesses done so far
+     * @param _keyPegs Feedback for the guesses done so far
+     */
     public MastermindAI4Holes(Integer[][] _codePegs, Integer[][] _keyPegs)
     {
         super(NHOLES, NCOLORS, _codePegs, _keyPegs);
@@ -67,63 +72,75 @@ public class MastermindAI4Holes extends CommonMastermindAI
     protected void SuccessorSelection(Integer lastRow, Integer[] successor)
     {
 
-        if (lastRow.intValue() >= -1 && lastRow.intValue() <= 2) {
+        switch (lastRow) {
+            case -1:
+                // without: 4,5
+                successor[0] = 0;
+                successor[1] = 1;
+                successor[2] = 2;
+                successor[3] = 3;
+                break;
+            case 0:
+                // without: 5,0
+                successor[0] = 1;
+                successor[1] = 2;
+                successor[2] = 3;
+                successor[3] = 4;
+                break;
+            case 1:
+                // without: 0,1
+                successor[0] = 2;
+                successor[1] = 3;
+                successor[2] = 4;
+                successor[3] = 5;
+                break;
+            case 2:
+                // without: 1,2
+                successor[0] = 3;
+                successor[1] = 4;
+                successor[2] = 5;
+                successor[3] = 0;
 
-            switch (lastRow) {
-                case -1:
-                    // without: 4,5
-                    successor[0] = 0;
-                    successor[1] = 1;
-                    successor[2] = 2;
-                    successor[3] = 3;
-                    break;
-                case 0:
-                    // without: 0,5
-                    successor[0] = 1;
-                    successor[1] = 2;
-                    successor[2] = 3;
-                    successor[3] = 4;
-                    break;
-                case 1:
-                    // without: 1,2
-                    successor[0] = 2;
-                    successor[1] = 3;
-                    successor[2] = 4;
-                    successor[3] = 5;
-                    break;
-                case 2:
-                    /* in the worst case, by this time we will know at least 3
-                     * of the colors in the pattern, and we will know that
-                     * 1 of the color does not exist in the pattern. so we will
-                     * lack of information only about 2 pegs.
-                     *
-                     * what we can do is to make a guess composed by
-                     * the 3 colors we know that are in, plus, 1 of the colors
-                     * we don't know about.
-                     *
-                     * the feedback from this row will tell us:
-                     * if we got 3 keypegs
-                     *  the 4th color is not in the pattern, so the
-                     *  remaining unknown color does.
-                     * if we got 4 keypegs
-                     *  the 4th color is in the pattern, so the
-                     *  remaingin unknown color does not.
-                     */
-                    ArrayList successorsList = new ArrayList();
-                    
-                    successorsList = IntegerArrayToArrayList(
-                            knowledge.WhichAreInPattern());
+                /*
+                * given 6 colors and 4 holes, in the worst case,
+                 * by this time we will know at least 3
+                 * of the colors in the pattern, and we will know that
+                 * 1 of the color does not exist in the pattern. so we will
+                 * lack of information only about 2 pegs.
+                 *
+                 * what we can do is to make a guess composed by
+                 * the 3 colors we know that are in, plus, 1 of the colors
+                 * we don't know about.
+                 *
+                 * the feedback from this row will tell us:
+                 * if we got 3 keypegs
+                 *  the 4th color is not in the pattern, so the
+                 *  remaining unknown color does.
+                 * if we got 4 keypegs
+                 *  the 4th color is in the pattern, so the
+                 *  remaingin unknown color does not.
+                 *
 
-                    successorsList.add(IntegerArrayToArrayList(
-                            knowledge.WhichMayBeInPattern()).get(0));
+                ArrayList successorsList = new ArrayList();
 
-                    Integer[] odiojava = ArrayListToIntegerArray(successorsList);
-                    for (int i = 0; i < successor.length; i++) {
-                        successor[i] = odiojava[i];
-                    }
-                    break;
-            }
-            
+                successorsList = IntegerArrayToArrayList(
+                        knowledge.WhichAreInPattern());
+
+                successorsList.add(IntegerArrayToArrayList(
+                        knowledge.WhichMayBeInPattern()).get(0));
+
+                Integer[] aux = ArrayListToIntegerArray(successorsList);
+                for (int i = 0; i < successor.length; i++) {
+                    successor[i] = aux[i];
+                }
+                */
+                break;
+            case 3:
+                // without: 2,3
+                successor[0] = 4;
+                successor[1] = 5;
+                successor[2] = 0;
+                successor[3] = 1;
         }
 
     }
