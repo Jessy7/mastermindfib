@@ -68,7 +68,7 @@ public abstract class CommonMastermindAI
      */
     protected Integer[][] keyPegs;
 
-    protected PegKnowledgeDC knowledge;
+    protected PegsKnowledge knowledge;
 
 
 
@@ -403,7 +403,7 @@ public abstract class CommonMastermindAI
             }
         }
 
-        knowledge = new PegKnowledgeDC(NCOLORS, NHOLES);
+        knowledge = new PegsKnowledge(NCOLORS, NHOLES);
     }
 
 
@@ -432,7 +432,13 @@ public abstract class CommonMastermindAI
          * Second: Get a successor. Where knowledge synthesis is performed.
          */
 
-        Learn();
+        PegsKnowledge oldK;
+
+        do {
+            oldK = new PegsKnowledge(knowledge);
+            Learn();
+        } while (!oldK.equals(knowledge));
+
         return getSuccessor();
     }
     
@@ -448,6 +454,8 @@ public abstract class CommonMastermindAI
 
     private void Learn()
     {
+        System.out.println("Learning...");
+
         int currRow;
 
         currRow = CurrentRow();
@@ -489,7 +497,30 @@ public abstract class CommonMastermindAI
             }
         }
 
-        // switch value
+        // as many colored keypegs as codepegs in the guess we know are well placed
+            // if there are no white keypegs
+                // we can infer that the rest of the key pegs are not in the pattern
+            // else
+                /* at least we can infer that the rest of the guess' codepegs
+                 * are not where they are
+                 */
+        if (knowledge.HowManyInRightHole(codePegs[row]).equals(
+                keyPegs[row][COLORED_COL])) {
+            if (keyPegs[row][WHITE_COL].equals(0)) {
+                for (int j = 0; j < NHOLES; j++) {
+                    if (knowledge.getState(j).equals(PegKnowledge.PUEDE_ESTAR)) {
+                        knowledge.addPegNoEsta(codePegs[row][j]);
+                    }
+                }
+            } else {
+                for (int j = 0; j < NHOLES; j++) {
+                   knowledge.addPegNoEstaEn(codePegs[row][j], j);
+                }
+            }
+        }
+
+
+        // switch nKeyPegs
         Integer nKeyPegs = keyPegs[row][COLORED_COL] + keyPegs[row][WHITE_COL];
 
         /* the minimum -> all outside the guess are inside the pattern
@@ -998,24 +1029,37 @@ public abstract class CommonMastermindAI
 
         Integer[] successor = {0, 0, 0, 0};
 
-        Integer lastRow = new Integer(CurrentRow() - 1);
+        // which pegs in right hole
+        Integer[] wrh = knowledge.WhichAreInRightHole();
 
-        // initializes the successor with the last guess
-        if (lastRow.intValue() >= 0) {
-            for (int j = 0; j < NHOLES.intValue(); j++) {
-                successor[j] = new Integer(codePegs[lastRow][j]);
+        if (wrh.length == NHOLES) {
+
+            for (int j = 0; j < NHOLES; j++) {
+                successor[knowledge.WhereIs(wrh[j])] = new Integer(wrh[j]);
             }
-        }
 
-        // if we don't know yet which colors are in the pattern
-        if (knowledge.HowManyInPattern() < NHOLES) {
+        } else {    
 
-            SuccessorSelection(lastRow, successor);
+            Integer lastRow = new Integer(CurrentRow() - 1);
 
-        // if we already know which colors are in the pattern
-        } else {
+            // initializes the successor with the last guess
+            if (lastRow.intValue() >= 0) {
+                for (int j = 0; j < NHOLES.intValue(); j++) {
+                    successor[j] = new Integer(codePegs[lastRow][j]);
+                }
+            }
 
-            SuccessorOrder(successor);
+            // if we don't know yet which colors are in the pattern
+            if (knowledge.HowManyInPattern() < NHOLES) {
+
+                SuccessorSelection(lastRow, successor);
+
+            // if we already know which colors are in the pattern
+            } else {
+
+                SuccessorOrder(successor);
+
+            }
 
         }
 
@@ -1156,7 +1200,7 @@ public abstract class CommonMastermindAI
         Integer row = CurrentRow() - 1;
 
         // swappable pegs as ArrayList
-        ArrayList swappablePegs = getSwappablePegs();
+        ArrayList swappablePegs = getSwappablePegs(row);
 
         // swappablePegs as Integer array
         Integer[] spAsInt = ArrayListToIntegerArray(swappablePegs);
@@ -1170,12 +1214,17 @@ public abstract class CommonMastermindAI
         return res;
     }
 
-    private ArrayList getSwappablePegs()
+    private ArrayList getSwappablePegs(int row)
     {
         ArrayList<Integer> swappable = new ArrayList();
 
         for (int i = 0; i < NCOLORS.intValue(); i++) {
-            if (knowledge.getState(i).equals(PegKnowledge.ESTA_PERO_NO_EN)) {
+            if (knowledge.getState(i).equals(PegKnowledge.ESTA_PERO_NO_EN) ||
+                    (
+                        knowledge.getState(i).equals(PegKnowledge.ESTA_EN) &&
+                        !knowledge.WhereIs(i).equals(PegPosInRow(row, i))
+                     )
+            ) {
                 swappable.add(i);
             }
         }

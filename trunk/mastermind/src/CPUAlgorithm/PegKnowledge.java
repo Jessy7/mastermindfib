@@ -49,6 +49,12 @@ public class PegKnowledge
         state_details = new HashSet();
     }
 
+    public PegKnowledge(PegKnowledge original)
+    {
+        state = new Integer(original.state);
+        state_details = new HashSet(original.state_details);
+    }
+
     public Integer getState()
     {
         return state;
@@ -68,16 +74,15 @@ public class PegKnowledge
 
     public void addPegNoEsta()
     {
-        if (greaterThan(NO_ESTA, state)) {
-            state = NO_ESTA;
-            state_details.clear();
-        }
+        state = NO_ESTA;
+        state_details.clear();
     }
 
     public void addPegNoEstaEn(Integer DondeNoEsta)
     {
-        if (equals(PUEDE_ESTAR, state)) {
-            state_details.add(DondeNoEsta);
+        if (state.intValue() == PUEDE_ESTAR.intValue() ||
+                state.intValue() == ESTA_PERO_NO_EN.intValue()) {
+            state_details.add(new Integer(DondeNoEsta));
         }
     }
 
@@ -86,15 +91,14 @@ public class PegKnowledge
      */
     public void addPegEstaPeroNoEn()
     {
-        if (greaterThan(ESTA_PERO_NO_EN, state)) {
+        if (ESTA_PERO_NO_EN.intValue() > state) {
             state = ESTA_PERO_NO_EN;
         }
     }
 
     public void addPegEstaPeroNoEn(Integer DondeNoEsta)
     {
-        if (equals(ESTA_PERO_NO_EN, state) ||
-                greaterThan(ESTA_PERO_NO_EN, state)) {
+        if (ESTA_PERO_NO_EN.intValue() >= state.intValue()) {
             state = ESTA_PERO_NO_EN;
             state_details.add(DondeNoEsta);
         }
@@ -102,7 +106,7 @@ public class PegKnowledge
 
     public void addPegEstaEn(Integer DondeEsta)
     {
-        if (greaterThan(ESTA_EN, state)) {
+        if (ESTA_EN.intValue() > state.intValue()) {
             state = ESTA_EN;
             state_details.clear();
             state_details.add(DondeEsta);
@@ -156,19 +160,10 @@ public class PegKnowledge
         return state.equals(PUEDE_ESTAR);
     }
 
-    private Boolean greaterThan (Integer stateA, Integer stateB)
+    public Boolean equals (PegKnowledge B)
     {
-        return Compare(stateA, stateB).intValue() > 0;
-    }
-
-    private Boolean lessThan (Integer stateA, Integer stateB)
-    {
-        return Compare(stateA, stateB).intValue() < 0;
-    }
-
-    private Boolean equals (Integer stateA, Integer stateB)
-    {
-        return Compare(stateA, stateB).equals(0);
+        return state.equals(B.state) &&
+                state_details.equals(B.state_details);
     }
 
     private Integer Compare (Integer stateA, Integer stateB)
