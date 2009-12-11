@@ -1,8 +1,6 @@
 
 package CPUAlgorithm;
 
-import java.util.ArrayList;
-
 /**
  * Since it extends from CommonMastermindAI, it only must implement the elements
  * dependant on the number of holes and colors.
@@ -82,24 +80,24 @@ public class MastermindAI4Holes extends CommonMastermindAI
                 break;
             case 0:
                 // without: 5,0
-                successor[0] = 1;
-                successor[1] = 2;
-                successor[2] = 3;
-                successor[3] = 4;
+                successor[0] = 4;
+                successor[1] = 1;
+                successor[2] = 2;
+                successor[3] = 3;
                 break;
             case 1:
                 // without: 0,1
-                successor[0] = 2;
-                successor[1] = 3;
-                successor[2] = 4;
-                successor[3] = 5;
+                successor[0] = 4;
+                successor[1] = 5;
+                successor[2] = 2;
+                successor[3] = 3;
                 break;
             case 2:
                 // without: 1,2
-                successor[0] = 3;
-                successor[1] = 4;
-                successor[2] = 5;
-                successor[3] = 0;
+                successor[0] = 4;
+                successor[1] = 5;
+                successor[2] = 0;
+                successor[3] = 3;
 
                 /*
                 * given 6 colors and 4 holes, in the worst case,

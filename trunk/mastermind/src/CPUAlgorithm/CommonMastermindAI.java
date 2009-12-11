@@ -300,7 +300,7 @@ public abstract class CommonMastermindAI
         // all the remaining must be in the same hole
         for (int j = 0; j < NHOLES.intValue(); j++) {
             if (fromRow[j].equals(removed)) {
-                // don't check this hole
+                // don't check the hole of the relieved peg
             } else {
                 if (!fromRow[j].equals(toRow[j])) {
                     res = false;
@@ -712,32 +712,18 @@ public abstract class CommonMastermindAI
 
 
                 /*
-                 * ESTA_EN state is transmited (but details are customized)
+                 * ESTA_EN state is transmited as ESTA_PERO_NO_EN (without details)
                  */
 
                 // removed -> added
-                } else if (
-                        // removed's state == ESTA_EN
-                        knowledge.getState(removed).equals(PegKnowledge.ESTA_EN) &&
-                        
-                        // removed was in his right position
-                        knowledge.WhereIs(removed).equals(PegPosInRow(fromRow, removed))
-                        ) {
-
-                    // added has been put in his right position
-                    knowledge.addPegEstaEn(added, PegPosInRow(toRow, added));
+                } else if (knowledge.getState(removed).equals(PegKnowledge.ESTA_EN)) {
+                    knowledge.addPegEstaPeroNoEn(added);
 
                 // added -> removed
-                } else if (
-                        // added's state == ESTA_EN
-                        knowledge.getState(added).equals(PegKnowledge.ESTA_EN) &&
+                } else if (knowledge.getState(added).equals(PegKnowledge.ESTA_EN)) {
+                    knowledge.addPegEstaPeroNoEn(removed);
 
-                        // added is in his right position
-                        knowledge.WhereIs(added).equals(PegPosInRow(toRow, added))
-                        ) {
 
-                    // removed has been removed from his right position
-                    knowledge.addPegEstaEn(removed, PegPosInRow(fromRow, removed));
 
                 }
 
@@ -745,7 +731,11 @@ public abstract class CommonMastermindAI
 
             // removed peg is in the pattern. the new doesn't.
             case -1:
-                knowledge.addPegEstaPeroNoEn(removed, PegPosInRow(fromRow, added));
+                if (keyPegs[fromRow][COLORED_COL].equals(0)) {
+                    knowledge.addPegEstaPeroNoEn(removed, PegPosInRow(fromRow, removed));
+                } else {
+                    knowledge.addPegEstaPeroNoEn(removed);
+                }
                 knowledge.addPegNoEsta(added);
                 break;
 
@@ -777,9 +767,11 @@ public abstract class CommonMastermindAI
             case 1:
                 knowledge.addPegEstaEn(added, pos);
 
-                // the old is not in the pattern
-                if (KeyWhiteDiff(fromRow, toRow).equals(0)) {
-                    knowledge.addPegNoEsta(removed);
+                switch (KeyDiff(fromRow, toRow)) {
+                    // and the removed peg is in the pattern, although not in that hole
+                    case 0:
+                        knowledge.addPegEstaPeroNoEn(removed, pos);
+                        break;
                 }
                 break;
 
@@ -787,12 +779,14 @@ public abstract class CommonMastermindAI
             case -1:
                 knowledge.addPegEstaEn(removed, pos);
 
-                // the new is not in the pattern
-                if (KeyWhiteDiff(fromRow, toRow).equals(0)) {
-                    knowledge.addPegNoEsta(added);
+                // but the new peg is in the pattern
+                switch (KeyDiff(fromRow, toRow)) {
+                    // and the added peg is in the pattern, although not in that hole
+                    case 0:
+                        knowledge.addPegEstaPeroNoEn(added, pos);
+                        break;
                 }
                 break;
-
         }
 
     }
@@ -1029,41 +1023,44 @@ public abstract class CommonMastermindAI
 
         Integer[] successor = {0, 0, 0, 0};
 
-        // which pegs in right hole
-        Integer[] wrh = knowledge.WhichAreInRightHole();
+        Integer lastRow = new Integer(CurrentRow() - 1);
 
-        if (wrh.length == NHOLES) {
-
-            for (int j = 0; j < NHOLES; j++) {
-                successor[knowledge.WhereIs(wrh[j])] = new Integer(wrh[j]);
+        // initializes the successor with the last guess
+        if (lastRow.intValue() >= 0) {
+            for (int j = 0; j < NHOLES.intValue(); j++) {
+                successor[j] = new Integer(codePegs[lastRow][j]);
             }
+        }
 
-        } else {    
+        // if we already know where the pegs are
+        if (knowledge.HowManyInRightHole().equals(NHOLES)) {
 
-            Integer lastRow = new Integer(CurrentRow() - 1);
+            SuccessorWin(successor);
 
-            // initializes the successor with the last guess
-            if (lastRow.intValue() >= 0) {
-                for (int j = 0; j < NHOLES.intValue(); j++) {
-                    successor[j] = new Integer(codePegs[lastRow][j]);
-                }
-            }
+        // if we already know which pegs are in the pattern
+        } else if (knowledge.HowManyInPattern().equals(NHOLES)) {
 
-            // if we don't know yet which colors are in the pattern
-            if (knowledge.HowManyInPattern() < NHOLES) {
+            SuccessorOrder(successor);
 
-                SuccessorSelection(lastRow, successor);
+        // if we don't know yet which peg are in the pattern
+        } else {
 
-            // if we already know which colors are in the pattern
-            } else {
-
-                SuccessorOrder(successor);
-
-            }
+            SuccessorSelection(lastRow, successor);
 
         }
 
+
         return successor;
+    }
+
+    private void SuccessorWin(Integer[] successor)
+    {
+        // which pegs in right hole
+        Integer[] wrh = knowledge.WhichAreInRightHole();
+
+        for (int j = 0; j < NHOLES; j++) {
+            successor[knowledge.WhereIs(wrh[j])] = new Integer(wrh[j]);
+        }
     }
 
     protected abstract void SuccessorSelection(Integer lastRow,
@@ -1074,7 +1071,17 @@ public abstract class CommonMastermindAI
         // if not all colors in the pattern were in the last guess
         if (!knowledge.HowManyInPattern(successor).equals(NHOLES)) {
 
+            /* progressive approach
+             *  more information could be retrieved from this attempt
+             *  however testing all NHOLES good colors could begin later
+             */
             Relieve1BadBy1Good(successor);
+
+
+            /*
+             * 
+             */
+            // RelieveAllBadByGood(successor);
 
         // if all colors in the were in the last guess
         } else {
