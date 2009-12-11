@@ -1081,7 +1081,7 @@ public abstract class CommonMastermindAI
             /*
              * 
              */
-            // RelieveAllBadByGood(successor);
+            // TODO: RelieveAllBadByGood(successor);
 
         // if all colors in the were in the last guess
         } else {
