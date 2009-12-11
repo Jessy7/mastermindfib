@@ -208,7 +208,7 @@ public class PegsKnowledge
         return ArrayListToIntegerArray(res);
     }
 
-    public Integer HowManyInState(Integer state)
+    private Integer HowManyInState(Integer state)
     {
         Integer res = new Integer(0);
 
@@ -221,7 +221,7 @@ public class PegsKnowledge
         return res;
     }
 
-    public Integer HowManyInState(Integer state, Integer[] Colors)
+    private Integer HowManyInState(Integer state, Integer[] Colors)
     {
         Integer res = new Integer(0);
 
@@ -251,6 +251,16 @@ public class PegsKnowledge
         }
 
         return res;
+    }
+
+    /**
+     *
+     * @return How many of the colors (all colors) is known where are
+     * in the pattern
+     */
+    public Integer HowManyInRightHole()
+    {
+        return HowManyInState(PegKnowledge.ESTA_EN);
     }
 
     /**

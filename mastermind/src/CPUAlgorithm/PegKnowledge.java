@@ -84,6 +84,10 @@ public class PegKnowledge
                 state.intValue() == ESTA_PERO_NO_EN.intValue()) {
             state_details.add(new Integer(DondeNoEsta));
         }
+
+        if (DondeNoEsta < 0) {
+            System.err.println("Warning: Invalid DondeNoEsta value (" + DondeNoEsta + ")");
+        }
     }
 
     /**
@@ -101,6 +105,10 @@ public class PegKnowledge
         if (ESTA_PERO_NO_EN.intValue() >= state.intValue()) {
             state = ESTA_PERO_NO_EN;
             state_details.add(DondeNoEsta);
+        }
+
+        if (DondeNoEsta < 0) {
+            System.err.println("Warning: Invalid DondeNoEsta value (" + DondeNoEsta + ")");
         }
     }
 
