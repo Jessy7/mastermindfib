@@ -394,18 +394,21 @@ public abstract class CommonMastermindAI
         NHOLES = _nHoles;
         NCOLORS = _nColors;
 
+        // current row
         Integer currRow = new Integer(0);
-        while (_codePegs[currRow][0] != null) {
+        while (DecodePeg(_codePegs[currRow][0]) != null) {
             currRow++;
         }
 
+        // code pegs
         codePegs = new Integer[_codePegs.length][NHOLES];
         for (int i = 0; i < currRow; i++) {
             for (int j = 0; j < NHOLES.intValue(); j++) {
                 codePegs[i][j] = new Integer(DecodePeg(_codePegs[i][j]));
             }
         }
-        
+
+        // key pegs
         keyPegs = new Integer[_keyPegs.length][KEYPEG_NCOLS];
         for (int i = 0; i < currRow; i++) {
             for (int j = 0; j < KEYPEG_NCOLS.intValue(); j++) {
@@ -413,6 +416,7 @@ public abstract class CommonMastermindAI
             }
         }
 
+        // knowledge
         knowledge = new PegsKnowledge(NCOLORS, NHOLES);
     }
 
