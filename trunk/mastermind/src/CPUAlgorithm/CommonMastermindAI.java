@@ -416,8 +416,35 @@ public abstract class CommonMastermindAI
             }
         }
 
+        PrintBoard(); // test
+
         // knowledge
         knowledge = new PegsKnowledge(NCOLORS, NHOLES);
+    }
+
+    private void PrintBoard()
+    {
+
+        System.out.println("PrintBoard:");
+
+        // for each row
+        for (int i = 0; i < codePegs.length; i++) {
+
+            // code pegs
+            for (int j = 0; j < NHOLES; j++) {
+                System.out.print(EncodePeg(codePegs[i][j]) + ",");
+            }
+
+            // visual separator
+            System.out.print("    ");
+
+            // key pegs
+            System.out.print(EncodePeg(keyPegs[i][COLORED_COL]) + ",");
+            System.out.print(EncodePeg(keyPegs[i][WHITE_COL]) + ",");
+
+            System.out.println();
+        }
+
     }
 
     /**
@@ -433,7 +460,7 @@ public abstract class CommonMastermindAI
         Integer res;
 
         // 0 -> null
-        if (peg.intValue() == 0) {
+        if (peg == null || peg.intValue() == 0) {
             res = null;
 
         // 1..N --> 0..N-1
