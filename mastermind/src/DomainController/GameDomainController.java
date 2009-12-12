@@ -1,6 +1,7 @@
 
 package DomainController;
 
+import CPUAlgorithm.MastermindAI4Holes;
 import Domain.Game;
 import java.util.Arrays;
 import java.util.Random;
@@ -340,12 +341,15 @@ public class GameDomainController extends GenericGameDC {
    {
        int currentRow = ((Game)g).getCurrentRow();
        int column = ((Game)g).getColumns();
+       Integer[][] codePegs = g.getBoard();
+       Integer[][] keyPegs = ((Game)g).getKeyPegs();
+       Integer[] cpuGuess;
+       MastermindAI4Holes m4h = new MastermindAI4Holes(codePegs,keyPegs);
+       cpuGuess = m4h.MakeGuess();
        for (int i = 0; i < column; i++) {
-        ((Game)g).setCell(currentRow, i, 1);
-       
-        //System.out.println("Code not merged.");
-        generateKeyPegs();
+        ((Game)g).setCell(currentRow, i, cpuGuess[i]);
        }
+       generateKeyPegs();
    }
 
    /**
