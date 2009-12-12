@@ -439,8 +439,8 @@ public abstract class CommonMastermindAI
             System.out.print("    ");
 
             // key pegs
-            System.out.print(EncodePeg(keyPegs[i][COLORED_COL]) + ",");
-            System.out.print(EncodePeg(keyPegs[i][WHITE_COL]) + ",");
+            System.out.print(keyPegs[i][COLORED_COL] + ",");
+            System.out.print(keyPegs[i][WHITE_COL] + ",");
 
             System.out.println();
         }
