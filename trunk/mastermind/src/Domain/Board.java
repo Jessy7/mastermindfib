@@ -53,7 +53,7 @@ public class Board extends GenericBoard {
         codePegs = new Integer[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                codePegs[i][j] = null;
+                codePegs[i][j] = new Integer(0);
             }
         }
 
