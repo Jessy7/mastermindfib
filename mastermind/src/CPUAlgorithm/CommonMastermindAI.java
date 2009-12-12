@@ -56,15 +56,17 @@ public abstract class CommonMastermindAI
      */
     /**
      * N rows, NHOLES columns.
+     *
+     * Values range from 0 to NCOLORS-1
      */
     protected Integer[][] codePegs;
 
-    /*
+    /**
      * X rows, KEYPEG_NCOLS columns.
      * - Column COLORED_COL: For colored key pegs.
-            Indicate some color and position match.
+     *      Indicate some color and position match.
      * - Column WHITE_COL: For white key pegs.
-            Indicate some color but not position match.
+     *      Indicate some color but not position match.
      */
     protected Integer[][] keyPegs;
 
@@ -378,6 +380,14 @@ public abstract class CommonMastermindAI
      *
      */
 
+    /**
+     * 
+     * @param _nHoles
+     * @param _nColors
+     * @param _codePegs Peg color for each code peg board hole. Peg colors are
+     * represented with an Integer from 1 to NCOLORS. 0 means "empty hole".
+     * @param _keyPegs
+     */
     public CommonMastermindAI(Integer _nHoles, Integer _nColors,
             Integer[][] _codePegs, Integer[][] _keyPegs)
     {
@@ -392,7 +402,7 @@ public abstract class CommonMastermindAI
         codePegs = new Integer[_codePegs.length][NHOLES];
         for (int i = 0; i < currRow; i++) {
             for (int j = 0; j < NHOLES.intValue(); j++) {
-                codePegs[i][j] = new Integer(_codePegs[i][j]);
+                codePegs[i][j] = new Integer(DecodePeg(_codePegs[i][j]));
             }
         }
         
@@ -404,6 +414,31 @@ public abstract class CommonMastermindAI
         }
 
         knowledge = new PegsKnowledge(NCOLORS, NHOLES);
+    }
+
+    /**
+     * @param peg
+     * @return An inside-codified value for a code pegs board hole from an
+     * outside-codified one.
+     *
+     * 0 -> null
+     * 1..N --> 0..N-1
+     */
+    private Integer DecodePeg(Integer peg)
+    {
+        Integer res;
+
+        // 0 -> null
+        if (peg.intValue() == 0) {
+            res = null;
+
+        // 1..N --> 0..N-1
+        } else {
+            res = new Integer(peg.intValue() - 1);
+
+        }
+
+        return res;
     }
 
 
@@ -439,7 +474,32 @@ public abstract class CommonMastermindAI
             Learn();
         } while (!oldK.equals(knowledge));
 
-        return getSuccessor();
+        return EncodePegArray(getSuccessor());
+    }
+
+    private Integer[] EncodePegArray(Integer[] pegArray)
+    {
+        Integer[] res = new Integer[pegArray.length];
+
+        for (int i = 0; i < pegArray.length; i++) {
+            res[i] = new Integer(EncodePeg(pegArray[i]));
+        }
+
+        return res;
+    }
+
+    /**
+     *
+     * @param peg
+     * @return if peg == null, return 0. if peg != null, return peg+1.
+     */
+    private Integer EncodePeg(Integer peg)
+    {
+        if (peg == null) {
+            return new Integer(0);
+        } else {
+            return new Integer(peg.intValue() + 1);
+        }
     }
     
 
