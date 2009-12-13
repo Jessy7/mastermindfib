@@ -5,16 +5,8 @@ import Enum.DifficultyLevel;
 import Enum.KeyPeg;
 
 /**
- * This class will have attributes that define whole problem elements and
- * characteristics
+ * This class will have attributes that define the game characteristics
  * 
- * vsCPU: Player 1 is human, player 2 is CPU
- * !vsCPU: Player 1 is human, player 2 is human
- *
- * Round 0: Player 1 is codemaker, player 2 is codebreaker
- * Round 1: Player 2 is codemaker, player 1 is codebreaker
- * Round 2: Player 1 is codemaker, player 2 is codebreaker
- * Round 3: ...
  *
  * @author Samuel Gómez
  */
@@ -243,14 +235,28 @@ public class Game extends GenericGame {
 
 
     /**
-     * vs CPU, first codemaker is Human
-     * @return
+     * vsCPU: Player 1 is human, player 2 is CPU
+     * !vsCPU: Player 1 is human, player 2 is human
+     *
+     * Round 0: Player 1 is codebreaker, player 2 is codemaker
+     * Round 1: Player 2 is codebreaker, player 1 is codemaker
+     * Round 2: Player 1 is codebreaker, player 2 is codemaker
+     * Round 3: ...
      */
     public Boolean isCodemakerHuman()
     {
-        return !((Settings)set).getVsCPU() || (currentRound % 2 == 1);
+        return !((Settings)set).getVsCPU() || (currentRound % 2 == 0);
     }
 
+    /**
+     * vsCPU: Player 1 is human, player 2 is CPU
+     * !vsCPU: Player 1 is human, player 2 is human
+     *
+     * Round 0: Player 1 is codebreaker, player 2 is codemaker
+     * Round 1: Player 2 is codebreaker, player 1 is codemaker
+     * Round 2: Player 1 is codebreaker, player 2 is codemaker
+     * Round 3: ...
+     */
     public Boolean isCodebreakerHuman()
     {
         return !((Settings)set).getVsCPU() || !isCodemakerHuman();
