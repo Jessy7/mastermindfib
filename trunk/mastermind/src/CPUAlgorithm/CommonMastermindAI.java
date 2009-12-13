@@ -34,9 +34,11 @@ public abstract class CommonMastermindAI
      * Constants
      *
      */
+    public static final Integer COLORED_KEYPEG = 2;
+    public static final Integer WHITE_KEYPEG = 1;
     protected static final Integer KEYPEG_NCOLS = 2;
-    protected static final Integer COLORED_COL = 0;
-    protected static final Integer WHITE_COL = 1;
+    protected static final Integer COLORED_COLUMN = 0;
+    protected static final Integer WHITE_COLUMN = 1;
 
     // dynamic here but static at subclass level
         /* although this implementation makes it to physically exist also dinamically
@@ -63,9 +65,9 @@ public abstract class CommonMastermindAI
 
     /**
      * X rows, KEYPEG_NCOLS columns.
-     * - Column COLORED_COL: For colored key pegs.
+     * - Column COLORED_COLUMN: For colored key pegs.
      *      Indicate some color and position match.
-     * - Column WHITE_COL: For white key pegs.
+     * - Column WHITE_COLUMN: For white key pegs.
      *      Indicate some color but not position match.
      */
     protected Integer[][] keyPegs;
@@ -384,9 +386,12 @@ public abstract class CommonMastermindAI
      * 
      * @param _nHoles
      * @param _nColors
-     * @param _codePegs Peg color for each code peg board hole. Peg colors are
-     * represented with an Integer from 1 to NCOLORS. 0 means "empty hole".
-     * @param _keyPegs
+     * @param _codePegs Matrix of N*M cells representing code pegs. Each cell
+     * saves the color of the code peg for that board hole. Peg colors range
+     * from 1 to NCOLORS. 0 means "empty hole".
+     * @param _keyPegs Matrix of N*M cells representing key pegs. Each cell
+     * saves a colored key peg (COLORED_KEYPEG)
+     * or a white key peg (WHITE_KEYPEG). 0 means "empty hole".
      */
     public CommonMastermindAI(Integer _nHoles, Integer _nColors,
             Integer[][] _codePegs, Integer[][] _keyPegs)
@@ -411,9 +416,27 @@ public abstract class CommonMastermindAI
         // key pegs
         keyPegs = new Integer[_keyPegs.length][KEYPEG_NCOLS];
         for (int i = 0; i < currRow; i++) {
-            for (int j = 0; j < KEYPEG_NCOLS.intValue(); j++) {
-                keyPegs[i][j] = new Integer(_keyPegs[i][j]);
+            
+            // colored and white key peg auxiliar counters
+            int ckp = 0, wkp = 0;
+
+            for (int j = 0; j < NHOLES.intValue(); j++) {
+
+                // colored key peg
+                if (_keyPegs[i][j].intValue() == COLORED_KEYPEG) {
+
+                    ckp++;
+
+                // white key peg
+                } else if (_keyPegs[i][j].intValue() == WHITE_KEYPEG) {
+
+                    wkp++;
+
+                }
             }
+            
+            keyPegs[i][COLORED_COLUMN] = new Integer(ckp);
+            keyPegs[i][WHITE_COLUMN] = new Integer(wkp);
         }
 
         PrintBoard(); // test
@@ -439,8 +462,8 @@ public abstract class CommonMastermindAI
             System.out.print("    ");
 
             // key pegs
-            System.out.print(keyPegs[i][COLORED_COL] + ",");
-            System.out.print(keyPegs[i][WHITE_COL] + ",");
+            System.out.print(keyPegs[i][COLORED_COLUMN] + ",");
+            System.out.print(keyPegs[i][WHITE_COLUMN] + ",");
 
             System.out.println();
         }
@@ -582,7 +605,7 @@ public abstract class CommonMastermindAI
     {
 
         // no colored keypegs -> none of the guessed can be where has been guessed
-        if (keyPegs[row][COLORED_COL] == 0) {
+        if (keyPegs[row][COLORED_COLUMN] == 0) {
             for (int j = 0; j < NHOLES; j++) {
                 knowledge.addPegNoEstaEn(codePegs[row][j], j);
             }
@@ -596,8 +619,8 @@ public abstract class CommonMastermindAI
                  * are not where they are
                  */
         if (knowledge.HowManyInRightHole(codePegs[row]).equals(
-                keyPegs[row][COLORED_COL])) {
-            if (keyPegs[row][WHITE_COL].equals(0)) {
+                keyPegs[row][COLORED_COLUMN])) {
+            if (keyPegs[row][WHITE_COLUMN].equals(0)) {
                 for (int j = 0; j < NHOLES; j++) {
                     if (knowledge.getState(j).equals(PegKnowledge.PUEDE_ESTAR)) {
                         knowledge.addPegNoEsta(codePegs[row][j]);
@@ -612,7 +635,7 @@ public abstract class CommonMastermindAI
 
 
         // switch nKeyPegs
-        Integer nKeyPegs = keyPegs[row][COLORED_COL] + keyPegs[row][WHITE_COL];
+        Integer nKeyPegs = keyPegs[row][COLORED_COLUMN] + keyPegs[row][WHITE_COLUMN];
 
         /* the minimum -> all outside the guess are inside the pattern
          * eg: 3 keypegs, 7 holes, 11 colors --> the 4 colors that are not there
@@ -631,7 +654,7 @@ public abstract class CommonMastermindAI
         } else if (nKeyPegs.equals(NHOLES)) {
 
             // if no one is on the right position
-            if (keyPegs[row][WHITE_COL].equals(NHOLES)) {
+            if (keyPegs[row][WHITE_COLUMN].equals(NHOLES)) {
 
                 // for each one we know that it is not on that position
                 for (Integer j = 0; j < NHOLES.intValue(); j++) {
@@ -761,7 +784,7 @@ public abstract class CommonMastermindAI
 
             // added peg is in the pattern. the old doesn't.
             case 1:
-                if (keyPegs[toRow][COLORED_COL].equals(0)) {
+                if (keyPegs[toRow][COLORED_COLUMN].equals(0)) {
                     knowledge.addPegEstaPeroNoEn(added, PegPosInRow(toRow, added));
                 } else {
                     knowledge.addPegEstaPeroNoEn(added);
@@ -822,7 +845,7 @@ public abstract class CommonMastermindAI
 
             // removed peg is in the pattern. the new doesn't.
             case -1:
-                if (keyPegs[fromRow][COLORED_COL].equals(0)) {
+                if (keyPegs[fromRow][COLORED_COLUMN].equals(0)) {
                     knowledge.addPegEstaPeroNoEn(removed, PegPosInRow(fromRow, removed));
                 } else {
                     knowledge.addPegEstaPeroNoEn(removed);
@@ -1069,12 +1092,12 @@ public abstract class CommonMastermindAI
 
     private Integer KeyColoredDiff(final Integer fromRow, final Integer toRow)
     {
-        return keyPegs[toRow][COLORED_COL] - keyPegs[fromRow][COLORED_COL];
+        return keyPegs[toRow][COLORED_COLUMN] - keyPegs[fromRow][COLORED_COLUMN];
     }
 
     private Integer KeyWhiteDiff(final Integer fromRow, final Integer toRow)
     {
-        return keyPegs[toRow][WHITE_COL] - keyPegs[fromRow][WHITE_COL];
+        return keyPegs[toRow][WHITE_COLUMN] - keyPegs[fromRow][WHITE_COLUMN];
     }
 
     protected Integer CurrentRow()
