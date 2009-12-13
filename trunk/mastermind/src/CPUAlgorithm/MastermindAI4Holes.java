@@ -40,7 +40,9 @@ public class MastermindAI4Holes extends CommonMastermindAI
      */
 
     /**
-     * @see CommonMastermindAI
+     * @see CommonMastermindAI#CommonMastermindAI(java.lang.Integer, java.lang.Integer, java.lang.Integer[][], java.lang.Integer[][])
+     * @param _codePegs See CommonMastermindAI constructor for description.
+     * @param _keyPegs See CommonMastermindAI constructor for description.
      */
     public MastermindAI4Holes(Integer[][] _codePegs, Integer[][] _keyPegs)
     {
