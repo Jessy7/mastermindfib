@@ -349,7 +349,6 @@ public class GameDomainController extends GenericGameDC {
        for (int i = 0; i < column; i++) {
         ((Game)g).setCell(currentRow, i, cpuGuess[i]);
        }
-       generateKeyPegs();
    }
 
    /**
