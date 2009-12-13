@@ -504,19 +504,25 @@ public class GameDomainController extends GenericGameDC {
        return output;
     }
 
+    /**
+     * This method converts a String in an Integer matrix. The matrix
+     * represents in each row the red and white keyPegs
+     * @param input String to be converted in a Integer matrix
+     * @return String converted in integer matrix
+     */
     private Integer[][] convertStringToKeyPegsMatrix(String input) {
        int columns = g.getColumns();
        int rows = 2;
-       Integer[][] codePeg = new Integer[rows][columns];
+       Integer[][] output = new Integer[rows][columns];
 
        int k = 0;
        for(int i = 0; i < rows; i++)
            for (int j = 0; j < columns; j++, k++)
            {
-               codePeg[i][j] = Integer.valueOf(input.substring(k, k+1));
+               output[i][j] = Integer.valueOf(input.substring(k, k+1));
 
            }
-       return codePeg;
+       return output;
     }
 
 }
