@@ -40,9 +40,7 @@ public class MastermindAI4Holes extends CommonMastermindAI
      */
 
     /**
-     * 
-     * @param _codePegs Guesses done so far
-     * @param _keyPegs Feedback for the guesses done so far
+     * @see CommonMastermindAI
      */
     public MastermindAI4Holes(Integer[][] _codePegs, Integer[][] _keyPegs)
     {
