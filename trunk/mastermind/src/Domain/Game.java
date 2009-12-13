@@ -421,10 +421,10 @@ public class Game extends GenericGame {
     }
 
     /**
-     * Adds a new key peg on the board
+     * Adds a new keypeg to the board
      *
-     * @param _keyPeg color of the keypeg
-     * @param row Row of the keypeg
+     * @param _keyPeg Color of the key peg. Range: KEYPEG_RED, KEYPEG_WHITE.
+     * @param row Row of the key peg
      */
     public void addKeyPeg(final Integer _keyPeg, final int row)
     {

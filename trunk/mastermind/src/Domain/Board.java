@@ -339,7 +339,7 @@ public class Board extends GenericBoard {
     /**
      * Adds a new keypeg to the board
      *
-     * @param _keyPeg color of the key peg
+     * @param _keyPeg Color of the key peg. Range: KEYPEG_RED, KEYPEG_WHITE.
      * @param row Row of the key peg
      */
     public void addKeyPeg(final Integer _keyPeg, final int row)
