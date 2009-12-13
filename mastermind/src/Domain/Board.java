@@ -359,15 +359,15 @@ public class Board extends GenericBoard {
      *
      * @deprecated
      * <p>
-     * Use {@link #addKeyPeg()} instead.
+     *  Use {@link #addKeyPeg()} instead.
      * </p>
      * <p>
-     * Currently, setKeyPeg couples the user with the internal representation
-     * of the key pegs, which changed from the external one during development.
+     *  Currently, setKeyPeg couples the user with the internal representation
+     *  of the key pegs, which changed from the external one during development.
      * </p>
      * <p>
-     * setKeyPeg could be re-implemented to recover its original meaning, but
-     * probably this will not happen due to its very low value/cost ratio:
+     *  setKeyPeg could be re-implemented to recover its original meaning, but
+     *  probably this will not happen due to its very low value/cost ratio:
      * </p>
      * <ul>
      *  <li>
