@@ -395,17 +395,14 @@ public class GameDomainController extends GenericGameDC {
        int lastRow = ((Game)g).getCodePegsLastRowNumber();
        Integer[] patternColor = ((Game)g).getPatternColor();
        Integer[] guess = ((Game)g).getCodePegsLastRow();
-       Integer[] keyPegs = new Integer[2];
        Boolean[] patternChecked = new Boolean[((Game)g).getColumns()];
 
-       keyPegs[0] = 0;
-       keyPegs[1] = 0;
        for (int i = 0; i < patternChecked.length; i++)
            patternChecked[i] = false;
 
        for (int i = 0; i < guess.length; i++) {
            if (guess[i].equals(patternColor[i])) {
-               keyPegs[0] = keyPegs[0] + 1;
+               ((Game)g).addKeyPeg(2, lastRow);
                patternChecked[i] = true;
            }
        }
@@ -413,18 +410,13 @@ public class GameDomainController extends GenericGameDC {
        for (int i = 0; i < guess.length; i++) {
            for (int j = 0; j < patternColor.length; j++) {
                 if (guess[i].equals(patternColor[j]) && (patternChecked[j] == false)) {
-                    keyPegs[1] = keyPegs[1] + 1;
+                    ((Game)g).addKeyPeg(1, lastRow);
                     patternChecked[j] = true;
                 }
            }
        }
-
-       //System.out.println("keyPegs[0]: " + keyPegs[0]);
-       //System.out.println("keyPegs[1]: " + keyPegs[1]);
-
-       for (int i = 0; i < 2; i++)
-           ((Game)g).setKeyPeg(keyPegs[i],lastRow, i);
    }
+
    public void setSettings(DifficultyLevel dl, Boolean isPlayer2CPU) {
        ((Game)g).setSettings(dl,isPlayer2CPU);
    }
