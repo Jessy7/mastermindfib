@@ -950,8 +950,8 @@ public abstract class CommonMastermindAI
     private void LearnFromDoubleTransition(final Integer firstRow,
             final Integer secondRow, final Integer thirdRow)
     {
-        ArrayList originsList = new ArrayList();
-        ArrayList destinationsList = new ArrayList();
+        ArrayList originsList;
+        ArrayList destinationsList;
 
         /*
          * If first transition is a swap(x,y) and second is a swap(y,z)
@@ -969,6 +969,9 @@ public abstract class CommonMastermindAI
                 if (KeyColoredDiff(firstRow, secondRow).equals(1)) {
 
                     // transition 1
+                    originsList = new ArrayList();
+                    destinationsList = new ArrayList();
+
                     SwapDiff(codePegs[firstRow], codePegs[secondRow],
                             originsList, destinationsList);
 
@@ -977,6 +980,9 @@ public abstract class CommonMastermindAI
                     Integer pD1 = new Integer((Integer)destinationsList.get(0));
 
                     // transition 2
+                    originsList = new ArrayList();
+                    destinationsList = new ArrayList();
+
                     SwapDiff(codePegs[secondRow], codePegs[thirdRow],
                             originsList, destinationsList);
 
