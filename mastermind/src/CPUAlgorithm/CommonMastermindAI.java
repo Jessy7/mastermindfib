@@ -1,6 +1,7 @@
 
 package CPUAlgorithm;
 
+import Enum.KeyPeg;
 import java.util.ArrayList;
 
 /**
@@ -34,8 +35,8 @@ public abstract class CommonMastermindAI
      * Constants
      *
      */
-    public static final Integer COLORED_KEYPEG = 2;
-    public static final Integer WHITE_KEYPEG = 1;
+    // public static final Integer COLORED_KEYPEG = 2;
+    // public static final Integer KeyPeg.WHITE = 1;
     protected static final Integer KEYPEG_NCOLS = 2;
     protected static final Integer COLORED_COLUMN = 0;
     protected static final Integer WHITE_COLUMN = 1;
@@ -390,11 +391,11 @@ public abstract class CommonMastermindAI
      * saves the color of the code peg for that board hole. Peg colors range
      * from 1 to NCOLORS. 0 means "empty hole".
      * @param _keyPegs Matrix of N*M cells representing key pegs. Each cell
-     * saves a colored key peg (COLORED_KEYPEG)
-     * or a white key peg (WHITE_KEYPEG). 0 means "empty hole".
+     * saves a colored key peg (KeyPeg.RED)
+     * or a white key peg (KeyPeg.WHITE). 0 means "empty hole".
      */
     public CommonMastermindAI(Integer _nHoles, Integer _nColors,
-            Integer[][] _codePegs, Integer[][] _keyPegs)
+            Integer[][] _codePegs, KeyPeg[][] _keyPegs)
     {
         NHOLES = _nHoles;
         NCOLORS = _nColors;
@@ -423,12 +424,12 @@ public abstract class CommonMastermindAI
             for (int j = 0; j < NHOLES.intValue(); j++) {
 
                 // colored key peg
-                if (_keyPegs[i][j].intValue() == COLORED_KEYPEG) {
+                if (_keyPegs[i][j].equals(KeyPeg.RED)) {
 
                     ckp++;
 
                 // white key peg
-                } else if (_keyPegs[i][j].intValue() == WHITE_KEYPEG) {
+                } else if (_keyPegs[i][j].equals(KeyPeg.WHITE)) {
 
                     wkp++;
 
