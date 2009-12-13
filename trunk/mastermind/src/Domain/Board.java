@@ -1,6 +1,8 @@
 
 package Domain;
 
+import Enum.KeyPeg;
+
 /**
  * Board class has specific attributes for Mastermind
  *
@@ -15,6 +17,7 @@ package Domain;
  *
  * Accessing key pegs is done through these methods:
  * - addKeyPeg
+ * - setKeyPegs
  * - getKeyPeg*
  *
  * Accessing pattern pegs is done through these methods:
@@ -30,19 +33,19 @@ public class Board extends GenericBoard {
     /**
      * A red keypeg indicates that a codepeg matches on both color and position
      */
-    public static final Integer KEYPEG_RED = 2;
+    // public static final Integer KeyPeg.RED = 2;
 
     /**
      * A white keypeg indicates that a codepeg matches on color,
      * but not on position
      */
-    public static final Integer KEYPEG_WHITE = 1;
+    // public static final Integer KEYPEG_WHITE = 1;
 
     /**
      * A void keypeg indicates that a codepeg does not match on color,
      * thus, neither in position
      */
-    public static final Integer KEYPEG_VOID = 0;
+    // public static final Integer KEYPEG_VOID = 0;
 
     private static final Integer COLOREDKP_COL = 0;
     private static final Integer WHITEKP_COL = 1;
@@ -56,17 +59,16 @@ public class Board extends GenericBoard {
     private Integer[][] codePegs;
 
     /**
-     * Key Pegs: There is a set of keypegs per row. They indicate how many
-     * codepegs do match with the pattern.
+     * Key Pegs: 2 column matrix storing, for each row of the board,
+     * how many key pegs of each type {RED, WHITE} there are.
      *
      * Number of rows: GenericBoard::rows
      * Number of columns: 2
-     * - Column 1: Number of red keypegs
-     * - Column 2: Number of white keypegs
+     * - Column 0: Number of red key pegs
+     * - Column 1: Number of white key pegs
      *
-     * However, this is only the internal representation; on the API related
-     * to key pegs, a matrix of GenericBoard::rows * GenericBoard::columns is
-     * the model.
+     * Nonetheless, the public getKeyPegs() method expresses this data in
+     * "mastermind board format".
      *
      */
     private Integer[][] keyPegs;
@@ -249,9 +251,9 @@ public class Board extends GenericBoard {
      * - Number of rows: GenericBoard::rows
      * - Number of rows: GenericBoard::columns
      */
-    public Integer[][] getKeyPegs()
+    public KeyPeg[][] getKeyPegs()
     {
-        Integer[][] res = new Integer[rows][columns];
+        KeyPeg[][] res = new KeyPeg[rows][columns];
 
         for (int i = 0; i < rows; i++) {
             res[i] = getKeyPegsRow(i);
@@ -262,41 +264,49 @@ public class Board extends GenericBoard {
 
     /**
      * @param row Row of the board from 0 to GenericBoard::rows - 1
-     * @return The array of key pegs for a given row of the board.
-     *
-     * Red keypegs first, white keypegs after, "void" keypegs finally.
-     *
-     * Examples:
-     * 
-     * If keyPegs[row] contains [2][1],
-     * this function will return [RED][RED][WHITE][VOID]
-     *
-     * If keyPegs[row] contains [0][3],
-     * this function will return [WHITE][WHITE][WHITE][VOID]
-     *
+     * @return
+     * <p>
+     *  The array of key pegs for a given row of the board.
+     * </p>
+     * <p>
+     *  Red keypegs first, white keypegs after, "void" keypegs finally.
+     * </p>
+     * <p>
+     *  Examples:
+     * </p>
+     * <ul>
+     *  <li>
+     *   If keyPegs[row] contains [2][1],
+     *   this function will return [RED][RED][WHITE][VOID]
+     *  </li>
+     *  <li>
+     *   If keyPegs[row] contains [0][3],
+     *   this function will return [WHITE][WHITE][WHITE][VOID]
+     *  </li>
+     * <ul>
      */
-    public Integer[] getKeyPegsRow(int row)
+    public KeyPeg[] getKeyPegsRow(int row)
     {
-        Integer[] res = new Integer[columns];
+        KeyPeg[] res = new KeyPeg[columns];
         int j = 0;
 
         // red keypegs
         for (int i = 0; i < keyPegs[row][COLOREDKP_COL]; i++) {
-            res[j] = new Integer(KEYPEG_RED);
+            res[j] = KeyPeg.RED;
             j++;
         }
         // now res contains [RED][RED][][]
 
         // white keypegs
         for (int i = 0; i < keyPegs[row][WHITEKP_COL]; i++) {
-            res[j] = new Integer(KEYPEG_WHITE);
+            res[j] = KeyPeg.WHITE;
             j++;
         }
         // now res contains [RED][RED][WHITE][]
 
         // void keypegs
         for (; j < columns; j++) {
-            res[j] = new Integer(KEYPEG_VOID);
+            res[j] = KeyPeg.VOID;
         }
         // now res contains [RED][RED][WHITE][VOID]
 
@@ -305,11 +315,24 @@ public class Board extends GenericBoard {
 
     /**
      * 
-     * @param _keyPegs Key peg matrix of the Mastermind board. Allowed values:
-     * KEYPEG_RED, KEYPEG_WHITE
+     * @param _keyPegs 
+     * <p>
+     *  Key peg 2-column-format matrix containing for each row:
+     * </p>
+     * <ul>
+     *  <li>
+     *   [0] The number of red key pegs.
+     *  </li>
+     *  <li>
+     *   [1] The number of white key pegs.
+     *  </li>
+     * </ul>
+     *
      */
     public void setKeyPegs(final Integer[][] _keyPegs)
     {
+        // implementation for board-format input
+        /*
         int nred;
         int nwhite;
 
@@ -322,9 +345,9 @@ public class Board extends GenericBoard {
 
             // for each column
             for (int j = 0; j < columns; j++) {
-                if (_keyPegs[i][j].equals(KEYPEG_RED)) {
+                if (_keyPegs[i][j].equals(KeyPeg.RED)) {
                     nred++;
-                } else if (_keyPegs[i][j].equals(KEYPEG_WHITE)) {
+                } else if (_keyPegs[i][j].equals(KeyPeg.WHITE)) {
                     nwhite++;
                 }
             } // ffor column
@@ -333,21 +356,30 @@ public class Board extends GenericBoard {
             keyPegs[i][WHITEKP_COL] = new Integer(nwhite);
 
         } // ffor row
+        */
+
+        // implementation for 2-columns-format input
+        for (int i = 0; i < rows; i++) {
+
+            keyPegs[i][COLOREDKP_COL] = new Integer(_keyPegs[i][COLOREDKP_COL]);
+            keyPegs[i][WHITEKP_COL] = new Integer(_keyPegs[i][WHITEKP_COL]);
+
+        }
 
     }
 
     /**
      * Adds a new keypeg to the board
      *
-     * @param _keyPeg Color of the key peg. Range: KEYPEG_RED, KEYPEG_WHITE.
+     * @param _keyPeg Color of the key peg. Range: KeyPeg.RED, KeyPeg.WHITE.
      * @param row Row of the key peg
      */
-    public void addKeyPeg(final Integer _keyPeg, final int row)
+    public void addKeyPeg(final KeyPeg _keyPeg, final int row)
     {
-        if (_keyPeg.equals(KEYPEG_RED)) {
+        if (_keyPeg.equals(KeyPeg.RED)) {
             keyPegs[row][COLOREDKP_COL]++;
 
-        } else if (_keyPeg.equals(KEYPEG_WHITE)) {
+        } else if (_keyPeg.equals(KeyPeg.WHITE)) {
             keyPegs[row][WHITEKP_COL]++;
 
         }

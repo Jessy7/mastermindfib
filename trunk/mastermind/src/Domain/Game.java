@@ -2,6 +2,7 @@
 package Domain;
 
 import Enum.DifficultyLevel;
+import Enum.KeyPeg;
 
 /**
  * This class will have attributes that define whole problem elements and
@@ -405,12 +406,12 @@ public class Game extends GenericGame {
         ((Board)board).setCodePegs(_codePegs);
     }
 
-    public Integer[][] getKeyPegs()
+    public KeyPeg[][] getKeyPegs()
     {
         return ((Board)board).getKeyPegs();
     }
 
-    public Integer[] getKeyPegsRow(int row)
+    public KeyPeg[] getKeyPegsRow(int row)
     {
         return ((Board)board).getKeyPegsRow(row);
     }
@@ -426,7 +427,7 @@ public class Game extends GenericGame {
      * @param _keyPeg Color of the key peg. Range: KEYPEG_RED, KEYPEG_WHITE.
      * @param row Row of the key peg
      */
-    public void addKeyPeg(final Integer _keyPeg, final int row)
+    public void addKeyPeg(final KeyPeg _keyPeg, final int row)
     {
         ((Board)board).addKeyPeg(_keyPeg, row);
     }
