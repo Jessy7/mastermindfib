@@ -1,6 +1,8 @@
 
 package CPUAlgorithm;
 
+import Enum.KeyPeg;
+
 /**
  * Since it extends from CommonMastermindAI, it only must implement the elements
  * dependant on the number of holes and colors.
@@ -44,7 +46,7 @@ public class MastermindAI4Holes extends CommonMastermindAI
      * @param _codePegs See CommonMastermindAI constructor for description.
      * @param _keyPegs See CommonMastermindAI constructor for description.
      */
-    public MastermindAI4Holes(Integer[][] _codePegs, Integer[][] _keyPegs)
+    public MastermindAI4Holes(Integer[][] _codePegs, KeyPeg[][] _keyPegs)
     {
         super(NHOLES, NCOLORS, _codePegs, _keyPegs);
     }

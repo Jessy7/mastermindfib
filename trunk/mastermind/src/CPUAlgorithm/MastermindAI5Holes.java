@@ -1,6 +1,7 @@
 
 package CPUAlgorithm;
 
+import Enum.KeyPeg;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +42,7 @@ public class MastermindAI5Holes extends CommonMastermindAI
      *
      */
 
-    public MastermindAI5Holes(Integer[][] _codePegs, Integer[][] _keyPegs)
+    public MastermindAI5Holes(Integer[][] _codePegs, KeyPeg[][] _keyPegs)
     {
         super(NHOLES, NCOLORS, _codePegs, _keyPegs);
     }
