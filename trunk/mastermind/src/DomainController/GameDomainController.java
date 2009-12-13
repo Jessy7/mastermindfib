@@ -6,6 +6,7 @@ import Domain.Game;
 import java.util.Arrays;
 import java.util.Random;
 import Enum.DifficultyLevel;
+import Enum.KeyPeg;
 
 /**
  * This singleton class extends GenericGameDC and it's the responsable to transmit data between
@@ -54,7 +55,7 @@ public class GameDomainController extends GenericGameDC {
     * @return Array of keyPegs for the indicated row. In the first element of the array indicates number of white pegs
     * and in the second one indicates number of red pegs in the row
     */
-   public Integer[] getKeyPegRow (int row) {
+   public KeyPeg[] getKeyPegsRow (int row) {
        return ((Game)g).getKeyPegsRow(row);
    }
 
@@ -231,7 +232,7 @@ public class GameDomainController extends GenericGameDC {
        data += String.valueOf(((Game)g).getP2Points()) + ",";
        data += convertIntegerArrayToString(((Game)g).getPatternColor()) + ",";
        data += convertIntegerMatrixToString(g.getBoard()) + ",";
-       data += convertIntegerMatrixToString(((Game)g).getKeyPegs()) + ",";
+       data += convertIntegerMatrixToString(((Game)g).getKeyPegsAs2Cols()) + ",";
        data += convertBooleanArrayToString(((Game)g).getPatternVisibility());
 
        return data;
@@ -342,7 +343,7 @@ public class GameDomainController extends GenericGameDC {
        int currentRow = ((Game)g).getCurrentRow();
        int column = ((Game)g).getColumns();
        Integer[][] codePegs = g.getBoard();
-       Integer[][] keyPegs = ((Game)g).getKeyPegs();
+       KeyPeg[][] keyPegs = ((Game)g).getKeyPegsAsBoard();
        Integer[] cpuGuess;
        MastermindAI4Holes m4h = new MastermindAI4Holes(codePegs,keyPegs);
        cpuGuess = m4h.MakeGuess();
@@ -357,15 +358,6 @@ public class GameDomainController extends GenericGameDC {
     */
    public int getCodePegsLastRowNumber() {
        return ((Game)g).getCodePegsLastRowNumber();
-   }
-
-   /**
-    * This method obtains the row of keyPeg table indicated
-    * @param row Number of the row of keyPeg table to obtain
-    * @return The row of keyPeg table obtained
-    */
-   public Integer[] getKeyPegsRow(int row) {
-        return ((Game)g).getKeyPegsRow(row);
    }
 
    /**
@@ -401,7 +393,7 @@ public class GameDomainController extends GenericGameDC {
 
        for (int i = 0; i < guess.length; i++) {
            if (guess[i].equals(patternColor[i])) {
-               ((Game)g).addKeyPeg(2, lastRow);
+               ((Game)g).addKeyPeg(KeyPeg.RED, lastRow);
                patternChecked[i] = true;
            }
        }
@@ -409,7 +401,7 @@ public class GameDomainController extends GenericGameDC {
        for (int i = 0; i < guess.length; i++) {
            for (int j = 0; j < patternColor.length; j++) {
                 if (guess[i].equals(patternColor[j]) && (patternChecked[j] == false)) {
-                    ((Game)g).addKeyPeg(1, lastRow);
+                    ((Game)g).addKeyPeg(KeyPeg.WHITE, lastRow);
                     patternChecked[j] = true;
                 }
            }
@@ -482,9 +474,9 @@ public class GameDomainController extends GenericGameDC {
         return output;
     }
 
-    public Integer[][] getKeyPegs()
+    public KeyPeg[][] getKeyPegs()
     {
-        return ((Game)g).getKeyPegs();
+        return ((Game)g).getKeyPegsAsBoard();
     }
 
     public Boolean[] getPatternVisibility()

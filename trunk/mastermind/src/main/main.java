@@ -6,6 +6,7 @@
 package main;
 
 import Enum.DifficultyLevel;
+import Enum.KeyPeg;
 import UseCaseController.GenericPlayGameUCC;
 import UseCaseController.LoadGameUseCaseController;
 import UseCaseController.NewGameUseCaseController;
@@ -31,7 +32,7 @@ public class main
     private static Integer[][] board;
     private static Integer[] patternColor;
     private static Integer[] patternVisibility;
-    private static Integer[][] keyPegs;
+    private static KeyPeg[][] keyPegs;
 
     public static void main (String args[]) throws IOException
     {
@@ -353,7 +354,7 @@ public class main
                 System.out.print(board[i][j]);
             System.out.print("          ");
             for (int j = 0; j < columns; j++)
-                System.out.print(keyPegs[i][j]);
+                System.out.print(keyPegs[i][j] + " ");
             System.out.println();
         }    
     }
@@ -365,7 +366,7 @@ public class main
         board = new Integer[10][columns];
         patternColor = new Integer[columns];
         patternVisibility = new Integer[columns];
-        keyPegs = new Integer[10][columns];
+        keyPegs = new KeyPeg[10][columns];
 
 
         for (int i = 0; i < 10; i++)
@@ -377,7 +378,7 @@ public class main
 
         for (int i = 0; i < 10; i++)
             for (int j = 0; j < columns; j++)
-                keyPegs[i][j] = new Integer(0);
+                keyPegs[i][j] = KeyPeg.VOID;
     }
 
     private static void updateElements() {

@@ -5,6 +5,7 @@ package UseCaseController;
 
 import DomainController.GameDomainController;
 import DomainController.RankingDomainController;
+import Enum.KeyPeg;
 
 /**
  * This class is who manage play game use case and extends GenericPlayGamuUCC
@@ -86,8 +87,8 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
     * @return Array of keyPegs for the indicated row. In the first element of the array indicates number of white pegs
     * and in the second one indicates number of red pegs in the row
     */
-    public Integer[] getKeyPegRow(int row) {
-        return ((GameDomainController)gdc).getKeyPegRow(row);
+    public KeyPeg[] getKeyPegsRow(int row) {
+        return ((GameDomainController)gdc).getKeyPegsRow(row);
     }
 
     /**
@@ -131,11 +132,6 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
         return ((GameDomainController)gdc).getCodePegsLastRowNumber();
     }
 
-    public Integer[] getKeyPegsRow(int row)
-    {
-        return ((GameDomainController)gdc).getKeyPegRow(row);
-    }
-
     public void closeRound()
     {
         ((GameDomainController)gdc).closeRound();
@@ -151,7 +147,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
         return ((GameDomainController)gdc).getScore(player);
     }
 
-    public Integer[][] getKeyPegs()
+    public KeyPeg[][] getKeyPegs()
     {
         return ((GameDomainController)gdc).getKeyPegs();
     }
