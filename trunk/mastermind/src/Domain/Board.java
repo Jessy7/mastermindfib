@@ -2,9 +2,28 @@
 package Domain;
 
 /**
- * Board class has attributes specific of Mastermind
+ * Board class has specific attributes for Mastermind
  *
- * @author Samuel Gomez
+ * Publicly, it represents a real Mastermind board with:
+ * - A matrix of N*M code pegs
+ * - A matrix of N*M key pegs
+ * - A row of M pattern pegs
+ *
+ * Accessing code pegs is done through these methods:
+ * - setCodePeg*
+ * - getCodePeg*
+ *
+ * Accessing key pegs is done through these methods:
+ * - addKeyPeg
+ * - getKeyPeg*
+ *
+ * Accessing pattern pegs is done through these methods:
+ * - setPatternColor
+ * - setPatternVisibility
+ * - getPatternColor
+ * - getPatternVisibility
+ *
+ * @author Samuel Gómez
  */
 public class Board extends GenericBoard {
 
@@ -14,25 +33,41 @@ public class Board extends GenericBoard {
     public static final Integer KEYPEG_RED = 2;
 
     /**
-     * A white keypeg indicates that a codepeg matches on color, but not on position
+     * A white keypeg indicates that a codepeg matches on color,
+     * but not on position
      */
     public static final Integer KEYPEG_WHITE = 1;
 
     /**
-     * A void keypeg indicates that a codepeg does not match on color, thus, neither in position
+     * A void keypeg indicates that a codepeg does not match on color,
+     * thus, neither in position
      */
     public static final Integer KEYPEG_VOID = 0;
 
+    private static final Integer COLOREDKP_COL = 0;
+    private static final Integer WHITEKP_COL = 1;
+
+    /**
+     * Code Pegs
+     *
+     * number of rows: GenericBoard::rows
+     * number of columns: GenericBoard::columns
+     */
     private Integer[][] codePegs;
 
     /**
-     * Keypegs: There is a set of keypegs per row. They indicate how many codepegs
-     * do match () with the pattern.
+     * Key Pegs: There is a set of keypegs per row. They indicate how many
+     * codepegs do match with the pattern.
      *
-     * number of rows: rows
-     * number of columns: 2
+     * Number of rows: GenericBoard::rows
+     * Number of columns: 2
      * - Column 1: Number of red keypegs
      * - Column 2: Number of white keypegs
+     *
+     * However, this is only the internal representation; on the API related
+     * to key pegs, a matrix of GenericBoard::rows * GenericBoard::columns is
+     * the model.
+     *
      */
     private Integer[][] keyPegs;
     private PatternPeg[] pattern;
@@ -59,8 +94,8 @@ public class Board extends GenericBoard {
 
         keyPegs = new Integer[rows][2];
         for (int i = 0; i < rows; i++) {
-            keyPegs[i][0] = new Integer(0);
-            keyPegs[i][1] = new Integer(0);
+            keyPegs[i][COLOREDKP_COL] = new Integer(0);
+            keyPegs[i][WHITEKP_COL] = new Integer(0);
         }
 
         pattern = new PatternPeg[columns];
@@ -75,7 +110,7 @@ public class Board extends GenericBoard {
 
     /*
      *
-     * CodePegs
+     * Code pegs
      *
      */
 
@@ -185,8 +220,8 @@ public class Board extends GenericBoard {
             for (int j = 0; j < columns; j++) {
                 codePegs[i][j] = 0;
             }
-            keyPegs[i][0] = 0;
-            keyPegs[i][1] = 0;
+            keyPegs[i][COLOREDKP_COL] = 0;
+            keyPegs[i][WHITEKP_COL] = 0;
         }
 
         for (int j = 0; j < columns; j++) {
@@ -201,7 +236,7 @@ public class Board extends GenericBoard {
 
     /*
      *
-     * KeyPegs
+     * Key pegs
      *
      */
 
@@ -209,6 +244,11 @@ public class Board extends GenericBoard {
      * getters
      */
 
+    /**
+     * @return The matrix of key pegs of the board.
+     * - Number of rows: GenericBoard::rows
+     * - Number of rows: GenericBoard::columns
+     */
     public Integer[][] getKeyPegs()
     {
         Integer[][] res = new Integer[rows][columns];
@@ -221,15 +261,19 @@ public class Board extends GenericBoard {
     }
 
     /**
-     * Returns the row of key pegs for a given row. Red keypegs first, white
-     * keypegs after, "void" keypegs finally.
+     * @param row Row of the board from 0 to GenericBoard::rows - 1
+     * @return The array of key pegs for a given row of the board.
      *
-     * @return
-     * eg: if keypeg[row] contains:
-     * - Column 1: 2 (red keypegs)
-     * - Column 2: 1 (white keypegs)
+     * Red keypegs first, white keypegs after, "void" keypegs finally.
      *
+     * Examples:
+     * 
+     * If keyPegs[row] contains [2][1],
      * this function will return [RED][RED][WHITE][VOID]
+     *
+     * If keyPegs[row] contains [0][3],
+     * this function will return [WHITE][WHITE][WHITE][VOID]
+     *
      */
     public Integer[] getKeyPegsRow(int row)
     {
@@ -237,14 +281,14 @@ public class Board extends GenericBoard {
         int j = 0;
 
         // red keypegs
-        for (int i = 0; i < keyPegs[row][0]; i++) {
+        for (int i = 0; i < keyPegs[row][COLOREDKP_COL]; i++) {
             res[j] = new Integer(KEYPEG_RED);
             j++;
         }
         // now res contains [RED][RED][][]
 
         // white keypegs
-        for (int i = 0; i < keyPegs[row][1]; i++) {
+        for (int i = 0; i < keyPegs[row][WHITEKP_COL]; i++) {
             res[j] = new Integer(KEYPEG_WHITE);
             j++;
         }
@@ -260,7 +304,9 @@ public class Board extends GenericBoard {
     }
 
     /**
-     * Sets keypegs without ordering them.
+     * 
+     * @param _keyPegs Key peg matrix of the Mastermind board. Allowed values:
+     * KEYPEG_RED, KEYPEG_WHITE
      */
     public void setKeyPegs(final Integer[][] _keyPegs)
     {
@@ -269,43 +315,79 @@ public class Board extends GenericBoard {
 
         keyPegs = new Integer[_keyPegs.length][_keyPegs[0].length];
 
+        // for each row
         for (int i = 0; i < rows; i++) {
             nred = 0;
             nwhite = 0;
+
+            // for each column
             for (int j = 0; j < columns; j++) {
-                if (_keyPegs[i][j] == KEYPEG_RED) {
+                if (_keyPegs[i][j].equals(KEYPEG_RED)) {
                     nred++;
-                } else if (_keyPegs[i][j] == KEYPEG_WHITE) {
+                } else if (_keyPegs[i][j].equals(KEYPEG_WHITE)) {
                     nwhite++;
                 }
-            }
-            keyPegs[i][0] = new Integer(nred);
-            keyPegs[i][1] = new Integer(nwhite);
-        }
+            } // ffor column
+
+            keyPegs[i][COLOREDKP_COL] = new Integer(nred);
+            keyPegs[i][WHITEKP_COL] = new Integer(nwhite);
+
+        } // ffor row
+
     }
 
     /**
-     * Places a new keypeg on the board and orders it in the context of its row
+     * Adds a new keypeg to the board
      *
-     * @param _keyPeg color of the keypeg 
-     * @param row Row of the keypeg
+     * @param _keyPeg color of the key peg
+     * @param row Row of the key peg
      */
     public void addKeyPeg(final Integer _keyPeg, final int row)
     {
-        if (_keyPeg == KEYPEG_RED) {
-            keyPegs[row][0]++;
-        } else if (_keyPeg == KEYPEG_WHITE) {
-            keyPegs[row][1]++;
+        if (_keyPeg.equals(KEYPEG_RED)) {
+            keyPegs[row][COLOREDKP_COL]++;
+
+        } else if (_keyPeg.equals(KEYPEG_WHITE)) {
+            keyPegs[row][WHITEKP_COL]++;
+
         }
     }
 
+    // http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/deprecation/deprecation.html
     /**
-     * Places a new keypeg on the board withour ordering it
+     * Places a new keypeg on the board without ordering it
      *
-     * @param _keyPeg color of the keypeg
+     * @deprecated
+     * <p>
+     * Use {@link #addKeyPeg()} instead.
+     * </p>
+     * <p>
+     * Currently, setKeyPeg couples the user with the internal representation
+     * of the key pegs, which changed from the external one during development.
+     * </p>
+     * <p>
+     * setKeyPeg could be re-implemented to recover its original meaning, but
+     * probably this will not happen due to its very low value/cost ratio:
+     * </p>
+     * <ul>
+     *  <li>
+     *   "column" parameter is not trivial to compute in the context of key pegs
+     *   computation; this makes this method hard to use.
+     *  </li>
+     *  <li>
+     *   It is complex to implement.
+     *  </li>
+     *  <li>
+     *   It is inefficient to run; the complex implementation does not simplify
+     *   further calculations.
+     *  </li>
+     * </ul>
+     * 
+     * @param _keyPeg Color of the keypeg
      * @param row Row of the keypeg
      * @param column Column of the keypeg
      */
+    @Deprecated
     public void setKeyPeg(final Integer _keyPeg, final int row, final int column)
     {
         keyPegs[row][column] = new Integer(_keyPeg);

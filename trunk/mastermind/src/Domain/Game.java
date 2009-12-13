@@ -4,17 +4,18 @@ package Domain;
 import Enum.DifficultyLevel;
 
 /**
- * This class will have attributes that define whole problem elements and characteristics
+ * This class will have attributes that define whole problem elements and
+ * characteristics
  * 
  * vsCPU: Player 1 is human, player 2 is CPU
  * !vsCPU: Player 1 is human, player 2 is human
  *
- * round 0: Player 1 is codemaker, player 2 is codebreaker
- * round 1: Player 2 is codemaker, player 1 is codebreaker
- * round 2: Player 1 is codemaker, player 2 is codebreaker
- * round 3: ...
+ * Round 0: Player 1 is codemaker, player 2 is codebreaker
+ * Round 1: Player 2 is codemaker, player 1 is codebreaker
+ * Round 2: Player 1 is codemaker, player 2 is codebreaker
+ * Round 3: ...
  *
- * @author Samuel
+ * @author Samuel Gómez
  */
 public class Game extends GenericGame {
 
@@ -419,6 +420,52 @@ public class Game extends GenericGame {
         ((Board)board).setKeyPegs(_keyPegs);
     }
 
+    /**
+     * Adds a new key peg on the board
+     *
+     * @param _keyPeg color of the keypeg
+     * @param row Row of the keypeg
+     */
+    public void addKeyPeg(final Integer _keyPeg, final int row)
+    {
+        ((Board)board).addKeyPeg(_keyPeg, row);
+    }
+
+    // http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/deprecation/deprecation.html
+    /**
+     * Places a new keypeg on the board without ordering it
+     *
+     * @deprecated
+     * <p>
+     *  Use {@link #addKeyPeg()} instead.
+     * </p>
+     * <p>
+     *  Currently, setKeyPeg couples the user with the internal representation
+     *  of the key pegs, which changed from the external one during development.
+     * </p>
+     * <p>
+     *  setKeyPeg could be re-implemented to recover its original meaning, but
+     *  probably this will not happen due to its very low value/cost ratio:
+     * </p>
+     * <ul>
+     *  <li>
+     *   "column" parameter is not trivial to compute in the context of key pegs
+     *   computation; this makes this method hard to use.
+     *  </li>
+     *  <li>
+     *   It is complex to implement.
+     *  </li>
+     *  <li>
+     *   It is inefficient to run; the complex implementation does not simplify
+     *   further calculations.
+     *  </li>
+     * </ul>
+     *
+     * @param _keyPeg Color of the keypeg
+     * @param row Row of the keypeg
+     * @param column Column of the keypeg
+     */
+    @Deprecated
     public void setKeyPeg(final Integer _keyPeg, final int row, final int column)
     {
         ((Board)board).setKeyPeg(_keyPeg, row, column);
