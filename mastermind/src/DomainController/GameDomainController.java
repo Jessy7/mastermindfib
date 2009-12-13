@@ -232,7 +232,7 @@ public class GameDomainController extends GenericGameDC {
        data += String.valueOf(((Game)g).getP2Points()) + ",";
        data += convertIntegerArrayToString(((Game)g).getPatternColor()) + ",";
        data += convertIntegerMatrixToString(g.getBoard()) + ",";
-       data += convertIntegerMatrixToString(((Game)g).getKeyPegsAs2Cols()) + ",";
+       data += convertKeyPegsMatrixToString(((Game)g).getKeyPegsAs2Cols()) + ",";
        data += convertBooleanArrayToString(((Game)g).getPatternVisibility());
 
        return data;
@@ -258,7 +258,7 @@ public class GameDomainController extends GenericGameDC {
        ((Game)g).setP2Points(Integer.valueOf(dataArray[4]));
        ((Game)g).setPatternColor(convertStringToIntegerArray(dataArray[5]));
        ((Game)g).setBoard(convertStringToIntegerMatrix(dataArray[6]));
-       ((Game)g).setKeyPegs(convertStringToIntegerMatrix(dataArray[7]));
+       ((Game)g).setKeyPegs(convertStringToKeyPegsMatrix(dataArray[7]));
        ((Game)g).setPatternVisibility(convertStringToBooleanArray(dataArray[8]));
    }
 
@@ -490,6 +490,33 @@ public class GameDomainController extends GenericGameDC {
 
     public int getRows() {
         return ((Game)g).getRows();
+    }
+
+    private String convertKeyPegsMatrixToString(Integer[][] input) {
+       String output = "";
+       int rows = 2;
+       int columns = g.getColumns();
+
+       for (int i = 0; i < rows; i++)
+           for (int j = 0; j < columns; j++)
+                output += input[i][j];
+
+       return output;
+    }
+
+    private Integer[][] convertStringToKeyPegsMatrix(String input) {
+       int columns = g.getColumns();
+       int rows = 2;
+       Integer[][] codePeg = new Integer[rows][columns];
+
+       int k = 0;
+       for(int i = 0; i < rows; i++)
+           for (int j = 0; j < columns; j++, k++)
+           {
+               codePeg[i][j] = Integer.valueOf(input.substring(k, k+1));
+
+           }
+       return codePeg;
     }
 
 }
