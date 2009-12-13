@@ -248,7 +248,7 @@ public class Board extends GenericBoard {
 
     /**
      *
-     * @return Key pegs of the board in 2-column format. Column [0] for red
+     * @return Key pegs of the board in 2-column-format; column [0] for red
      * key pegs, column [1] for white key pegs.
      */
     public Integer[][] getKeyPegsAs2Cols()
@@ -259,7 +259,7 @@ public class Board extends GenericBoard {
     /**
      * @return
      * <p>
-     *  The matrix of key pegs of the board.
+     *  N*M matrix of key pegs of the board.
      * </p>
      * <ul>
      *  <li>
