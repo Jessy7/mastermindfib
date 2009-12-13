@@ -494,8 +494,8 @@ public class GameDomainController extends GenericGameDC {
 
     private String convertKeyPegsMatrixToString(Integer[][] input) {
        String output = "";
-       int rows = 2;
-       int columns = g.getColumns();
+       int rows = g.getRows();
+       int columns = 2;
 
        for (int i = 0; i < rows; i++)
            for (int j = 0; j < columns; j++)
@@ -511,8 +511,8 @@ public class GameDomainController extends GenericGameDC {
      * @return String converted in integer matrix
      */
     private Integer[][] convertStringToKeyPegsMatrix(String input) {
-       int columns = g.getColumns();
-       int rows = 2;
+       int columns = 2;
+       int rows = g.getRows();
        Integer[][] output = new Integer[rows][columns];
 
        int k = 0;
