@@ -247,11 +247,30 @@ public class Board extends GenericBoard {
      */
 
     /**
-     * @return The matrix of key pegs of the board.
-     * - Number of rows: GenericBoard::rows
-     * - Number of rows: GenericBoard::columns
+     *
+     * @return Key pegs of the board in 2-column format. Column [0] for red
+     * key pegs, column [1] for white key pegs.
      */
-    public KeyPeg[][] getKeyPegs()
+    public Integer[][] getKeyPegsAs2Cols()
+    {
+        return keyPegs;
+    }
+
+    /**
+     * @return
+     * <p>
+     *  The matrix of key pegs of the board.
+     * </p>
+     * <ul>
+     *  <li>
+     *   Number of rows: GenericBoard::rows
+     *  </li>
+     *  <li>
+     *   Number of columns: GenericBoard::columns
+     *  </li>
+     * </ul>
+     */
+    public KeyPeg[][] getKeyPegsAsBoard()
     {
         KeyPeg[][] res = new KeyPeg[rows][columns];
 
