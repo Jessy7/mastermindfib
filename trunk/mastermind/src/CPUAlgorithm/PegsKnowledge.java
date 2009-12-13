@@ -129,19 +129,36 @@ public class PegsKnowledge
     public void addPegNoEstaEn(int peg, Integer DondeNoEsta)
     {
         knowledge[peg].addPegNoEstaEn(DondeNoEsta);
+        
+        Integer[] where = WhereMayBe(peg);
+        if (where.length == 1) {
 
-        /* if a peg P in the pattern can only be in one possible hole H, P is in H */
-        if (knowledge[peg].getState().equals(PegKnowledge.ESTA_PERO_NO_EN)) {
-            Integer[] where = WhereMayBe(peg);
-            if (where.length == 1) {
+            /* if a peg P in the pattern can only be in one possible hole H, P is in H */
+            if (knowledge[peg].getState().equals(PegKnowledge.ESTA_PERO_NO_EN)) {
                 addPegEstaEn(peg, where[0]);
             }
+
+        } else if (where.length == 0) {
+
+            /* if a peg P in the pattern can not be in any hole, P is not in the pattern */
+            addPegNoEsta(peg);
+
         }
+
     }
 
     public void addPegEstaPeroNoEn(int peg)
     {
         knowledge[peg].addPegEstaPeroNoEn();
+
+        // if we know all which are in, we know than the rest are not
+        if (HowManyInPattern().equals(nHoles)) {
+            for (int i = 0; i < nColors; i++) {
+                if (!knowledge[i].isInPattern()) {
+                    addPegNoEsta(i);
+                }
+            }
+        }
     }
 
     public void addPegEstaPeroNoEn(int peg, Integer DondeNoEsta)
@@ -154,6 +171,14 @@ public class PegsKnowledge
             addPegEstaEn(peg, where[0]);
         }
 
+        // if we know all which are in, we know than the rest are not
+        if (HowManyInPattern().equals(nHoles)) {
+            for (int i = 0; i < nColors; i++) {
+                if (!knowledge[i].isInPattern()) {
+                    addPegNoEsta(i);
+                }
+            }
+        }
     }
 
     public void addPegEstaEn(int peg, Integer DondeEsta)
@@ -164,6 +189,15 @@ public class PegsKnowledge
         for (int i = 0; i < knowledge.length; i++) {
             if (i != peg) {
                 addPegNoEstaEn(i, DondeEsta);
+            }
+        }
+
+        // if we know all which are in, we know than the rest are not
+        if (HowManyInPattern().equals(nHoles)) {
+            for (int i = 0; i < nColors; i++) {
+                if (!knowledge[i].isInPattern()) {
+                    addPegNoEsta(i);
+                }
             }
         }
     }
