@@ -218,9 +218,9 @@ public class GameDomainController extends GenericGameDC {
     * This method indicates to domain if the player2 is a human or a cpu
     * @param isPlayer2CPU Thi parameter indicates if player is a human
     */
-  /* public void setPlayer2(Boolean isPlayer2CPU) {
+   public void setPlayer2(Boolean isPlayer2CPU) {
        ((Game)g).setVsCPU(isPlayer2CPU);
-   }*/
+   }
 
    /**
     * This method obtains all information needed to save the game from domain layer
@@ -408,10 +408,10 @@ public class GameDomainController extends GenericGameDC {
        return ((Game)g).getCurrentRow();
    }
 
-   public int getPatternLength()
+   /*public int getPatternLength()
    {
        return ((Game)g).getColumns();
-   }
+   }*/
 
    public int getP1Points()
    {
