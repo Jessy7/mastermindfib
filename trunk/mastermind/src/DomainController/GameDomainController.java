@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Random;
 import Enum.DifficultyLevel;
 import Enum.KeyPeg;
+import Conversors.IntegerMatrixStringConverter;
+import Conversors.StringBooleanArray;
 
 /**
  * This singleton class extends GenericGameDC and it's the responsable to transmit data between
@@ -224,6 +226,7 @@ public class GameDomainController extends GenericGameDC {
     */
    private String saveDomain() {
        String data = "";
+       int rows = g.getRows();
 
        data += String.valueOf(((Game)g).getVsCPU()) + ",";
        data += String.valueOf(((Game)g).getLevel()) + ",";
@@ -232,8 +235,8 @@ public class GameDomainController extends GenericGameDC {
        data += String.valueOf(((Game)g).getP2Points()) + ",";
        data += convertIntegerArrayToString(((Game)g).getPatternColor()) + ",";
        data += convertIntegerMatrixToString(g.getBoard()) + ",";
-       data += convertKeyPegsMatrixToString(((Game)g).getKeyPegsAs2Cols()) + ",";
-       data += convertBooleanArrayToString(((Game)g).getPatternVisibility());
+       data += IntegerMatrixStringConverter.toString(((Game)g).getKeyPegsAs2Cols(),rows,2) + ",";
+       data += StringBooleanArray.toString(((Game)g).getPatternVisibility());
 
        return data;
    }
@@ -247,6 +250,7 @@ public class GameDomainController extends GenericGameDC {
    protected void loadDomain(String data) {
 
        String dataArray[] = splitAttributes(data);
+       int rows = g.getRows();
 
        g = new Game();
        Boolean vsCpu = Boolean.valueOf(dataArray[0]);
@@ -259,8 +263,9 @@ public class GameDomainController extends GenericGameDC {
        ((Game)g).setP2Points(Integer.valueOf(dataArray[4]));
        ((Game)g).setPatternColor(convertStringToIntegerArray(dataArray[5]));
        ((Game)g).setBoard(convertStringToIntegerMatrix(dataArray[6]));
-       ((Game)g).setKeyPegs(convertStringToKeyPegsMatrix(dataArray[7]));
-       ((Game)g).setPatternVisibility(convertStringToBooleanArray(dataArray[8]));
+
+       ((Game)g).setKeyPegs(IntegerMatrixStringConverter.toIntegerMatrix(dataArray[7],rows,2));
+       ((Game)g).setPatternVisibility(StringBooleanArray.toBooleanArray(dataArray[8]));
    }
 
    /**
@@ -448,33 +453,6 @@ public class GameDomainController extends GenericGameDC {
        return ((Game)g).getVsCPU();
    }
 
-    private String convertBooleanArrayToString(Boolean[] patternVisibility)
-    {
-        String data = "";
-        for (int i = 0; i < patternVisibility.length; i++)
-        {
-            if (patternVisibility[i] == Boolean.TRUE)
-                data += "1";
-            else
-                data += "0";
-        }
-        return data;
-    }
-
-    private Boolean[] convertStringToBooleanArray(String input)
-    {
-        Boolean[] output = new Boolean[input.length()];
-
-        for (int i = 0; i < input.length(); i++)
-        {
-            if (input.substring(i, i+1).compareTo("1") == 0)
-                output[i] = Boolean.TRUE;
-            else
-                output[i] = Boolean.FALSE;
-        }
-        return output;
-    }
-
     public KeyPeg[][] getKeyPegs()
     {
         return ((Game)g).getKeyPegsAsBoard();
@@ -492,38 +470,4 @@ public class GameDomainController extends GenericGameDC {
     public int getRows() {
         return ((Game)g).getRows();
     }
-
-    private String convertKeyPegsMatrixToString(Integer[][] input) {
-       String output = "";
-       int rows = g.getRows();
-       int columns = 2;
-
-       for (int i = 0; i < rows; i++)
-           for (int j = 0; j < columns; j++)
-                output += input[i][j];
-
-       return output;
-    }
-
-    /**
-     * This method converts a String in an Integer matrix. The matrix
-     * represents in each row the red and white keyPegs
-     * @param input String to be converted in a Integer matrix
-     * @return String converted in integer matrix
-     */
-    private Integer[][] convertStringToKeyPegsMatrix(String input) {
-       int columns = 2;
-       int rows = g.getRows();
-       Integer[][] output = new Integer[rows][columns];
-
-       int k = 0;
-       for(int i = 0; i < rows; i++)
-           for (int j = 0; j < columns; j++, k++)
-           {
-               output[i][j] = Integer.valueOf(input.substring(k, k+1));
-
-           }
-       return output;
-    }
-
 }
