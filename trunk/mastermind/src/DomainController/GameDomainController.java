@@ -45,7 +45,7 @@ public class GameDomainController extends GenericGameDC {
     * @param row Row to check
     * @return Array of codePegs for the indicated row
     */
-   public Integer[] getCodePegRow (int row) {
+   public Integer[] getCodePegsRow (int row) {
        return ((Game)g).getCodePegsRow(row);
    }
 
@@ -243,6 +243,7 @@ public class GameDomainController extends GenericGameDC {
     * This method is used when the user wants to load a game
     * @param data Data nedeed to load a prevoius saved game
     */
+   @Override
    protected void loadDomain(String data) {
 
        String dataArray[] = splitAttributes(data);

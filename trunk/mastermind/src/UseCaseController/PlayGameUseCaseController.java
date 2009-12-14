@@ -78,7 +78,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
     */
     public Integer[] getCodePegRow(int row)
     {
-        return ((GameDomainController)gdc).getCodePegRow(row);
+        return ((GameDomainController)gdc).getCodePegsRow(row);
     }
 
     /**
