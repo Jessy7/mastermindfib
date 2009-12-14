@@ -3,15 +3,16 @@ package Conversors;
 /**
  * This class is specialized in convert Array of Integers to String and reverse.
  * It only offers this two converters methods
+ * This class is used to save and load games
  *
  * @author Oriol Bellet
  */
 public class IntegerArrayString {
 
     /**
-    * This method converts a String to Integer array
+    * This method converts a String to Integer's array
     * @param input String to be converted
-    * @return String converted to Integer Array
+    * @return String converted to Integer's Array
     */
    public static Integer[] toIntegerArray (String input) {
 
@@ -25,9 +26,9 @@ public class IntegerArrayString {
    }
 
     /**
-    * This method converts an Integer array to String
-    * @param input Integer array to be converted
-    * @return Integer array converted to String
+    * This method converts an Integer's array to String
+    * @param input Integer's array to be converted
+    * @return Integer's array converted to String
     */
    public static String toString (Integer[] input) {
 
