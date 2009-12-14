@@ -2,6 +2,7 @@
 package DomainController;
 
 import CPUAlgorithm.MastermindAI4Holes;
+import Conversors.IntegerArrayString;
 import Domain.Game;
 import java.util.Arrays;
 import java.util.Random;
@@ -77,6 +78,7 @@ public class GameDomainController extends GenericGameDC {
     * This method allows to user to have a hint. If is the first time that user ask for a hint, the hint is given
     * @return 0 if ok, -1 if the hint is already given.
     */
+   @Override
    public int giveHint() {
        if (!((Game)g).getHintWasGiven())
                 return ((Game)g).giveHint();
@@ -131,7 +133,7 @@ public class GameDomainController extends GenericGameDC {
     * @return 0 if ok, -1 if error
     */
    public int setPattern(String pattern) {
-       ((Game)g).setPatternColor(convertStringToIntegerArray(pattern));
+       ((Game)g).setPatternColor(IntegerArrayString.toIntegerArray(pattern));
        return 0;
    }
 
@@ -216,9 +218,9 @@ public class GameDomainController extends GenericGameDC {
     * This method indicates to domain if the player2 is a human or a cpu
     * @param isPlayer2CPU Thi parameter indicates if player is a human
     */
-   public void setPlayer2(Boolean isPlayer2CPU) {
+  /* public void setPlayer2(Boolean isPlayer2CPU) {
        ((Game)g).setVsCPU(isPlayer2CPU);
-   }
+   }*/
 
    /**
     * This method obtains all information needed to save the game from domain layer
@@ -233,7 +235,7 @@ public class GameDomainController extends GenericGameDC {
        data += String.valueOf(((Game)g).getCurrentRound()) + ",";
        data += String.valueOf(((Game)g).getP1Points()) + ",";
        data += String.valueOf(((Game)g).getP2Points()) + ",";
-       data += convertIntegerArrayToString(((Game)g).getPatternColor()) + ",";
+       data += IntegerArrayString.toString(((Game)g).getPatternColor()) + ",";
        data += convertIntegerMatrixToString(g.getBoard()) + ",";
        data += IntegerMatrixStringConverter.toString(((Game)g).getKeyPegsAs2Cols(),rows,2) + ",";
        data += StringBooleanArray.toString(((Game)g).getPatternVisibility());
@@ -261,7 +263,7 @@ public class GameDomainController extends GenericGameDC {
        ((Game)g).setCurrentRound(Integer.valueOf(dataArray[2]));
        ((Game)g).setP1Points(Integer.valueOf(dataArray[3]));
        ((Game)g).setP2Points(Integer.valueOf(dataArray[4]));
-       ((Game)g).setPatternColor(convertStringToIntegerArray(dataArray[5]));
+       ((Game)g).setPatternColor(IntegerArrayString.toIntegerArray(dataArray[5]));
        ((Game)g).setBoard(convertStringToIntegerMatrix(dataArray[6]));
 
        ((Game)g).setKeyPegs(IntegerMatrixStringConverter.toIntegerMatrix(dataArray[7],rows,2));
@@ -279,38 +281,11 @@ public class GameDomainController extends GenericGameDC {
        return dataArray;
    }
 
-   /**
-    * This method transforms a String to an Integer array
-    * @param input String to be converted
-    * @return String converted in array
-    */
-   private Integer[] convertStringToIntegerArray (String input) {
-       Integer[] output = new Integer[input.length()];
-       int columns = ((Game)g).getColumns();
-
-       for (int i = 0; i < columns; i++)
-            output[i] = Integer.valueOf(input.substring(i,i+1));
-
-       return output;
-
-   }
+ 
 
 
 
-   /**
-    * This method transforms an Integer array to String
-    * @param input Integer array to convert
-    * @return Integer array converted to String
-    */
-   private String convertIntegerArrayToString (Integer[] input) {
-       String output = "";
-       int columns = ((Game)g).getColumns();
 
-       for (int i = 0; i < columns; i++)
-           output += input[i];
-
-       return output;
-   }
 
    /**
     * This method obtains the color of the elements of the pattern
