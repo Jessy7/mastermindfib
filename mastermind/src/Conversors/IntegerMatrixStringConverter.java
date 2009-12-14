@@ -1,22 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Conversors;
 
 /**
+ * This class is specialized in convert Matrix of Integers to String and reverse.
+ * It only offers this two converters methods
+ * This class is used to save and load games
  *
  * @author Oriol Bellet
  */
 public class IntegerMatrixStringConverter {
 
-        /**
-     * This method converts a String in an Integer matrix. The matrix
-     * represents in each row the red and white keyPegs
-     * @param input String to be converted in a Integer matrix
-     * @return String converted in integer matrix
-     */
+    /**
+    * This method converts a String to Integer's matrix
+    * @param input String to be converted
+    * @param rows Number of rows of the matrix created
+    * @param columns Number of columns of the matrix created
+    * @return String converted to Integer's matrix
+    */
     public static Integer[][] toIntegerMatrix(String input, int rows, int columns) {
 
        Integer[][] output = new Integer[rows][columns];
@@ -31,7 +30,13 @@ public class IntegerMatrixStringConverter {
        return output;
     }
 
-
+    /**
+    * This method converts an Integer's matrix to String
+    * @param input Integer's matrix to be converted
+    * @param rows Number of Rows of the input matrix
+    * @param columns Number of columns of the input matrix
+    * @return Integer's matrix converted to String
+    */
     public static String toString(Integer[][] input, int rows, int columns) {
 
        String output = "";
