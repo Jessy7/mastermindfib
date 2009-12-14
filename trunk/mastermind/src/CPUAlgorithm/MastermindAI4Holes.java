@@ -145,4 +145,31 @@ public class MastermindAI4Holes extends CommonMastermindAI
 
     }
 
+    protected void SwapAll(Integer[] successor)
+    {
+        /*
+         * brute force constraint satisfaction
+         */
+        Integer[] Attempt = new Integer[successor.length];
+        for (Integer w0 : knowledge.WhichMayBeInPos(0)) {
+            Attempt[0] = new Integer(w0);
+            for (Integer w1 : knowledge.WhichMayBeInPos(1)) {
+                Attempt[1] = new Integer(w1);
+                for (Integer w2 : knowledge.WhichMayBeInPos(2)) {
+                    Attempt[2] = new Integer(w2);
+                    for (Integer w3 : knowledge.WhichMayBeInPos(3)) {
+                        Attempt[3] = new Integer(w3);
+
+                        if (!IntegerArrayFindDuplicate(Attempt)) {
+                            if (!IsRowInMatrix(Attempt, codePegs)) {
+                                System.arraycopy(Attempt, 0, successor, 0, successor.length);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
