@@ -1,20 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Conversors;
 
 /**
+ * This class is specialized in convert Array of Integers to String and reverse.
+ * It only offers this two converters methods
  *
  * @author Oriol Bellet
  */
 public class IntegerArrayString {
 
-      /**
-    * This method transforms a String to an Integer array
+    /**
+    * This method converts a String to Integer array
     * @param input String to be converted
-    * @return String converted in array
+    * @return String converted to Integer Array
     */
    public static Integer[] toIntegerArray (String input) {
 
@@ -28,8 +25,8 @@ public class IntegerArrayString {
    }
 
     /**
-    * This method transforms an Integer array to String
-    * @param input Integer array to convert
+    * This method converts an Integer array to String
+    * @param input Integer array to be converted
     * @return Integer array converted to String
     */
    public static String toString (Integer[] input) {
@@ -41,7 +38,4 @@ public class IntegerArrayString {
 
        return output;
    }
-
-
-
 }
