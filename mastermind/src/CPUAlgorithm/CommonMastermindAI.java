@@ -3,6 +3,7 @@ package CPUAlgorithm;
 
 import Enum.KeyPeg;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class offers a method to make a guess from mastermind board with
@@ -279,6 +280,25 @@ public abstract class CommonMastermindAI
         return ArrayListToIntegerArray(res);
     }
 
+    protected static Boolean IntegerArrayFindDuplicate(Integer[] a)
+    {
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a.length; j++) {
+                if (i != j) {
+                    if (a[i].equals(a[j])) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+
     private Boolean IsRelieve(final Integer[] fromRow, final Integer[] toRow)
     {
         ArrayList addedList = new ArrayList();
@@ -440,7 +460,7 @@ public abstract class CommonMastermindAI
             keyPegs[i][WHITE_COLUMN] = new Integer(wkp);
         }
 
-        PrintBoard(); // test
+        // PrintBoard(); // test
 
         // knowledge
         knowledge = new PegsKnowledge(NCOLORS, NHOLES);
@@ -1142,7 +1162,7 @@ public abstract class CommonMastermindAI
          * NCOLORS and NHOLES.
          */
 
-        Integer[] successor = {0, 0, 0, 0};
+        Integer[] successor = new Integer[NHOLES];
 
         Integer lastRow = new Integer(CurrentRow() - 1);
 
@@ -1212,12 +1232,34 @@ public abstract class CommonMastermindAI
         }
     }
     
+    protected void Swap(Integer[] successor)
+    {
+
+        Integer[] oldSuccessor = new Integer[NHOLES];
+        System.arraycopy(successor, 0, oldSuccessor, 0, successor.length);
+
+        SwapOne(successor);
+
+        // if could not swap one
+        if (Arrays.equals(successor, oldSuccessor)) {
+            SwapAll(successor);
+        }
+
+    }
+
+    /**
+     * Swap all into places where it is possible
+     * @pre All pegs in successor are in the pattern.
+     * @param successor
+     */
+    protected abstract void SwapAll(Integer[] successor);
+
     /**
      * Swap a couple of colors already in the successor
      * 
      * @param successor
      */
-    protected void Swap(Integer[] successor)
+    protected void SwapOne(Integer[] successor)
     {
         // list of swappable positions
         ArrayList swappablePoss = getSwappablePoss();
@@ -1257,27 +1299,28 @@ public abstract class CommonMastermindAI
 
         int i = 0;
 
-        Integer[] successorAttempt = new Integer[successor.length];
+        // successor Attempt
+        Integer[] Attempt = new Integer[successor.length]; 
 
         do {
-            System.arraycopy(successor, 0, successorAttempt, 0, successor.length);
+            System.arraycopy(successor, 0, Attempt, 0, successor.length);
 
             Integer aux;
             Integer pos1 = (Integer)origins.get(i);
             Integer pos2 = (Integer)destinations.get(i);
 
-            aux = successorAttempt[pos1];
-            successorAttempt[pos1] = successorAttempt[pos2];
-            successorAttempt[pos2] = aux;
-            System.out.println("successorAttempt: " + IntegerArrayToString(successorAttempt));
+            aux = Attempt[pos1];
+            Attempt[pos1] = Attempt[pos2];
+            Attempt[pos2] = aux;
+            System.out.println("successorAttempt: " + IntegerArrayToString(Attempt));
             
             i++;
             
         // discard proposing a previous guess
-        } while (IsRowInMatrix(successorAttempt, codePegs) && i < origins.size());
+        } while (IsRowInMatrix(Attempt, codePegs) && i < origins.size());
 
-        System.arraycopy(successorAttempt, 0, successor, 0, successor.length);
-        System.out.println("final successor: " + IntegerArrayToString(successorAttempt));
+        System.arraycopy(Attempt, 0, successor, 0, successor.length);
+        System.out.println("final successor: " + IntegerArrayToString(Attempt));
     }
 
     /**
