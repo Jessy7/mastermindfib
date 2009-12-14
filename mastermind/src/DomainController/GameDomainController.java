@@ -408,10 +408,10 @@ public class GameDomainController extends GenericGameDC {
        return ((Game)g).getCurrentRow();
    }
 
-   /*public int getPatternLength()
+   public int getPatternLength()
    {
        return ((Game)g).getColumns();
-   }*/
+   }
 
    public int getP1Points()
    {
