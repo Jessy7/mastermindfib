@@ -41,6 +41,7 @@ public abstract class CommonMastermindAI
     protected static final Integer KEYPEG_NCOLS = 2;
     protected static final Integer COLORED_COLUMN = 0;
     protected static final Integer WHITE_COLUMN = 1;
+    protected static final Boolean DEBUG = true;
 
     // dynamic here but static at subclass level
         /* although this implementation makes it to physically exist also dinamically
@@ -589,7 +590,7 @@ public abstract class CommonMastermindAI
 
     private void Learn()
     {
-        System.out.println("Learning...");
+        if (DEBUG) System.out.println("Learning...");
 
         int currRow;
 
@@ -600,8 +601,6 @@ public abstract class CommonMastermindAI
             LearnFromRow(i);
         }
 
-        // knowledge.print();
-
         // learn from transitions
         for (int i = 0; i < currRow; i++) {
             for (int j = 0; j < currRow; j++) {
@@ -611,14 +610,12 @@ public abstract class CommonMastermindAI
             }
         }
 
-        // knowledge.print();
-
         // learn from double transitions
         for (int i = 0; i < currRow - 2; i++) {
             LearnFromDoubleTransition(i, i + 1, i + 2);
         }
 
-        knowledge.print();
+        if (DEBUG) knowledge.print();
 
      }
     
@@ -1264,9 +1261,9 @@ public abstract class CommonMastermindAI
         // list of swappable positions
         ArrayList swappablePoss = getSwappablePoss();
 
-        System.out.println("Swappable positions: " +
+        /* System.out.println("Swappable positions: " +
                 IntegerArrayToString(ArrayListToIntegerArray(swappablePoss)));
-
+        */
 
         // list of potential swaps
             /* cartesian product filtering
@@ -1291,8 +1288,8 @@ public abstract class CommonMastermindAI
          */
 
         if (origins.size() == 0 || destinations.size() == 0) {
-            System.out.println("swap(): there are no origins or destinations.");
-            System.out.println("Successor: " + IntegerArrayToString(successor));
+            if (DEBUG) System.out.println("swap(): there are no origins or destinations.");
+            if (DEBUG) System.out.println("Successor: " + IntegerArrayToString(successor));
 
             return;
         }
@@ -1312,7 +1309,7 @@ public abstract class CommonMastermindAI
             aux = Attempt[pos1];
             Attempt[pos1] = Attempt[pos2];
             Attempt[pos2] = aux;
-            System.out.println("successorAttempt: " + IntegerArrayToString(Attempt));
+            if (DEBUG) System.out.println("successorAttempt: " + IntegerArrayToString(Attempt));
             
             i++;
             
@@ -1320,7 +1317,7 @@ public abstract class CommonMastermindAI
         } while (IsRowInMatrix(Attempt, codePegs) && i < origins.size());
 
         System.arraycopy(Attempt, 0, successor, 0, successor.length);
-        System.out.println("final successor: " + IntegerArrayToString(Attempt));
+        if (DEBUG) System.out.println("final successor: " + IntegerArrayToString(Attempt));
     }
 
     /**
