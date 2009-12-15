@@ -41,7 +41,7 @@ public abstract class CommonMastermindAI
     protected static final Integer KEYPEG_NCOLS = 2;
     protected static final Integer COLORED_COLUMN = 0;
     protected static final Integer WHITE_COLUMN = 1;
-    protected static final Boolean DEBUG = true;
+    protected static final Boolean DEBUG = false;
 
     // dynamic here but static at subclass level
         /* although this implementation makes it to physically exist also dinamically
@@ -957,6 +957,16 @@ public abstract class CommonMastermindAI
 
     }
 
+    private Boolean RowHasUnjustifiedColoredPegs(Integer row)
+    {
+        /* unjustified if not all pegs of the row known to be in the right hole
+         * have a colored key peg.
+         */
+        Integer inPat = knowledge.HowManyInRightHole(codePegs[row]);
+        Integer inKP = keyPegs[row][COLORED_COLUMN];
+        return !inPat.equals(inKP);
+    }
+
     /**
      * @pre movements were swap(x, y) and swap(y, z).
      *  - all the swapped pegs were in the state ESTA_PERO_NO_EN
@@ -971,8 +981,9 @@ public abstract class CommonMastermindAI
         ArrayList destinationsList;
 
         /*
-         * If first transition is a swap(x,y) and second is a swap(y,z)
+         * If first transition is a swap(x,y) and second is a swap(y,z)  
          *  If first transition wins a colored peg
+         *    If first row does not have unjustified colored pegs
          *      If second transition looses a colored peg
          *          y is in position(y)
          *      If the second transition does not modify the colored pegs won
@@ -982,80 +993,93 @@ public abstract class CommonMastermindAI
         if (IsSwap11(codePegs[firstRow], codePegs[secondRow])) {
             if (IsSwap11(codePegs[secondRow], codePegs[thirdRow])) {
 
-                // if first transition won a colored peg
+                // If first transition won a colored peg
                 if (KeyColoredDiff(firstRow, secondRow).equals(1)) {
 
-                    // transition 1
-                    originsList = new ArrayList();
-                    destinationsList = new ArrayList();
+                    // If first row does not have unjustified colored pegs
+                    if (!RowHasUnjustifiedColoredPegs(firstRow)) {
 
-                    SwapDiff(codePegs[firstRow], codePegs[secondRow],
-                            originsList, destinationsList);
+                        // transition 1
+                        originsList = new ArrayList();
+                        destinationsList = new ArrayList();
 
-                    Integer pO1 = new Integer((Integer)originsList.get(0));
+                        SwapDiff(codePegs[firstRow], codePegs[secondRow],
+                                originsList, destinationsList);
 
-                    Integer pD1 = new Integer((Integer)destinationsList.get(0));
+                        Integer pO1 = new Integer((Integer)originsList.get(0));
 
-                    // transition 2
-                    originsList = new ArrayList();
-                    destinationsList = new ArrayList();
+                        Integer pD1 = new Integer((Integer)destinationsList.get(0));
 
-                    SwapDiff(codePegs[secondRow], codePegs[thirdRow],
-                            originsList, destinationsList);
+                        // transition 2
+                        originsList = new ArrayList();
+                        destinationsList = new ArrayList();
 
-                    Integer pO2 = new Integer((Integer)originsList.get(0));
+                        SwapDiff(codePegs[secondRow], codePegs[thirdRow],
+                                originsList, destinationsList);
 
-                    Integer pD2 = new Integer((Integer)destinationsList.get(0));
+                        Integer pO2 = new Integer((Integer)originsList.get(0));
 
-                    Integer X, Y, Z;
-                    Integer pX = new Integer(-1);
-                    Integer pY = new Integer(-1);
-                    Integer pZ = new Integer(-1);
+                        Integer pD2 = new Integer((Integer)destinationsList.get(0));
 
-                    // origen 1 == origen 2
-                    if (pO1.equals(pO2)) {
-                        pX = new Integer(pD1);
-                        pY = new Integer(pO2);
-                        pZ = new Integer(pD2);
+                        Integer X, Y, Z;
+                        Integer pX = new Integer(-1);
+                        Integer pY = new Integer(-1);
+                        Integer pZ = new Integer(-1);
 
-                    // origen 1 == destí 2
-                    } else if (pO1.equals(pD2)) {
-                        pX = new Integer(pD1);
-                        pY = new Integer(pD2);
-                        pZ = new Integer(pO2);
+                        // origen 1 == origen 2
+                        if (pO1.equals(pO2)) {
+                            pX = new Integer(pD1);
+                            pY = new Integer(pO2);
+                            pZ = new Integer(pD2);
 
-                    // destí 1 == origen 2
-                    } else if (pD1.equals(pO2)) {
-                        pX = new Integer(pO1);
-                        pY = new Integer(pO2);
-                        pZ = new Integer(pD2);
+                        // origen 1 == destí 2
+                        } else if (pO1.equals(pD2)) {
+                            pX = new Integer(pD1);
+                            pY = new Integer(pD2);
+                            pZ = new Integer(pO2);
 
-                    // destí 1 == destí 2
-                    } else if (pD1.equals(pD2)) {
-                        pX = new Integer(pO1);
-                        pY = new Integer(pD2);
-                        pZ = new Integer(pO2);
+                        // destí 1 == origen 2
+                        } else if (pD1.equals(pO2)) {
+                            pX = new Integer(pO1);
+                            pY = new Integer(pO2);
+                            pZ = new Integer(pD2);
 
-                    }
+                        // destí 1 == destí 2
+                        } else if (pD1.equals(pD2)) {
+                            pX = new Integer(pO1);
+                            pY = new Integer(pD2);
+                            pZ = new Integer(pO2);
 
-                    X = new Integer(codePegs[thirdRow][pX]);
-                    Z = new Integer(codePegs[thirdRow][pZ]);
+                        /*
+                         * transition 1 and transition 2 do not share a point;
+                         * they work with disjoint sets
+                         */
+                        } else {
 
-                    switch(KeyColoredDiff(secondRow, thirdRow)) {
+                            return;
 
-                        // if second transition looses a colored peg
-                        case -1:
-                            knowledge.addPegEstaEn(Z, pY);
-                            break;
+                        }
 
-                        // if second transition does not modify the colored pegs
-                        case 0:
-                            knowledge.addPegEstaEn(X, pX);
-                            break;
-                    }
-                }
-            }
-        }
+                        X = new Integer(codePegs[secondRow][pX]);
+                        Y = new Integer(codePegs[secondRow][pY]);
+                        Z = new Integer(codePegs[secondRow][pZ]);
+
+                        switch(KeyColoredDiff(secondRow, thirdRow)) {
+
+                            // if second transition looses a colored peg
+                            case -1:
+                                knowledge.addPegEstaEn(Y, pY);
+                                break;
+
+                            // if second transition does not modify the colored pegs
+                            case 0:
+                                knowledge.addPegEstaEn(X, pX);
+                                break;
+                        } // fi switch
+                    } // fi KeyColoredDiff
+                } // fi RowHasUnjustifiedColoredPegs
+            } // fi isSwap 2,3
+        } // fi isSwap 1,2
     }
 
     private Boolean IsSwap11(final Integer[] fromRow, final Integer[] toRow)
