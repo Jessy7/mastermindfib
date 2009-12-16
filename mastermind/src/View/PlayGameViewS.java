@@ -42,6 +42,7 @@ public class PlayGameViewS extends JFrame{
 	public PlayGameViewS(){
 
 		setSize(520,600);
+                setTitle("Mastermind    Setting: Hard");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
                 JButton saveGame = new JButton("Save game");
                 JButton hint = new JButton("Hint");
