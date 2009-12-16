@@ -26,7 +26,7 @@ public class SettingsView extends GenericSettingsView {
     /** Creates new form GenericSettingsView */
     public SettingsView() {
         initComponents();
-        init();
+    
     }
 
     /** This method is called from within the constructor to
@@ -53,18 +53,33 @@ public class SettingsView extends GenericSettingsView {
         setTitle("Settings");
         setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18));
-        jLabel1.setText("CHOOSE YOUR LEVEL");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setText("Choose your level");
 
         buttonGroup1.add(RadioE);
-        RadioE.setText("EASY");
+        RadioE.setText("easy");
+        RadioE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RadioEActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(RadioM);
         RadioM.setSelected(true);
-        RadioM.setText("NORMAL");
+        RadioM.setText("normal");
+        RadioM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RadioMActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(RadioH);
-        RadioH.setText("HARD");
+        RadioH.setText("hard");
+        RadioH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RadioHActionPerformed(evt);
+            }
+        });
 
         SV_Play.setFont(new java.awt.Font("Tahoma", 1, 14));
         SV_Play.setText("PLAY");
@@ -86,24 +101,23 @@ public class SettingsView extends GenericSettingsView {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
+                .addGap(52, 52, 52)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(RadioH, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SV_Play, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(RadioH, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SV_Play, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(RadioE, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(RadioM))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(RadioPlayer)
-                                    .addComponent(RadioCPU))))))
+                            .addComponent(RadioE, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(RadioM))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(RadioPlayer)
+                            .addComponent(RadioCPU))))
                 .addContainerGap(44, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(92, 92, 92)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,7 +144,7 @@ public class SettingsView extends GenericSettingsView {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -170,6 +184,18 @@ public class SettingsView extends GenericSettingsView {
 
         
 }//GEN-LAST:event_SV_PlayActionPerformed
+
+    private void RadioMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RadioMActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RadioMActionPerformed
+
+    private void RadioHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RadioHActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RadioHActionPerformed
+
+    private void RadioEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RadioEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RadioEActionPerformed
 
     /**
     * @param args the command line arguments

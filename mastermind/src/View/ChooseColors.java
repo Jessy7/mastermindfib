@@ -12,7 +12,7 @@ import java.awt.*;
 public class ChooseColors extends JFrame{
 
 
-	private int memory = 9;
+
 	String currentColor= "G";
 	JButton jButtonColor = new JButton("Current Color");
 	private String[] trying = new String[6];
