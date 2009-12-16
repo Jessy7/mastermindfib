@@ -957,14 +957,14 @@ public abstract class CommonMastermindAI
 
     }
 
-    private Boolean RowHasUnjustifiedColoredPegs(Integer row)
+    private Integer HowManyUnjustifiedColoredPegs(Integer row)
     {
         /* unjustified if not all pegs of the row known to be in the right hole
          * have a colored key peg.
          */
         Integer inPat = knowledge.HowManyInRightHole(codePegs[row]);
         Integer inKP = keyPegs[row][COLORED_COLUMN];
-        return !inPat.equals(inKP);
+        return inKP.intValue() - inPat.intValue();
     }
 
     /**
@@ -997,8 +997,75 @@ public abstract class CommonMastermindAI
                 // If first transition won a colored peg
                 if (KeyColoredDiff(firstRow, secondRow).equals(1)) {
 
-                    // If first row does not have unjustified colored pegs
-                    if (!RowHasUnjustifiedColoredPegs(firstRow)) {
+                    // transition 1
+                    originsList = new ArrayList();
+                    destinationsList = new ArrayList();
+
+                    SwapDiff(codePegs[firstRow], codePegs[secondRow],
+                            originsList, destinationsList);
+
+                    Integer pO1 = new Integer((Integer)originsList.get(0));
+
+                    Integer pD1 = new Integer((Integer)destinationsList.get(0));
+
+                    // transition 2
+                    originsList = new ArrayList();
+                    destinationsList = new ArrayList();
+
+                    SwapDiff(codePegs[secondRow], codePegs[thirdRow],
+                            originsList, destinationsList);
+
+                    Integer pO2 = new Integer((Integer)originsList.get(0));
+
+                    Integer pD2 = new Integer((Integer)destinationsList.get(0));
+
+                    Integer X, Y, Z;
+                    Integer pX = new Integer(-1);
+                    Integer pY = new Integer(-1);
+                    Integer pZ = new Integer(-1);
+
+                    // origen 1 == origen 2
+                    if (pO1.equals(pO2)) {
+                        pX = new Integer(pD1);
+                        pY = new Integer(pO2);
+                        pZ = new Integer(pD2);
+
+                    // origen 1 == destí 2
+                    } else if (pO1.equals(pD2)) {
+                        pX = new Integer(pD1);
+                        pY = new Integer(pD2);
+                        pZ = new Integer(pO2);
+
+                    // destí 1 == origen 2
+                    } else if (pD1.equals(pO2)) {
+                        pX = new Integer(pO1);
+                        pY = new Integer(pO2);
+                        pZ = new Integer(pD2);
+
+                    // destí 1 == destí 2
+                    } else if (pD1.equals(pD2)) {
+                        pX = new Integer(pO1);
+                        pY = new Integer(pD2);
+                        pZ = new Integer(pO2);
+
+                    /*
+                     * transition 1 and transition 2 do not share a point;
+                     * they work with disjoint sets
+                     */
+                    } else {
+
+                        return;
+
+                    }
+
+                    X = new Integer(codePegs[secondRow][pX]);
+                    Y = new Integer(codePegs[secondRow][pY]);
+                    Z = new Integer(codePegs[secondRow][pZ]);
+
+                    // If all colored key pegs on first row are justified
+                    if (knowledge.WhereIs(X).equals(-1) &&
+                            knowledge.WhereIs(Y).equals(-1) &&
+                            HowManyUnjustifiedColoredPegs(firstRow).equals(0)) {
                         /*
                          * when we loose a colored key peg in the second
                          * transition we need to be sure that it is not
@@ -1014,79 +1081,24 @@ public abstract class CommonMastermindAI
                          * the code peg moved in both transitions belongs
                          * to its destination on the first transition.
                          *
+                         * this excludes a first row having:
+                         * 1. moving pegs (X or Y) we know where are
+                         * 2. colored key pegs from unknown causes
+                         *
                          */
 
-                        if (RowHasUnjustifiedColoredPegs(secondRow)) {
+                        if (knowledge.WhereIs(Y).equals(-1) &&
+                                knowledge.WhereIs(Z).equals(-1) &&
+                                HowManyUnjustifiedColoredPegs(secondRow).equals(1)) {
                             /*
                              * so, only if the ckp won with the first transition
                              * is from unknown causes, we are interested in
-                             * what happened with the second transition
+                             * what happened with the second transition.
+                             *
+                             * this excludes a second rows having:
+                             * 1. moving pegs (Y or Z) we know where are
+                             * 2. 
                              */
-
-                            // transition 1
-                            originsList = new ArrayList();
-                            destinationsList = new ArrayList();
-
-                            SwapDiff(codePegs[firstRow], codePegs[secondRow],
-                                    originsList, destinationsList);
-
-                            Integer pO1 = new Integer((Integer)originsList.get(0));
-
-                            Integer pD1 = new Integer((Integer)destinationsList.get(0));
-
-                            // transition 2
-                            originsList = new ArrayList();
-                            destinationsList = new ArrayList();
-
-                            SwapDiff(codePegs[secondRow], codePegs[thirdRow],
-                                    originsList, destinationsList);
-
-                            Integer pO2 = new Integer((Integer)originsList.get(0));
-
-                            Integer pD2 = new Integer((Integer)destinationsList.get(0));
-
-                            Integer X, Y, Z;
-                            Integer pX = new Integer(-1);
-                            Integer pY = new Integer(-1);
-                            Integer pZ = new Integer(-1);
-
-                            // origen 1 == origen 2
-                            if (pO1.equals(pO2)) {
-                                pX = new Integer(pD1);
-                                pY = new Integer(pO2);
-                                pZ = new Integer(pD2);
-
-                            // origen 1 == destí 2
-                            } else if (pO1.equals(pD2)) {
-                                pX = new Integer(pD1);
-                                pY = new Integer(pD2);
-                                pZ = new Integer(pO2);
-
-                            // destí 1 == origen 2
-                            } else if (pD1.equals(pO2)) {
-                                pX = new Integer(pO1);
-                                pY = new Integer(pO2);
-                                pZ = new Integer(pD2);
-
-                            // destí 1 == destí 2
-                            } else if (pD1.equals(pD2)) {
-                                pX = new Integer(pO1);
-                                pY = new Integer(pD2);
-                                pZ = new Integer(pO2);
-
-                            /*
-                             * transition 1 and transition 2 do not share a point;
-                             * they work with disjoint sets
-                             */
-                            } else {
-
-                                return;
-
-                            }
-
-                            X = new Integer(codePegs[secondRow][pX]);
-                            Y = new Integer(codePegs[secondRow][pY]);
-                            Z = new Integer(codePegs[secondRow][pZ]);
 
                             switch(KeyColoredDiff(secondRow, thirdRow)) {
 
