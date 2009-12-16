@@ -2817,7 +2817,7 @@ public class PlayGameView extends GenericPlayGameView {
                 ready = false;
         }
 
-        if (ready)
+        if (ready) 
         {
             this.setGuess();
             ((PlayGameUseCaseController)pg).generateKeyPegs();
@@ -3211,7 +3211,7 @@ public class PlayGameView extends GenericPlayGameView {
 
             jpKeyPegs[0][0] = jpKeyPeg00;
             jpKeyPegs[0][1] = jpKeyPeg01;
-            jpKeyPegs[0][2] = jpKeyPeg02;
+            jpKeyPegs[0][2] = jpKeyPeg02; 
             jpKeyPegs[0][3] = jpKeyPeg03;
             jpKeyPegs[0][4] = jpKeyPeg04;
             jpKeyPegs[0][5] = jpKeyPeg05;
@@ -3547,11 +3547,11 @@ public class PlayGameView extends GenericPlayGameView {
     }
 
     private void updateKeyPegs() {
-        Integer[] keyPegsRow = ((PlayGameUseCaseController)pg).getKeyPegsRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
+       // Integer[] keyPegsRow= null;// = ((PlayGameUseCaseController)pg).getKeyPegsRow(((PlayGameUseCaseController)pg).getCodePegsLastRowNumber());
 
         for (int i = 0; i < columns; i++)
         {
-            jpKeyPegs[currentRow][i].setBackground(convertIntToColor(keyPegsRow[i]));
+           // jpKeyPegs[currentRow][i].setBackground(convertIntToColor(keyPegsRow[i]));
         }
 
     }
