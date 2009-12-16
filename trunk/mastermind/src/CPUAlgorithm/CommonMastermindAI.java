@@ -984,10 +984,11 @@ public abstract class CommonMastermindAI
          * If first transition is a swap(x,y) and second is a swap(y,z)  
          *  If first transition wins a colored peg
          *    If first row does not have unjustified colored pegs
-         *      If second transition looses a colored peg
-         *          y is in position(y)
-         *      If the second transition does not modify the colored pegs won
-         *          x is position(x)
+         *      If the second row has unjustified colored pegs
+         *          If second transition looses a colored peg
+         *              y is in position(y)
+         *          If the second transition does not modify the colored pegs won
+         *              x is position(x)
          */
 
         if (IsSwap11(codePegs[firstRow], codePegs[secondRow])) {
@@ -998,86 +999,110 @@ public abstract class CommonMastermindAI
 
                     // If first row does not have unjustified colored pegs
                     if (!RowHasUnjustifiedColoredPegs(firstRow)) {
-
-                        // transition 1
-                        originsList = new ArrayList();
-                        destinationsList = new ArrayList();
-
-                        SwapDiff(codePegs[firstRow], codePegs[secondRow],
-                                originsList, destinationsList);
-
-                        Integer pO1 = new Integer((Integer)originsList.get(0));
-
-                        Integer pD1 = new Integer((Integer)destinationsList.get(0));
-
-                        // transition 2
-                        originsList = new ArrayList();
-                        destinationsList = new ArrayList();
-
-                        SwapDiff(codePegs[secondRow], codePegs[thirdRow],
-                                originsList, destinationsList);
-
-                        Integer pO2 = new Integer((Integer)originsList.get(0));
-
-                        Integer pD2 = new Integer((Integer)destinationsList.get(0));
-
-                        Integer X, Y, Z;
-                        Integer pX = new Integer(-1);
-                        Integer pY = new Integer(-1);
-                        Integer pZ = new Integer(-1);
-
-                        // origen 1 == origen 2
-                        if (pO1.equals(pO2)) {
-                            pX = new Integer(pD1);
-                            pY = new Integer(pO2);
-                            pZ = new Integer(pD2);
-
-                        // origen 1 == destí 2
-                        } else if (pO1.equals(pD2)) {
-                            pX = new Integer(pD1);
-                            pY = new Integer(pD2);
-                            pZ = new Integer(pO2);
-
-                        // destí 1 == origen 2
-                        } else if (pD1.equals(pO2)) {
-                            pX = new Integer(pO1);
-                            pY = new Integer(pO2);
-                            pZ = new Integer(pD2);
-
-                        // destí 1 == destí 2
-                        } else if (pD1.equals(pD2)) {
-                            pX = new Integer(pO1);
-                            pY = new Integer(pD2);
-                            pZ = new Integer(pO2);
-
                         /*
-                         * transition 1 and transition 2 do not share a point;
-                         * they work with disjoint sets
+                         * when we loose a colored key peg in the second
+                         * transition we need to be sure that it is not
+                         * because the third code peg we moved was in its right
+                         * hole;
+                         * otherwise we will not be able to tell whether the
+                         * loose was because we "broke" what we just "achieved"
+                         * with the first transition or because we took
+                         * a code peg from its right hole.
+                         *
+                         * so, we want to be sure that if a colored key peg
+                         * is lost in the second transition it is because
+                         * the code peg moved in both transitions belongs
+                         * to its destination on the first transition.
+                         *
                          */
-                        } else {
 
-                            return;
+                        if (RowHasUnjustifiedColoredPegs(secondRow)) {
+                            /*
+                             * so, only if the ckp won with the first transition
+                             * is from unknown causes, we are interested in
+                             * what happened with the second transition
+                             */
 
-                        }
+                            // transition 1
+                            originsList = new ArrayList();
+                            destinationsList = new ArrayList();
 
-                        X = new Integer(codePegs[secondRow][pX]);
-                        Y = new Integer(codePegs[secondRow][pY]);
-                        Z = new Integer(codePegs[secondRow][pZ]);
+                            SwapDiff(codePegs[firstRow], codePegs[secondRow],
+                                    originsList, destinationsList);
 
-                        switch(KeyColoredDiff(secondRow, thirdRow)) {
+                            Integer pO1 = new Integer((Integer)originsList.get(0));
 
-                            // if second transition looses a colored peg
-                            case -1:
-                                knowledge.addPegEstaEn(Y, pY);
-                                break;
+                            Integer pD1 = new Integer((Integer)destinationsList.get(0));
 
-                            // if second transition does not modify the colored pegs
-                            case 0:
-                                knowledge.addPegEstaEn(X, pX);
-                                break;
-                        } // fi switch
-                    } // fi KeyColoredDiff
-                } // fi RowHasUnjustifiedColoredPegs
+                            // transition 2
+                            originsList = new ArrayList();
+                            destinationsList = new ArrayList();
+
+                            SwapDiff(codePegs[secondRow], codePegs[thirdRow],
+                                    originsList, destinationsList);
+
+                            Integer pO2 = new Integer((Integer)originsList.get(0));
+
+                            Integer pD2 = new Integer((Integer)destinationsList.get(0));
+
+                            Integer X, Y, Z;
+                            Integer pX = new Integer(-1);
+                            Integer pY = new Integer(-1);
+                            Integer pZ = new Integer(-1);
+
+                            // origen 1 == origen 2
+                            if (pO1.equals(pO2)) {
+                                pX = new Integer(pD1);
+                                pY = new Integer(pO2);
+                                pZ = new Integer(pD2);
+
+                            // origen 1 == destí 2
+                            } else if (pO1.equals(pD2)) {
+                                pX = new Integer(pD1);
+                                pY = new Integer(pD2);
+                                pZ = new Integer(pO2);
+
+                            // destí 1 == origen 2
+                            } else if (pD1.equals(pO2)) {
+                                pX = new Integer(pO1);
+                                pY = new Integer(pO2);
+                                pZ = new Integer(pD2);
+
+                            // destí 1 == destí 2
+                            } else if (pD1.equals(pD2)) {
+                                pX = new Integer(pO1);
+                                pY = new Integer(pD2);
+                                pZ = new Integer(pO2);
+
+                            /*
+                             * transition 1 and transition 2 do not share a point;
+                             * they work with disjoint sets
+                             */
+                            } else {
+
+                                return;
+
+                            }
+
+                            X = new Integer(codePegs[secondRow][pX]);
+                            Y = new Integer(codePegs[secondRow][pY]);
+                            Z = new Integer(codePegs[secondRow][pZ]);
+
+                            switch(KeyColoredDiff(secondRow, thirdRow)) {
+
+                                // if second transition looses a colored peg
+                                case -1:
+                                    knowledge.addPegEstaEn(Y, pY);
+                                    break;
+
+                                // if second transition does not modify the colored pegs
+                                case 0:
+                                    knowledge.addPegEstaEn(X, pX);
+                                    break;
+                            } // fi switch
+                        } // fi RowHasUnjustifiedColoredPegs row 2
+                    } // fi !RowHasUnjustifiedColoredPegs row 1
+                } // fi KeyColoredDiff
             } // fi isSwap 2,3
         } // fi isSwap 1,2
     }
@@ -1261,8 +1286,8 @@ public abstract class CommonMastermindAI
 
         SwapOne(successor);
 
-        // if could not swap one
-        if (Arrays.equals(successor, oldSuccessor)) {
+        // if could not swap one that gave a not already tested guess
+        if (IsRowInMatrix(successor, codePegs)) {
             SwapAll(successor);
         }
 
