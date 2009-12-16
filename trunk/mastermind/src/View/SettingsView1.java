@@ -158,6 +158,8 @@ public SettingsView1() {
             }else if(RadioH.isSelected()){
                 d = DifficultyLevel.Hard;
             }
+            PlayGameViewS gui= new PlayGameViewS();
+
 
             Boolean vsCpu = false;
             if(RadioPlayer.isSelected()){
@@ -187,6 +189,6 @@ catch
 
         }
 	  public static void main(String args[]) {
-          SettingsView1 sv1= new SettingsView1();
+       SettingsView1 oi= new SettingsView1();
             }
 }*/

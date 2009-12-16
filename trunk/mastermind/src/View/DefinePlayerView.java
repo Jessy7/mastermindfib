@@ -14,6 +14,8 @@ package View;
 import View.*;
 import UseCaseController.PlayGameUseCaseController;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 
 /**
@@ -65,7 +67,7 @@ public class DefinePlayerView extends GenericDefinePlayerView {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(DF_SubmitButton))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,8 +86,8 @@ public class DefinePlayerView extends GenericDefinePlayerView {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,8 +105,15 @@ public class DefinePlayerView extends GenericDefinePlayerView {
        JOptionPane.showMessageDialog(null, "You must enter a name", "Error", JOptionPane.WARNING_MESSAGE);
 
         }else{
-        p.updateRanking(DF_NameText.getText(),0);
+        //p.updateRanking(DF_NameText.getText(),0);
         }
+try{
+    UIManager.setLookAndFeel
+            ("com.sun.java.swing.plaf.metal.MetalLookAndFeel");
+            SwingUtilities.updateComponentTreeUI(this);
+}
+catch
+       (Exception ex){}
 
     }//GEN-LAST:event_DF_SubmitButtonActionPerformed
 
