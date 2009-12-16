@@ -14,6 +14,8 @@ package View;
 //import UseCaseController.GenericNewGameUCC;
 //import UseCaseController.SettingsUseCaseController;
 //import UseCaseController.PlayGameUseCaseController;
+import Enum.DifficultyLevel;
+import UseCaseController.SettingsUseCaseController;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -62,7 +64,6 @@ public SettingsView1() {
             }
 
             private void RadioCPUActionPerformed(ActionEvent evt) {
-                throw new UnsupportedOperationException("Not yet implemented");
             }
         });
         RadioPlayer.addActionListener(new java.awt.event.ActionListener() {
@@ -71,7 +72,7 @@ public SettingsView1() {
             }
 
             private void RadioPlayerActionPerformed(ActionEvent evt) {
-                throw new UnsupportedOperationException("Not yet implemented");
+                //throw new UnsupportedOperationException("Not yet implemented");
             }
         });
 
@@ -116,7 +117,7 @@ public SettingsView1() {
             }
 
             private void RadioEActionPerformed(ActionEvent evt) {
-                throw new UnsupportedOperationException("Not yet implemented");
+                //throw new UnsupportedOperationException("Not yet implemented");
             }
         });
 
@@ -126,7 +127,7 @@ public SettingsView1() {
             }
 
             private void RadioMActionPerformed(ActionEvent evt) {
-                throw new UnsupportedOperationException("Not yet implemented");
+                //throw new UnsupportedOperationException("Not yet implemented");
             }
         });
 
@@ -137,7 +138,7 @@ public SettingsView1() {
             }
 
             private void RadioHActionPerformed(ActionEvent evt) {
-                throw new UnsupportedOperationException("Not yet implemented");
+                //throw new UnsupportedOperationException("Not yet implemented");
             }
         });
 
@@ -149,33 +150,34 @@ public SettingsView1() {
 
 
          private void SV_PlayActionPerformed(ActionEvent evt) {
-    // DifficultyLevel d;
-//        if(RadioE.isSelected()){
-//        d = DifficultyLevel.Easy;
-//        }else if(RadioM.isSelected()){
-//        d = DifficultyLevel.Normal;
-//        }else if(RadioH.isSelected()){
-//        d = DifficultyLevel.Hard;
-//        }
-//
-//        if(RadioPlayer.isSelected()){
-//            v = es jugador
-//        }else if(RadioCPU.isSelected()){
-//            v = es cpu
-//        }
-//
-//        SettingsUseCaseController s = new SettingsUseCaseController() {
-//                    //poner el level aqui de vuestro usecaseconttroller
-//            setsettings(d,v);
-//        }
+             DifficultyLevel d = null;
+             if(RadioE.isSelected()){
+                d = DifficultyLevel.Easy;
+            }else if(RadioM.isSelected()){
+                d = DifficultyLevel.Normal;
+            }else if(RadioH.isSelected()){
+                d = DifficultyLevel.Hard;
+            }
 
+            Boolean vsCpu = false;
+            if(RadioPlayer.isSelected()){
+                vsCpu = false;
+            }else if(RadioCPU.isSelected()){
+                vsCpu = true;
+            }
 
+            SettingsUseCaseController s = new SettingsUseCaseController();
+            //poner el level aqui de vuestro usecaseconttroller
+            s.setSettings(d,vsCpu);
+            PlayGameViewS pgv = new PlayGameViewS();
+            pgv.setVisible(true);
+        }
+        });
+}
 }
 
 
-        });
-
-try{
+/*try{
     UIManager.setLookAndFeel
             ("com.sun.java.swing.plaf.metal.MetalLookAndFeel");
             SwingUtilities.updateComponentTreeUI(this);
@@ -187,7 +189,4 @@ catch
 	  public static void main(String args[]) {
           SettingsView1 sv1= new SettingsView1();
             }
-}
-
-
-
+}*/
