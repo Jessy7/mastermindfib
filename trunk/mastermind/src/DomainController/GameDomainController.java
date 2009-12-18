@@ -2,6 +2,7 @@
 package DomainController;
 
 import CPUAlgorithm.MastermindAI4Holes;
+import CPUAlgorithm.MastermindAI5Holes;
 import Conversors.IntegerArrayString;
 import Domain.Game;
 import java.util.Arrays;
@@ -326,12 +327,24 @@ public class GameDomainController extends GenericGameDC {
        Integer[][] codePegs = g.getBoard();
        KeyPeg[][] keyPegs = ((Game)g).getKeyPegsAsBoard();
        Integer[] cpuGuess;
-       MastermindAI4Holes m4h = new MastermindAI4Holes(codePegs,keyPegs);
-       cpuGuess = m4h.MakeGuess();
-       for (int i = 0; i < column; i++) {
-        ((Game)g).setCell(currentRow, i, cpuGuess[i]);
+       DifficultyLevel dl = g.getLevel();
+       
+       if (dl == DifficultyLevel.Easy) {
+            MastermindAI4Holes mh = new MastermindAI4Holes(codePegs,keyPegs);
+            cpuGuess = mh.MakeGuess();
+            for (int i = 0; i < column; i++) {
+                ((Game)g).setCell(currentRow, i, cpuGuess[i]);
+            }
+       }
+       else if (dl == DifficultyLevel.Normal) {
+           MastermindAI5Holes mh = new MastermindAI5Holes(codePegs,keyPegs);
+           cpuGuess = mh.MakeGuess();
+           for (int i = 0; i < column; i++) {
+                ((Game)g).setCell(currentRow, i, cpuGuess[i]);
+           }
        }
    }
+
 
    /**
     *This method obtains the last row of the codePeg board full of codepegs
