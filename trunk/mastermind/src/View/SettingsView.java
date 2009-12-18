@@ -161,8 +161,7 @@ public class SettingsView extends GenericSettingsView {
 
     private void SV_PlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SV_PlayActionPerformed
 
-
-//        DifficultyLevel d;
+DifficultyLevel d;
 //        if(RadioE.isSelected()){
 //        d = DifficultyLevel.Easy;
 //        }else if(RadioM.isSelected()){
@@ -170,6 +169,7 @@ public class SettingsView extends GenericSettingsView {
 //        }else if(RadioH.isSelected()){
 //        d = DifficultyLevel.Hard;
 //        }
+//        
 //
 //        if(RadioPlayer.isSelected()){
 //            v = es jugador

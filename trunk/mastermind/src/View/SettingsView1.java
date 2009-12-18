@@ -36,9 +36,8 @@ public class SettingsView1 extends JFrame{
 
 public SettingsView1() {
 
-    setSize(600,150);
-    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-     buttonGroup1 = new ButtonGroup();
+       setSize(600,150);
+       buttonGroup1 = new ButtonGroup();
         RadioE = new JRadioButton();
         RadioM = new JRadioButton();
         RadioH = new JRadioButton();
@@ -68,7 +67,7 @@ public SettingsView1() {
             private void RadioCPUActionPerformed(ActionEvent evt) {
 
             if(RadioCPU.isSelected()){
-                vsCpu = true;
+                vsCpu=true;
             }
             }
         });
@@ -80,7 +79,7 @@ public SettingsView1() {
 
             private void RadioPlayerActionPerformed(ActionEvent evt) {
                  if(RadioPlayer.isSelected()){
-                 vsCpu = false;
+                vsCpu= false;
             }
             }
         });
@@ -120,6 +119,7 @@ public SettingsView1() {
 	        getContentPane().add(pane);
 		setResizable(false);
 		setVisible(true);
+             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
        RadioE.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,29 +171,45 @@ public SettingsView1() {
 
          private void SV_PlayActionPerformed(ActionEvent evt) {
              DifficultyLevel d = null;
+
+             if(RadioCPU.isSelected())
+                 vsCpu=true;
+             else
+                 vsCpu=false;
+
+
              if(RadioE.isSelected()){
                 d = DifficultyLevel.Easy;
-                PlayGameViewE piu= new PlayGameViewE();
+                PlayGameViewE piu= new PlayGameViewE(vsCpu);
                 piu.setVisible(true);
             }else if(RadioM.isSelected()){
                 d = DifficultyLevel.Normal;
-                PlayGameViewM qui= new PlayGameViewM();
+                PlayGameViewM qui= new PlayGameViewM(vsCpu);
                  qui.setVisible(true);
             }else if(RadioH.isSelected()){
                 d = DifficultyLevel.Hard;
-                PlayGameViewS gui= new PlayGameViewS();
+                PlayGameViewS gui= new PlayGameViewS(vsCpu);
                 gui.setVisible(true);
             }
+
+
+              if(RadioCPU.isSelected()){
+                vsCpu= false;
+                ChooseColors cs= new ChooseColors();
+                {
 
             SettingsUseCaseController s = new SettingsUseCaseController();
             //poner el level aqui de vuestro usecaseconttroller
             s.setSettings(d,vsCpu);
-  
-           
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                }
+              }
+         }
+         }
+                );
+}
         }
-        });
-}
-}
+
 
 
 /*try{
