@@ -28,7 +28,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
     * successes the pattern o when the maximum number of attempts are done.
     * @return true if the round is finished, 0 otherwise
     */
-    public Boolean isRoundFinished() {
+    public int isRoundFinished() {
         return ((GameDomainController)gdc).isRoundFinished();
     }
 

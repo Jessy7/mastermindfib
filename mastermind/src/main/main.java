@@ -187,8 +187,9 @@ public class main
 
         Boolean b = false;
         int guessLength = ((PlayGameUseCaseController)pg).getColumns();
+        int isRoundFinished = ((PlayGameUseCaseController)pg).isRoundFinished();
 
-        while (!((PlayGameUseCaseController)pg).isRoundFinished())
+        while (isRoundFinished == 0)
         {
 
             showElements();
@@ -228,6 +229,19 @@ public class main
 
             ((PlayGameUseCaseController)pg).generateKeyPegs();
             updateElements();
+            isRoundFinished = ((PlayGameUseCaseController)pg).isRoundFinished();
+        }
+        switch (isRoundFinished) {
+            case 1: System.out.println ("Codebreaker wins!");
+                break;
+            case 2: System.out.println ("Codemaker wins!");
+                    Integer[] pattern = ((PlayGameUseCaseController)pg).getPatternColor();
+                    int patternLength = ((PlayGameUseCaseController)pg).getPatternLength();
+                    for (int i = 0; i < patternLength; i++) {
+                        System.out.print(pattern[i]);
+                    }
+                    System.out.println();
+                break;
         }
         ((PlayGameUseCaseController)pg).closeRound();
     }
@@ -423,7 +437,8 @@ public class main
 
             while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
             {
-                System.out.println("Do you want a hint? (y/n)");
+                System.out.println("If you ask for a hint, you'll not be able to appear on the ranking");
+                System.out.println("Do you really want a hint? (y/n)");
                 answer = br.readLine();
             }
 

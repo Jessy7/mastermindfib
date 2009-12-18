@@ -97,35 +97,29 @@ public class GameDomainController extends GenericGameDC {
    }
 
    /**
-    * This method checks if the current round is finished. A round is finished when the codebreakers
-    * successes the pattern o when the maximum number of attempts are done.
-    * @return true if the round is finished, 0 otherwise
+    * This method checks if the current round is finished. A round is finished 
+    * when the codebreakers successes the pattern o when the maximum number of
+    * attempts are done.
+    * @return 0 if the round is not finished, 1 if the round is finished and
+    * codebreaker wins, 2 if the round is finished and codemaker wins
     */
-   public Boolean isRoundFinished() {
+   public int isRoundFinished() {
        
        if (((Game)g).getCurrentRow() == 0)
-           return false;
+           return 0;
 
        Integer[] pattern = ((Game)g).getPatternColor();
        Integer[] solutionAttempt = ((Game)g).getCodePegsLastRow();
 
        if (Arrays.equals(pattern, solutionAttempt)) {
-           System.out.println("CODEBREAKER WINS THIS ROUND!");
-           System.out.println();
-           System.out.println();
-           System.out.println();
-           return true;
+           return 1;
        }
 
        else if (((Game)g).getCurrentRow() == 10) {
-           System.out.println("CODEMAKER WINS THIS ROUND!");
-           for (int i = 0; i < pattern.length; i++) System.out.print(pattern[i]);
-           System.out.println();
-           System.out.println();
-           return true;
+           return 2;
        }
 
-       return false;
+       return 0;
    }
 
    /**
