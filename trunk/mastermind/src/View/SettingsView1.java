@@ -130,8 +130,7 @@ public SettingsView1() {
          
           if(RadioE.isSelected()){
           d = DifficultyLevel.Easy;
-          PlayGameViewE piu= new PlayGameViewE();
-          piu.setVisible(true);
+          
             }
             }
         });
@@ -144,8 +143,7 @@ public SettingsView1() {
             private void RadioMActionPerformed(ActionEvent evt) {
             if(RadioM.isSelected()){
             d = DifficultyLevel.Normal;
-            PlayGameViewM qui=new PlayGameViewM();
-            qui.setVisible(true);
+            
             }
             }
         });
@@ -159,8 +157,7 @@ public SettingsView1() {
             private void RadioHActionPerformed(ActionEvent evt) {
                  if(RadioH.isSelected()){
                d = DifficultyLevel.Hard;
-               PlayGameViewS gui= new PlayGameViewS();
-               gui.setVisible(true);
+              
         }
             }
         });
