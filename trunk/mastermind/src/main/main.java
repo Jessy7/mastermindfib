@@ -107,6 +107,11 @@ public class main
         else
             bVsCpu = true;
 
+        if (DifficultyLevel.getFromString(difficulty) == DifficultyLevel.Hard && bVsCpu == true)
+        {
+            System.out.println ("Playing level HARD vs CPU is not allowed yet");
+            settings();
+        }
         s.setSettings(DifficultyLevel.getFromString(difficulty), bVsCpu);
 
         playGame();
