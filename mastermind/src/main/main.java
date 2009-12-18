@@ -308,19 +308,32 @@ public class main
 
     private static void loadGame() throws IOException
     {
-        String name = "";
         br = new BufferedReader(new InputStreamReader(System.in));
         LoadGameUseCaseController lg = new LoadGameUseCaseController();
 
-        System.out.println("Insert de name of the game to load");
-        name = br.readLine();
-
-        int control = lg.loadGame("C:\\Documents and Settings\\Ori\\Escritorio\\games\\" + name + ".sav");
+        String path = "";
+        while (path.compareTo("") == 0)
+        {
+            System.out.println("Insert the absolute directory path of the game to load (including the last \\ or /)");
+            path = br.readLine();
+        }
+	
+        String name = "";
+        while (name.compareTo("") == 0)
+        {
+            System.out.println("Insert the name of the game");
+            name = br.readLine();
+        }
+        int control = lg.loadGame(path + name + ".sav");
         if (control == -1)
+        {
             System.out.println("load game error");
+            loadGame();
+        }
         updateElements();
         playRound();
         playGame();
+
 
     }
 
@@ -330,15 +343,21 @@ public class main
         SaveGameUseCaseController sg = new SaveGameUseCaseController();
         br = new BufferedReader(new InputStreamReader(System.in));
 
-        String name = "";
+        String path = "";
+        while (path.compareTo("") == 0)
+        {
+            System.out.println("Insert the completly directory path to save the game");
+            path = br.readLine();
+        }
+	
+	String name = "";
         while (name.compareTo("") == 0)
         {
-            System.out.println("Insert the name");
+            System.out.println("Insert the name of the game");
             name = br.readLine();
         }
-
-        sg.saveGame("C:\\Documents and Settings\\Ori\\Escritorio\\games", name);
-
+	
+        sg.saveGame(path, name);
     }
 
     private static void giveHint()

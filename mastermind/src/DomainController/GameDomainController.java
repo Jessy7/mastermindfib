@@ -250,12 +250,13 @@ public class GameDomainController extends GenericGameDC {
    protected void loadDomain(String data) {
 
        String dataArray[] = splitAttributes(data);
-       int rows = g.getRows();
+       
 
        g = new Game();
        Boolean vsCpu = Boolean.valueOf(dataArray[0]);
        DifficultyLevel dl = DifficultyLevel.valueOf(dataArray[1]);
        ((Game)g).setSettings(dl, vsCpu);
+       int rows = g.getRows();
 
        System.out.println("Current round: " + dataArray[2]);
        ((Game)g).setCurrentRound(Integer.valueOf(dataArray[2]));
