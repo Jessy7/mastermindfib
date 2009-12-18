@@ -1,65 +1,59 @@
-package View;
-
-
 /**
  *
  * @author Monica
  */
+package View;
 //import UseCaseController.PlayGameUseCaseController;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
 
-public class PlayGameViewM extends PlayGameView{
+public class ChooseColorsE extends JFrame{
 
 
-	private int memory = 9;
-	String currentColor= "Y";
+
+	String currentColor= "G";
 	JButton jButtonColor = new JButton("Current Color");
-	private String[][] trying = new String[10][5];
-        private JLabel round= new JLabel("Round:");
+	private String[] trying = new String[4];
+
 
 	private boolean col1 = false;
 	private boolean col2 = false;
 	private boolean col3 = false;
 	private boolean col4 = false;
-        private boolean col5 = false;
-
-	private JButton[][] pegs = new JButton[10][5];
-	private JButton[][] pattern= new JButton[10][5];
-          private JLabel svar= new JLabel("Solution");
-        private JButton[]solution=new JButton[5];
 
 
-	public PlayGameViewM(boolean vsCPU){
+        private JLabel choosen= new JLabel("Pattern");
+        private JLabel jLabelPattern= new JLabel("Choose the code");
+        private JButton[]solution=new JButton[4];
 
-		setSize(535,570);
-                setTitle("Mastermind                   Setting: Normal");
+
+	public ChooseColorsE(){
+
+		setSize(600,150);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-                JButton saveGame = new JButton("Save game");
-                JButton hint = new JButton("Hint");
-		JButton exit = new JButton("Exit");
-                JButton ok= new JButton ("Check");
-		//saveGame.addActionListener(new saveGameView());
-		//hint.addActionListener(new hintGame());??
-		//ok.addActionListener(new playGameUseController());
+
+                JButton start= new JButton ("Start Game");
+
+		//start.addActionListener(new playGameUseController());
 
 
 		JPanel pane = new JPanel();
 		pane.setLayout(new BorderLayout());
                 JPanel jPanelSolution= new JPanel();
-                jPanelSolution.add(svar);
-                for (int i = 0; i < 5; i++){
+                jPanelSolution.add(choosen);
+                for (int i = 0; i < 4; i++){
 				JButton sol = new JButton(""+i);
-
-				sol.setPreferredSize(new Dimension(40,40));
-				sol.setBackground(Color.GRAY);
+				sol.addActionListener(new GameListener());
+				sol.setPreferredSize(new Dimension(37,37));
+				sol.setBackground(Color.WHITE);
 				solution[i] = sol;
 				jPanelSolution.add(solution[i]);
 			}
 
-                Box boxes= new Box(BoxLayout.PAGE_AXIS);
+                JPanel boxes= new JPanel();
+                boxes.setLayout(new FlowLayout());
 
 		JButton yellow = new JButton(":::");
 		JButton magenta = new JButton(":::");
@@ -67,7 +61,7 @@ public class PlayGameViewM extends PlayGameView{
 		JButton green = new JButton(":::");
 		JButton red = new JButton(":::");
 		JButton blue = new JButton(":::");
-                  jPanelSolution.add(ok);
+
 
 		yellow.addActionListener(new YellowListener());
 		magenta.addActionListener(new MagentaListener());
@@ -94,49 +88,12 @@ public class PlayGameViewM extends PlayGameView{
                 boxes.add(green);
                 boxes.add(red);
                 boxes.add(blue);
+                JPanel jLabelPanel= new JPanel();
+                jLabelPanel.add(jLabelPattern);
+               Component add = jPanelSolution.add(start);
 
-
-
-		JPanel jPanel1 = new JPanel();
-		jPanel1.setPreferredSize(new Dimension(200,400));
-
-		for (int rig = 0; rig < 10; rig++){
-			jPanel1.add(new JLabel(""+(1+rig)));
-			for (int col = 0; col < 5; col++){
-				JButton patt = new JButton(""+col);
-				patt.addActionListener(new GameListener());
-				patt.setPreferredSize(new Dimension(35,35));
-				patt.setBackground(Color.white);
-				pattern[rig][col] = patt;
-				jPanel1.add(pattern[rig][col]);
-			}
-		}
-
-		JPanel jPanel2 = new JPanel();
-                jPanel2.setPreferredSize(new Dimension(200,400));
-		for (int rig = 0; rig < 10; rig++){
-
-			for (int col = 0; col < 5; col++){
-				JButton peg = new JButton();
-				peg.setPreferredSize(new Dimension(35,35));
-				peg.setEnabled(false);
-				peg.setBackground(Color.LIGHT_GRAY);
-				pegs[rig][col] = peg;
-				jPanel2.add(pegs[rig][col]);
-			}
-
-		}
-		JPanel jPanelButtons = new JPanel();
-                jPanelButtons.setLayout(new FlowLayout());
-		jPanelButtons.add(saveGame);
-		jPanelButtons.add(hint);
-		jPanelButtons.add(exit);
-                 jPanelButtons.add(round);
-
-                pane.add(jPanelButtons, BorderLayout.NORTH);
-		pane.add(jPanel1, BorderLayout.CENTER);
-		pane.add(jPanel2, BorderLayout.WEST);
-                pane.add(boxes, BorderLayout.EAST);
+                pane.add(jLabelPanel,BorderLayout.NORTH);
+                pane.add(boxes, BorderLayout.CENTER);
                 pane.add(jPanelSolution, BorderLayout.SOUTH);
 
 	        getContentPane().add(pane);
@@ -152,7 +109,7 @@ catch
 
         }
 	  public static void main(String args[]) {
-          PlayGameViewM guit= new PlayGameViewM();
+          ChooseColorsE choo= new ChooseColorsE();
             }
 
 	public class YellowListener implements ActionListener{
@@ -213,22 +170,21 @@ catch
 			if (temp_col == 1) {col2 = true;}
 			if (temp_col == 2) {col3 = true;}
 			if (temp_col == 3) {col4 = true;}
-                        if (temp_col == 4) {col5 = true;}
 
-			pattern[memory][temp_col].setBackground(jButtonColor.getBackground());
-			trying[memory][temp_col] = (""+currentColor);
-			if (col1&&col2&&col3&&col4&&col5){
+
+			solution[temp_col].setBackground(jButtonColor.getBackground());
+			trying [temp_col] = (""+currentColor);
+			if (col1&&col2&&col3&&col4){
 			//	verifica();
 
 				col1 = false;
 				col2 = false;
 				col3 = false;
 				col4 = false;
-                                col5=false;
+
 			}
 		}
 	}
         }
-
 
 

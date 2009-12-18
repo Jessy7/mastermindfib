@@ -32,7 +32,7 @@ public class PlayGameViewE extends PlayGameView {
         private JButton[]solution=new JButton[4];
 
 
-	public PlayGameViewE(){
+	public PlayGameViewE(boolean vsCpu){
 
 		setSize(386,550);
                 setTitle("Mastermind   Setting:Easy");

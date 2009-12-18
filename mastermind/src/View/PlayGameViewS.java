@@ -39,7 +39,7 @@ public class PlayGameViewS extends PlayGameView{
         private JButton[]solution=new JButton[6];
 
 
-	public PlayGameViewS(){
+	public PlayGameViewS(boolean vsCpu){
 
 		setSize(520,600);
                 setTitle("Mastermind    Setting: Hard");
