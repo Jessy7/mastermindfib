@@ -30,6 +30,8 @@ public class SettingsView1 extends JFrame{
     private ButtonGroup buttonGroup1;
     private ButtonGroup buttonGroup2;
     private JLabel jLabel1;
+    DifficultyLevel d;
+    Boolean vsCpu = false;
 
 
 public SettingsView1() {
@@ -64,17 +66,25 @@ public SettingsView1() {
             }
 
             private void RadioCPUActionPerformed(ActionEvent evt) {
+
+            if(RadioCPU.isSelected()){
+                vsCpu = true;
+            }
             }
         });
+
         RadioPlayer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RadioPlayerActionPerformed(evt);
             }
 
             private void RadioPlayerActionPerformed(ActionEvent evt) {
-                //throw new UnsupportedOperationException("Not yet implemented");
+                 if(RadioPlayer.isSelected()){
+                 vsCpu = false;
+            }
             }
         });
+
 
         jLabel1 = new JLabel();
         jLabel1.setText("Choose your level");
@@ -117,7 +127,10 @@ public SettingsView1() {
             }
 
             private void RadioEActionPerformed(ActionEvent evt) {
-                //throw new UnsupportedOperationException("Not yet implemented");
+         
+          if(RadioE.isSelected()){
+          d = DifficultyLevel.Easy;
+            }
             }
         });
 
@@ -127,7 +140,9 @@ public SettingsView1() {
             }
 
             private void RadioMActionPerformed(ActionEvent evt) {
-                //throw new UnsupportedOperationException("Not yet implemented");
+            if(RadioM.isSelected()){
+            d = DifficultyLevel.Normal;
+      }
             }
         });
 
@@ -138,7 +153,9 @@ public SettingsView1() {
             }
 
             private void RadioHActionPerformed(ActionEvent evt) {
-                //throw new UnsupportedOperationException("Not yet implemented");
+                 if(RadioH.isSelected()){
+               d = DifficultyLevel.Hard;
+        }
             }
         });
 
@@ -160,19 +177,11 @@ public SettingsView1() {
             }
             PlayGameViewS gui= new PlayGameViewS();
 
-
-            Boolean vsCpu = false;
-            if(RadioPlayer.isSelected()){
-                vsCpu = false;
-            }else if(RadioCPU.isSelected()){
-                vsCpu = true;
-            }
-
             SettingsUseCaseController s = new SettingsUseCaseController();
             //poner el level aqui de vuestro usecaseconttroller
             s.setSettings(d,vsCpu);
-            PlayGameViewS pgv = new PlayGameViewS();
-            pgv.setVisible(true);
+  
+            gui.setVisible(true);
         }
         });
 }
