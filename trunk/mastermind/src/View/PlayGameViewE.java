@@ -11,7 +11,7 @@ import java.awt.event.*;
 import java.awt.*;
 
 
-// public class PlayGameViewE extends JFrame{
+
 public class PlayGameViewE extends PlayGameView {
 
 
@@ -30,9 +30,16 @@ public class PlayGameViewE extends PlayGameView {
 	private JButton[][] pattern= new JButton[10][4];
           private JLabel svar= new JLabel("Solution");
         private JButton[]solution=new JButton[4];
+        private boolean vsCpu;
 
 
-	public PlayGameViewE(boolean vsCpu){
+
+	public PlayGameViewE(boolean vsCPU){
+
+               // vsCpu= _vsCpu;
+              // if(!vsCpu){
+            //        ChooseColorsE j= new ChooseColorsE();
+              // }
 
 		setSize(386,550);
                 setTitle("Mastermind   Setting:Easy");
@@ -152,8 +159,9 @@ catch
 
         }
 	  public static void main(String args[]) {
-          PlayGameViewE guia= new PlayGameViewE();
+        //  PlayGameViewE guia= new PlayGameViewE();
             }
+
 
 	public class YellowListener implements ActionListener{
 
