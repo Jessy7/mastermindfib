@@ -34,7 +34,8 @@ public class Game extends GenericGame {
     private Integer currentRound; // 1..NROUNDS
     private Integer P1Points;
     private Integer P2Points;
-    private Boolean HintWasGiven;
+    private Boolean HintWasGivenForP1;
+    private Boolean HintWasGivenForP2;
 
     /**
      * Called during load game use case
@@ -47,7 +48,8 @@ public class Game extends GenericGame {
         currentRound = new Integer(0);
         P1Points = new Integer(0);
         P2Points = new Integer(0);
-        HintWasGiven = new Boolean(false);
+        HintWasGivenForP1 = new Boolean(false);
+        HintWasGivenForP2 = new Boolean(false);
     }
 
     /**
@@ -71,7 +73,8 @@ public class Game extends GenericGame {
         currentRound = new Integer(0);
         P1Points = new Integer(0);
         P2Points = new Integer(0);
-        HintWasGiven = new Boolean(false);
+        HintWasGivenForP1 = new Boolean(false);
+        HintWasGivenForP2 = new Boolean(false);
     }
 
     /**
@@ -304,14 +307,21 @@ public class Game extends GenericGame {
      * Hint
      */
 
-    public Boolean getHintWasGiven()
+    /**
+     *
+     * @return Returns whether the player $player asked for a hint.
+     */
+    public Boolean getHintWasGiven(Integer whichPlayer)
     {
-        return HintWasGiven;
+        if (whichPlayer.equals(1)) {
+            return HintWasGivenForP1;
+        } else {
+            return HintWasGivenForP2;
+        }
     }
 
     /**
-     * pre: no previous hint was given.
-     *
+     * @pre: no previous hint for the current code breaker was given.
      * @return the position of the peg of the pattern revealed to the user
      * (between 0 and the number of columns - 1)
      */
@@ -324,7 +334,11 @@ public class Game extends GenericGame {
         visib[hint] = true;
         ((Board)board).setPatternVisibility(visib);
 
-        HintWasGiven = true;
+        if (getCodeBreaker().equals(1)) {
+            HintWasGivenForP1 = new Boolean(true);
+        } else {
+            HintWasGivenForP2 = new Boolean(true);
+        }
 
         return hint;
     }
