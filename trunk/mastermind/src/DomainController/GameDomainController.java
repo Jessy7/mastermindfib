@@ -81,8 +81,11 @@ public class GameDomainController extends GenericGameDC {
     */
    @Override
    public int giveHint() {
-       if (!((Game)g).getHintWasGiven())
-                return ((Game)g).giveHint();
+
+       int codeBreakerPlayer = ((Game)g).getCodeBreaker();
+
+       if (!((Game)g).getHintWasGiven(codeBreakerPlayer))
+               return ((Game)g).giveHint();
        else
                return -1;
    }
@@ -451,5 +454,9 @@ public class GameDomainController extends GenericGameDC {
 
     public int getRows() {
         return ((Game)g).getRows();
+    }
+
+    public Boolean hintWasGiven(int player) {
+        return ((Game)g).getHintWasGiven(player);
     }
 }
