@@ -195,8 +195,11 @@ public class main
             showElements();
 
             askForSave();
-            askForAHint();
 
+            if (((PlayGameUseCaseController)pg).isCodebreakerHuman()) {
+                askForAHint();
+            }
+            
             String guess = "";
 
             int attempt = ((PlayGameUseCaseController)pg).getCurrentRow();
@@ -231,12 +234,20 @@ public class main
             updateElements();
             isRoundFinished = ((PlayGameUseCaseController)pg).isRoundFinished();
         }
+
+        Integer[] pattern = ((PlayGameUseCaseController)pg).getPatternColor();
+        int patternLength = ((PlayGameUseCaseController)pg).getPatternLength();
+
         switch (isRoundFinished) {
-            case 1: System.out.println ("Codebreaker wins!");
+            case 1: System.out.println ("CODEBREAKER WINS THIS ROUND!");
+                    System.out.print("Pattern: ");
+                    for (int i = 0; i < patternLength; i++) {
+                        System.out.print(pattern[i]);
+                    }
+                    System.out.println();
                 break;
-            case 2: System.out.println ("Codemaker wins!");
-                    Integer[] pattern = ((PlayGameUseCaseController)pg).getPatternColor();
-                    int patternLength = ((PlayGameUseCaseController)pg).getPatternLength();
+            case 2: System.out.println ("CODEMAKER WINS THIS ROUND!");
+                    System.out.print("Pattern: ");
                     for (int i = 0; i < patternLength; i++) {
                         System.out.print(pattern[i]);
                     }
