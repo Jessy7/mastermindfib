@@ -321,9 +321,9 @@ public class Game extends GenericGame {
     }
 
     /**
-     * @pre: no previous hint for the current code breaker was given.
-     * @return the position of the peg of the pattern revealed to the user
-     * (between 0 and the number of columns - 1)
+     * @pre: No previous hint for the current code breaker was given.
+     * @return The position of the peg in the pattern revealed to the current
+     * code breaker. Between 0 and the number of columns - 1.
      */
     public int giveHint()
     {
