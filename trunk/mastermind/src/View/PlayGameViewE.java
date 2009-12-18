@@ -11,7 +11,8 @@ import java.awt.event.*;
 import java.awt.*;
 
 
-public class PlayGameViewE extends JFrame{
+// public class PlayGameViewE extends JFrame{
+public class PlayGameViewE extends PlayGameView {
 
 
 	private int memory = 9;
@@ -39,10 +40,10 @@ public class PlayGameViewE extends JFrame{
                 JButton saveGame = new JButton("Save game");
                 JButton hint = new JButton("Hint");
 		JButton exit = new JButton("Exit");
-                JButton ok= new JButton ("Next row");
-		//saveGame.addActionListener(new saveGameView());
+                JButton ok= new JButton ("Check");
+		//saveGame.addActionListener());
 		//hint.addActionListener(new hintGame());??
-		//ok.addActionListener(new playGameUseController());
+		ok.addActionListener(new OkListener());
 
 
 		JPanel pane = new JPanel();
@@ -201,6 +202,14 @@ catch
 			currentColor = "B";
 			jButtonColor.setBackground(Color.blue);
 		}
+        }
+
+        public class OkListener implements ActionListener{
+
+        public void actionPerformed(ActionEvent e) {
+           // verifica las 4 colunas de codepegs y mostra los keyspegs al lado
+        }
+
         }
 
      public class GameListener implements ActionListener{
