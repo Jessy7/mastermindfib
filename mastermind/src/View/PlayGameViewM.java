@@ -11,7 +11,7 @@ import java.awt.event.*;
 import java.awt.*;
 
 
-public class PlayGameViewM extends JFrame{
+public class PlayGameViewM extends PlayGameView{
 
 
 	private int memory = 9;
@@ -40,7 +40,7 @@ public class PlayGameViewM extends JFrame{
                 JButton saveGame = new JButton("Save game");
                 JButton hint = new JButton("Hint");
 		JButton exit = new JButton("Exit");
-                JButton ok= new JButton ("Next row");
+                JButton ok= new JButton ("Check");
 		//saveGame.addActionListener(new saveGameView());
 		//hint.addActionListener(new hintGame());??
 		//ok.addActionListener(new playGameUseController());
