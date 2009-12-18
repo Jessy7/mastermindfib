@@ -152,7 +152,7 @@ catch
 
         }
 	  public static void main(String args[]) {
-          PlayGameViewM guit= new PlayGameViewM();
+         // PlayGameViewM guit= new PlayGameViewM();
             }
 
 	public class YellowListener implements ActionListener{

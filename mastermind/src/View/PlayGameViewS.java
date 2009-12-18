@@ -159,7 +159,7 @@ catch
 
         }
 	  public static void main(String args[]) {
-          PlayGameViewS gui= new PlayGameViewS();
+//          PlayGameViewS gui= new PlayGameViewS();
             }
 
 	public class YellowListener implements ActionListener{
