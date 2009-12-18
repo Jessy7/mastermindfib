@@ -263,25 +263,25 @@ public class main
 
         int score = ((PlayGameUseCaseController)pg).getScore(1);
 
-        if (pg.entersRanking(score))
+        if (pg.entersRanking(score) && !((PlayGameUseCaseController)pg).hintWasGiven(1))
         {
             while (name.isEmpty())
             {
                 System.out.println("Insert player1 name:");
-                name = br.readLine();
+                name = br.readLine().trim();
             }
             pg.updateRanking(name, score);
         }
 
         score = ((PlayGameUseCaseController)pg).getScore(2);
 
-        if (pg.entersRanking(score))
+        if (pg.entersRanking(score) && !((PlayGameUseCaseController)pg).hintWasGiven(2))
         {
             name = "";
 
             while (name.isEmpty())  {
                 System.out.println("Insert player2 name:");
-                name = br.readLine();
+                name = br.readLine().trim();
             }
 
             pg.updateRanking(name, score);

@@ -164,4 +164,9 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
     public int getColumns() {
         return ((GameDomainController)gdc).getColumns();
     }
+
+    public Boolean hintWasGiven(int player) {
+        return ((GameDomainController)gdc).hintWasGiven(player);
+    }
+
 }
