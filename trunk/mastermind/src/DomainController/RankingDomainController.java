@@ -16,8 +16,7 @@ import Enum.DifficultyLevel;
 public class RankingDomainController extends GenericRankingDC {
 
     private static RankingDomainController INSTANCE = null;
-    private RankingDomainController()
-    {
+    private RankingDomainController() {
         int[] values = new int[10];
         String[] names = new String[10];
         ranking = new Ranking[1];
@@ -33,8 +32,7 @@ public class RankingDomainController extends GenericRankingDC {
 
    public static RankingDomainController getInstance()
     {
-        if (INSTANCE == null)
-        {
+        if (INSTANCE == null) {
             INSTANCE = new RankingDomainController();
         }
         return INSTANCE;

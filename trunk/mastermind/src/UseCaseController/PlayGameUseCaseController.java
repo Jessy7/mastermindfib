@@ -76,8 +76,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
     * @param row Row to check
     * @return Array of codePegs for the indicated row
     */
-    public Integer[] getCodePegRow(int row)
-    {
+    public Integer[] getCodePegRow(int row) {
         return ((GameDomainController)gdc).getCodePegsRow(row);
     }
 
@@ -102,8 +101,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
     /**
     * This method updates the score of the codemaker adding to his score the points of the current row
     */
-    public void setCodemakerPoints()
-    {
+    public void setCodemakerPoints() {
         ((GameDomainController)gdc).setCodemakerPoints();
     }
 
@@ -111,8 +109,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * Gets the length of the pattern
      * @return Pattern's length
      */
-    public int getPatternLength()
-    {
+    public int getPatternLength() {
         return ((GameDomainController)gdc).getPatternLength();
     }
 
@@ -120,8 +117,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * Gets which round of the game is being played
      * @return Number of round of the game that is being played
      */
-    public int getCurrentRound()
-    {
+    public int getCurrentRound() {
        return ((GameDomainController)gdc).getCurrentRound();
     }
 
@@ -129,8 +125,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * gets the number of first row of codePegs board with no pegs
      * @return Number of the first row of codepegs with no pegs
      */
-    public int getCurrentRow()
-    {
+    public int getCurrentRow() {
         return ((GameDomainController)gdc).getCurrentRow();
     }
 
@@ -138,8 +133,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * Gets the last set of pegs inserted in codePegs board and generates the
      * corresponding keyPegs
      */
-    public void generateKeyPegs()
-    {
+    public void generateKeyPegs() {
         ((GameDomainController)gdc).generateKeyPegs();
     }
 
@@ -147,8 +141,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * Gets the number of the last row of codePegs board with pegs
      * @return The number of the last row of codePegs board with pegs
      */
-    public int getCodePegsLastRowNumber()
-    {
+    public int getCodePegsLastRowNumber() {
         return ((GameDomainController)gdc).getCodePegsLastRowNumber();
     }
 
@@ -156,8 +149,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * Updates the game state. Increments the number of current round,
      * calculates the scores of the round and resets the codePegs board
      */
-    public void closeRound()
-    {
+    public void closeRound() {
         ((GameDomainController)gdc).closeRound();
     }
 
@@ -166,8 +158,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * @return false if the game is being played against human, true if is being
      * played against cpu
      */
-    public Boolean getVsCpu()
-    {
+    public Boolean getVsCpu() {
         return ((GameDomainController)gdc).getVsCpu();
     }
 
@@ -176,8 +167,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * @param player Identifier of the player
      * @return total score of the indicated player
      */
-    public int getScore(int player)
-    {
+    public int getScore(int player) {
         return ((GameDomainController)gdc).getScore(player);
     }
 
@@ -185,8 +175,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * gets the keyPegs board of the current game
      * @return KeyPegs board
      */
-    public KeyPeg[][] getKeyPegs()
-    {
+    public KeyPeg[][] getKeyPegs() {
         return ((GameDomainController)gdc).getKeyPegs();
     }
 
@@ -196,8 +185,7 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
      * @return for each element of the array, false means invisible and true
      * means visible
      */
-    public Boolean[] getPatternVisibility()
-    {
+    public Boolean[] getPatternVisibility() {
         return ((GameDomainController)gdc).getPatternVisibility();
     }
 

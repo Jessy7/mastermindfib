@@ -17,8 +17,7 @@ public class SettingsUseCaseController extends GenericSettingsUCC {
      * Sets if the player2 is a human or the cpu
      * @param CPU true if player2 is the cpu, false if player2 is a human
      */
-    public void setPlayer2(boolean CPU)
-    {
+    public void setPlayer2(boolean CPU) {
         gdc = GameDomainController.getInstance();
         ((GameDomainController)gdc).setPlayer2(CPU);
     }
@@ -28,8 +27,7 @@ public class SettingsUseCaseController extends GenericSettingsUCC {
      * @param dl DifficultyLevel of the game
      * @param vsCpu true if player2 is the cpu, false if player2 is a human 
      */
-    public void setSettings(DifficultyLevel dl, Boolean vsCpu)
-    {
+    public void setSettings(DifficultyLevel dl, Boolean vsCpu) {
         gdc = GameDomainController.getInstance();
         ((GameDomainController)gdc).setSettings(dl, vsCpu);
     }
