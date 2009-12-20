@@ -191,7 +191,7 @@ public class main
         {
 
             showElements();
-
+            askForQuit();
             askForSave();
 
             if (((PlayGameUseCaseController)pg).isCodebreakerHuman()) {
@@ -506,6 +506,10 @@ public class main
 
         try {
             Integer.parseInt(pattern);
+            for (int i = 0; i < pattern.length(); i++)
+                if (Integer.valueOf(pattern.substring(i,i+1)) < 1 || Integer.valueOf(pattern.substring(i,i+1)) > 6)
+                    return false;
+            
             return true;
         } catch (NumberFormatException nfe) {
             return false;
@@ -528,6 +532,23 @@ public class main
 
         return false;
         
+    }
+
+    private static void askForQuit() throws IOException {
+
+            String answer = "";
+
+            while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
+            {
+                System.out.println("Do you want to quit the game? (y/n)");
+                answer = br.readLine();
+            }
+
+            if (answer.compareTo("y") == 0)
+            {
+                askForSave();
+                main(null);
+            }
     }
 
 
