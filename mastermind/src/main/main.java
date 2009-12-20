@@ -349,8 +349,11 @@ public class main
             System.out.println("Insert the name of the game");
             name = br.readLine();
         }
-	
-        sg.saveGame(path, name);
+
+        int control;
+        control = sg.saveGame(path, name);
+        if (control == -1)
+            System.out.println("save game error");
     }
 
     private static void giveHint()
