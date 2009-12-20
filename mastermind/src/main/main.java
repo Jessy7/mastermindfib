@@ -52,7 +52,7 @@ public class main
                 System.out.println("2.Load Game");
                 System.out.println("3.Show Ranking");
                 System.out.println("4.Show Rules");
-                System.out.println("5.Exit Game");
+                System.out.println("5.Exit Program");
 
                 mainOption = br.readLine();
             }
