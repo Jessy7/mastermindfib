@@ -293,9 +293,17 @@ public class main
         sr.getRanking(names, scores);
 
         System.out.println("Ranking");
+        String name = "";
+        Integer score = new Integer(0);
         for (int i = 0; i < names.size() && i < scores.size(); i++)
         {
-            System.out.println((i+1) + ". " + names.get(i) + " " + scores.get(i));
+            name = names.get(i);
+            score = scores.get(i);
+
+            if (score != 0)
+                System.out.println((i+1) + ". " + name + " " + score);
+
+            System.out.println();
         }
     }
 
