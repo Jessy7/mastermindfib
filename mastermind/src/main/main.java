@@ -14,6 +14,7 @@ import UseCaseController.PlayGameUseCaseController;
 import UseCaseController.SaveGameUseCaseController;
 import UseCaseController.SettingsUseCaseController;
 import UseCaseController.ShowRankingUseCaseController;
+import UseCaseController.ShowRulesUseCaseController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,13 +43,14 @@ public class main
         while(true)
         {
             String mainOption = "";
-            while ((mainOption.compareTo("1") != 0)  && (mainOption.compareTo("2")!= 0) && (mainOption.compareTo("3")!= 0) && (mainOption.compareTo("4")!= 0))
+            while ((mainOption.compareTo("1") != 0)  && (mainOption.compareTo("2")!= 0) && (mainOption.compareTo("3")!= 0) && (mainOption.compareTo("4")!= 0) && (mainOption.compareTo("5")!= 0))
             {
                 System.out.println("Choose option:");
                 System.out.println("1.New game");
                 System.out.println("2.Load Game");
                 System.out.println("3.Show Ranking");
-                System.out.println("4.Exit Game");
+                System.out.println("4.Show Rules");
+                System.out.println("5.Exit Game");
 
                 mainOption = br.readLine();
             }
@@ -61,7 +63,9 @@ public class main
                             break;
                 case 3 : showRanking();
                             break;
-                case 4 : exitGame();;
+                case 4 : showRules();
+                            break;
+                case 5 : exitGame();
                             break;
             }
         }
@@ -481,5 +485,11 @@ public class main
             {
                 giveHint();
             }
+    }
+
+    private static void showRules() {
+        ShowRulesUseCaseController sr = new ShowRulesUseCaseController();
+        String rules = sr.getRules();
+        System.out.println(rules);
     }
 }
