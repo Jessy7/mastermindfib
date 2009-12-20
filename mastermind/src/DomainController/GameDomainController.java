@@ -279,13 +279,7 @@ public class GameDomainController extends GenericGameDC {
        dataArray = data.split(",");
        return dataArray;
    }
-
- 
-
-
-
-
-
+   
    /**
     * This method obtains the color of the elements of the pattern
     * @return Color of the elements of the pattern
@@ -319,8 +313,7 @@ public class GameDomainController extends GenericGameDC {
     * This method is used by the cpu to guess the pattern. Is the algorithm for 
     * cpu to success the game. Uses AI classes
     */
-   public void cpuAttempt() 
-   {
+   public void cpuAttempt()  {
        int currentRow = ((Game)g).getCurrentRow();
        int column = ((Game)g).getColumns();
        Integer[][] codePegs = g.getBoard();
@@ -441,8 +434,7 @@ public class GameDomainController extends GenericGameDC {
      * Gets the length of the pattern
      * @return Pattern's length
      */
-   public int getPatternLength()
-   {
+   public int getPatternLength() {
        return ((Game)g).getColumns();
    }
 
@@ -450,8 +442,7 @@ public class GameDomainController extends GenericGameDC {
     * Gets points of player1
     * @return Number of points of player 1
     */
-   public int getP1Points()
-   {
+   public int getP1Points() {
        return ((Game)g).getP1Points();
    }
 
@@ -459,8 +450,7 @@ public class GameDomainController extends GenericGameDC {
     * Gets points of player2
     * @return Number of points of player2
     */
-   public int getP2Points()
-   {
+   public int getP2Points() {
        return ((Game)g).getP2Points();
    }
 
@@ -469,8 +459,7 @@ public class GameDomainController extends GenericGameDC {
      * @return false if the game is being played against human, true if is being
      * played against cpu
      */
-   public Boolean getVsCpu()
-   {
+   public Boolean getVsCpu() {
        return ((Game)g).getVsCPU();
    }
 
@@ -478,8 +467,7 @@ public class GameDomainController extends GenericGameDC {
      * gets the keyPegs board of the current game
      * @return KeyPegs board
      */
-    public KeyPeg[][] getKeyPegs()
-    {
+    public KeyPeg[][] getKeyPegs() {
         return ((Game)g).getKeyPegsAsBoard();
     }
 
@@ -489,8 +477,7 @@ public class GameDomainController extends GenericGameDC {
      * @return for each element of the array, false means invisible and true
      * means visible
      */
-    public Boolean[] getPatternVisibility()
-    {
+    public Boolean[] getPatternVisibility() {
         return ((Game)g).getPatternVisibility();
     }
 

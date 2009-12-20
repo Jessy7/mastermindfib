@@ -14,8 +14,7 @@ public class StringBooleanArray {
      * @param input String to be converted
      * @return String converted to Boolean's Array
      */
-    public static Boolean[] toBooleanArray(String input)
-    {
+    public static Boolean[] toBooleanArray(String input) {
         Boolean[] output = new Boolean[input.length()];
 
         for (int i = 0; i < input.length(); i++)
@@ -33,8 +32,7 @@ public class StringBooleanArray {
      * @param input Booleans's array to be converted
      * @return Booleans's array converted to String
      */
-    public static String toString(Boolean[] input)
-    {
+    public static String toString(Boolean[] input) {
         String data = "";
         for (int i = 0; i < input.length; i++)
         {
