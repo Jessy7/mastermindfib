@@ -172,11 +172,11 @@ public class Game extends GenericGame {
 
 
 
-    public Boolean getLevelDuplicatesAllowed(DifficultyLevel level)
+    public Boolean areDuplicatesAllowed()
     {
         Boolean res;
 
-        switch(level) {
+        switch(set.getLevel()) {
             case Easy: res = new Boolean(ALLOW_DUPLICATES_EASY); break;
             case Normal: res = new Boolean(ALLOW_DUPLICATES_MEDIUM); break;
             case Hard: res = new Boolean(ALLOW_DUPLICATES_HARD); break;
