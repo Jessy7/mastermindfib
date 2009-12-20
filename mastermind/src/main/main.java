@@ -251,7 +251,7 @@ public class main
                 break;
         }
         ((PlayGameUseCaseController)pg).closeRound();
-        System.out.println("Press any key to continue");
+        System.out.println("Press enter to continue");
         br.readLine();
 
     }
