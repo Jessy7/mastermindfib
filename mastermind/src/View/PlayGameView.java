@@ -13,7 +13,7 @@ import javax.swing.JFrame;
  *
  * @author Administrador
  */
-public abstract class PlayGameView extends JFrame {
+public class PlayGameView extends JFrame {
     public PlayGameView()
     {
         PlayGameUseCaseController nh= new PlayGameUseCaseController();
