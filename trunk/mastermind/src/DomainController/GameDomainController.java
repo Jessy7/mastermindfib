@@ -373,20 +373,24 @@ public class GameDomainController extends GenericGameDC {
        Integer[] patternColor = ((Game)g).getPatternColor();
        Integer[] guess = ((Game)g).getCodePegsLastRow();
        Boolean[] patternChecked = new Boolean[((Game)g).getColumns()];
+       Boolean[] guessChecked = new Boolean[((Game)g).getColumns()];
 
-       for (int i = 0; i < patternChecked.length; i++)
+       for (int i = 0; i < patternChecked.length; i++) {
            patternChecked[i] = false;
+           guessChecked[i] = false;
+       }
 
        for (int i = 0; i < guess.length; i++) {
            if (guess[i].equals(patternColor[i])) {
                ((Game)g).addKeyPeg(KeyPeg.RED, lastRow);
                patternChecked[i] = true;
+               guessChecked[i] = true;
            }
        }
 
        for (int i = 0; i < guess.length; i++) {
            for (int j = 0; j < patternColor.length; j++) {
-                if (guess[i].equals(patternColor[j]) && (patternChecked[j] == false)) {
+                if (guess[i].equals(patternColor[j]) && (patternChecked[j] == false) && guessChecked[i] == false) {
                     ((Game)g).addKeyPeg(KeyPeg.WHITE, lastRow);
                     patternChecked[j] = true;
                 }
