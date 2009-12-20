@@ -460,4 +460,8 @@ public class GameDomainController extends GenericGameDC {
     public Boolean hintWasGiven(int player) {
         return ((Game)g).getHintWasGiven(player);
     }
+
+    public Boolean areDuplicatesAllowed() {
+        return ((Game)g).areDuplicatesAllowed();
+    }
 }

@@ -169,4 +169,8 @@ public class PlayGameUseCaseController extends GenericPlayGameUCC {
         return ((GameDomainController)gdc).hintWasGiven(player);
     }
 
+    public Boolean areDuplicatesAllowed() {
+        return ((GameDomainController)gdc).areDuplicatesAllowed();
+    }
+
 }
