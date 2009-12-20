@@ -51,7 +51,7 @@ public class ShowRulesUseCaseController extends GenericShowRulesUCC {
 
     @Override
     public void setRules(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not necessary.");
     }
 }
 
