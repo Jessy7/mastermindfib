@@ -35,6 +35,8 @@ public class main
     private static Integer[] patternVisibility;
     private static KeyPeg[][] keyPegs;
 
+    private static final Integer NCOLORS = 6;
+
     public static void main (String args[]) throws IOException
     {
         
@@ -123,38 +125,25 @@ public class main
     
     private static void insertPattern() throws IOException 
     {
-        Boolean validPatern = false;
+        Boolean validPattern = false;
         String pattern = "";
-        int patternLenght;
+        int patternLength;
         
         pg = new PlayGameUseCaseController();
-        DifficultyLevel dl = ((PlayGameUseCaseController)pg).getLevel();
-        patternLenght = ((PlayGameUseCaseController)pg).getPatternLength();
-        
-        while(!validPatern)
+        patternLength = ((PlayGameUseCaseController)pg).getPatternLength();
+
+        while(!validPattern)
         {
             System.out.println("Please, insert the pattern");
             pattern = br.readLine();
-            if (dl ==  DifficultyLevel.Easy && pattern.length() == patternLenght)
-            {
-                ((PlayGameUseCaseController)pg).setPattern(pattern);
-                validPatern = true;
-            }
-            else if (dl ==  DifficultyLevel.Normal && pattern.length() == patternLenght)
-            {
-                ((PlayGameUseCaseController)pg).setPattern(pattern);
-                validPatern = true;
-            }
-            else if (dl ==  DifficultyLevel.Hard && pattern.length() == patternLenght)
-            {
-                ((PlayGameUseCaseController)pg).setPattern(pattern);
-                validPatern = true;
-            }
-            else
-            {
-                System.out.println("Invalid pattern");
-            }
+            validPattern = checkPattern(pattern,patternLength);
+
+            if (!validPattern)
+                System.out.println("InvalidPattern");
         }
+
+        ((PlayGameUseCaseController)pg).setPattern(pattern);
+
     }
 
     private static void playGame() throws IOException
@@ -194,7 +183,6 @@ public class main
 
     private static void playRound() throws IOException {
 
-        Boolean b = false;
         int guessLength = ((PlayGameUseCaseController)pg).getColumns();
         int isRoundFinished = ((PlayGameUseCaseController)pg).isRoundFinished();
 
@@ -209,31 +197,27 @@ public class main
                 askForAHint();
             }
             
-            String guess = "";
-
-            int attempt = ((PlayGameUseCaseController)pg).getCurrentRow();
-            System.out.println("Attempt: " + (attempt+1));
+            int currentGuess = ((PlayGameUseCaseController)pg).getCurrentRow();
+            System.out.println("Attempt: " + (currentGuess+1));
 
             if (((PlayGameUseCaseController)pg).isCodebreakerHuman()) {
-                b = false;
-                while (!b) {
+
+                String guess = "";
+                Boolean validGuess = false;
+
+                while (!validGuess) {
                     System.out.println("Please, insert the guess");
                     guess = br.readLine();
 
-                    Integer[] iGuess = new Integer[guess.length()];
-                    for(int i = 0; i < guess.length(); i++)
-                        iGuess[i] = Integer.valueOf(guess.substring(i,i+1));
+                    validGuess = checkGuess(guess,guessLength);
 
-                    if (guess.length() == guessLength)
-                    {
-                        for (int i = 0; i < guessLength; i++)
-                            ((PlayGameUseCaseController)pg).setCell(attempt, i, iGuess[i]);
-                        b = true;
-                    }
-                    else {
+                    if (validGuess == false)
                         System.out.println("Invalid guess");
-                    }
                 }
+
+                for (int i = 0; i < guessLength; i++)
+                    ((PlayGameUseCaseController)pg).setCell(currentGuess, i,  Integer.valueOf(guess.substring(i,i+1)));
+
             }
             else if(!((PlayGameUseCaseController)pg).isCodebreakerHuman()) {
                 ((PlayGameUseCaseController)pg).cpuAttempt();
@@ -474,15 +458,12 @@ public class main
 
             String answer = "";
 
-            while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0))
-            {
-                System.out.println("If you ask for a hint, you'll not be able to appear on the ranking");
-                System.out.println("Do you really want a hint? (y/n)");
+            while ((answer.compareTo("y") != 0) && (answer.compareTo("n") != 0)) {
+                System.out.println("Do you want a hint? (If you ask for a hint, you'll not be able to appear on the ranking) (y/n)");
                 answer = br.readLine();
             }
 
-            if (answer.compareTo("y") == 0)
-            {
+            if (answer.compareTo("y") == 0) {
                 giveHint();
             }
     }
@@ -492,4 +473,59 @@ public class main
         String rules = sr.getRules();
         System.out.println(rules);
     }
+
+    private static Boolean checkPattern(String pattern, int patternLength) {
+
+        if (pattern.length() != patternLength)
+            return false;
+
+        if (!isNumeric(pattern))
+            return false;
+
+        if (!((PlayGameUseCaseController)pg).areDuplicatesAllowed() && containsDuplicates(pattern))
+            return false;
+
+        return true;
+    }
+
+    private static Boolean checkGuess(String pattern, int patternLength) {
+
+        if (pattern.length() != patternLength)
+            return false;
+
+        if (!isNumeric(pattern))
+            return false;
+
+        return true;
+    }
+
+    private static Boolean isNumeric(String pattern) {
+
+        try {
+            Integer.parseInt(pattern);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
+    private static Boolean containsDuplicates(String input) {
+
+        Boolean colorsUsed[] = new Boolean [NCOLORS];
+        for (int i = 0; i < NCOLORS; i++) {
+            colorsUsed[i] = false;
+        }
+
+        for (int i = 0; i < input.length(); i++) {
+            if (colorsUsed[Integer.valueOf(input.substring(i, i+1))-1] == true)
+                return true;
+
+            colorsUsed[Integer.valueOf(input.substring(i, i+1))-1] = true;
+        }
+
+        return false;
+        
+    }
+
+
 }
