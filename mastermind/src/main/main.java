@@ -185,6 +185,7 @@ public class main
 
         int guessLength = ((PlayGameUseCaseController)pg).getColumns();
         int isRoundFinished = ((PlayGameUseCaseController)pg).isRoundFinished();
+        br = new BufferedReader(new InputStreamReader(System.in));
 
         while (isRoundFinished == 0)
         {
@@ -232,14 +233,16 @@ public class main
         int patternLength = ((PlayGameUseCaseController)pg).getPatternLength();
 
         switch (isRoundFinished) {
-            case 1: System.out.println ("CODEBREAKER WINS THIS ROUND!");
+            case 1: showElements();
+                    System.out.println ("CODEBREAKER WINS THIS ROUND!");
                     System.out.print("Pattern: ");
                     for (int i = 0; i < patternLength; i++) {
                         System.out.print(pattern[i]);
                     }
                     System.out.println();
                 break;
-            case 2: System.out.println ("CODEMAKER WINS THIS ROUND!");
+            case 2: showElements();
+                    System.out.println ("CODEMAKER WINS THIS ROUND!");
                     System.out.print("Pattern: ");
                     for (int i = 0; i < patternLength; i++) {
                         System.out.print(pattern[i]);
@@ -248,6 +251,9 @@ public class main
                 break;
         }
         ((PlayGameUseCaseController)pg).closeRound();
+        System.out.println("Press any key to continue");
+        br.readLine();
+
     }
 
     private static void definePlayer() throws IOException
@@ -312,20 +318,13 @@ public class main
         br = new BufferedReader(new InputStreamReader(System.in));
         LoadGameUseCaseController lg = new LoadGameUseCaseController();
 
-        String path = "";
-        while (path.compareTo("") == 0)
-        {
-            System.out.println("Insert the absolute directory path of the game to load (including the last \\ or /)");
-            path = br.readLine();
-        }
-	
         String name = "";
         while (name.compareTo("") == 0)
         {
             System.out.println("Insert the name of the game");
             name = br.readLine();
         }
-        int control = lg.loadGame(path + name + ".sav");
+        int control = lg.loadGame("./" + name + ".sav");
         if (control == -1)
         {
             System.out.println("load game error");
@@ -343,13 +342,6 @@ public class main
 
         SaveGameUseCaseController sg = new SaveGameUseCaseController();
         br = new BufferedReader(new InputStreamReader(System.in));
-
-        String path = "";
-        while (path.compareTo("") == 0)
-        {
-            System.out.println("Insert the completly directory path to save the game");
-            path = br.readLine();
-        }
 	
 	String name = "";
         while (name.compareTo("") == 0)
@@ -359,7 +351,7 @@ public class main
         }
 
         int control;
-        control = sg.saveGame(path, name);
+        control = sg.saveGame("./", name);
         if (control == -1)
             System.out.println("save game error");
     }
