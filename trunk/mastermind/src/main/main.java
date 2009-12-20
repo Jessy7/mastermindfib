@@ -48,7 +48,7 @@ public class main
             while ((mainOption.compareTo("1") != 0)  && (mainOption.compareTo("2")!= 0) && (mainOption.compareTo("3")!= 0) && (mainOption.compareTo("4")!= 0) && (mainOption.compareTo("5")!= 0))
             {
                 System.out.println("Choose option:");
-                System.out.println("1.New game");
+                System.out.println("1.New Game");
                 System.out.println("2.Load Game");
                 System.out.println("3.Show Ranking");
                 System.out.println("4.Show Rules");
